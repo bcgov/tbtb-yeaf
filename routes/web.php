@@ -18,6 +18,8 @@ Route::get('/logout', [App\Http\Controllers\UserController::class, 'logout'])->n
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
+Route::post('/app-login', [App\Http\Controllers\UserController::class, 'checkLogin'])->name('check-login');
 
 Route::middleware(['auth', 'active'])->group(function () {
 
