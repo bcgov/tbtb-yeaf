@@ -3,70 +3,98 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AjaxRequest;
+use App\Models\Comment;
+use App\Models\Grant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Response;
 use Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 
 class UserController extends Controller
 {
-    public function checkLogin(Request $request)
-    {
-        var_dump($request);
-    }
-
     public function appLogin(Request $request)
     {
         $provider = new Keycloak([
-            'authServerUrl'         => env('KEYCLOAK_SERVER_URL'),
-            'realm'                 => env('KEYCLOAK_REALM'),
-            'clientId'              => env('KEYCLOAK_CLIENT_ID'),
-            'clientSecret'          => env('KEYCLOAK_CLIENT_SECRET'),
-            'redirectUri'           => env('KEYCLOAK_REDIRECT_URI'),
+            'authServerUrl' => env('KEYCLOAK_SERVER_URL'),
+            'realm' => env('KEYCLOAK_REALM'),
+            'clientId' => env('KEYCLOAK_CLIENT_ID'),
+            'clientSecret' => env('KEYCLOAK_CLIENT_SECRET'),
+            'redirectUri' => env('KEYCLOAK_REDIRECT_URI'),
         ]);
 
-        if (!isset($_GET['code'])) {
-
+        if (! $request->has('code')) {
             // If we don't have an authorization code then get one
             $authUrl = $provider->getAuthorizationUrl();
-            $_SESSION['oauth2state'] = $provider->getState();
-            header('Location: '.$authUrl);
-            exit;
+            $request->session()->put('oauth2state', $provider->getState());
 
-        // Check given state against previously stored one to mitigate CSRF attack
-        } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
+            return Redirect::to($authUrl);
 
-            unset($_SESSION['oauth2state']);
-            exit('Invalid state, make sure HTTP sessions are enabled.');
-
+            // Check given state against previously stored one to mitigate CSRF attack
+        } elseif (! $request->has('state') || ($request->state !== $request->session()->get('oauth2state'))) {
+            $request->session()->forget('oauth2state');
+            //Invalid state, make sure HTTP sessions are enabled
+            return Inertia::render('Auth/Login', [
+                'loginAttempt' => true,
+                'hasAccess' => false,
+                'status' => 'We could not log you in. Please contact RequestIT.',
+            ]);
         } else {
-
             // Try to get an access token (using the authorization coe grant)
             try {
                 $token = $provider->getAccessToken('authorization_code', [
-                    'code' => $_GET['code']
+                    'code' => $request->code,
                 ]);
             } catch (\Exception $e) {
-                exit('Failed to get access token: '.$e->getMessage());
+                return Inertia::render('Auth/Login', [
+                    'loginAttempt' => true,
+                    'hasAccess' => false,
+                    'status' => 'Failed to get access token: '.$e->getMessage(),
+                ]);
             }
 
             // Optional: Now you have a token you can look up a users profile data
             try {
-
                 // We got an access token, let's now get the user's details
-                $user = $provider->getResourceOwner($token);
-
-                // Use these details to create a new profile
-                printf('Hello %s!', $user->getName());
-
+                $idir_user = $provider->getResourceOwner($token);
+                $idir_user = $idir_user->toArray();
             } catch (\Exception $e) {
-                exit('Failed to get resource owner: '.$e->getMessage());
+                return Inertia::render('Auth/Login', [
+                    'loginAttempt' => true,
+                    'hasAccess' => false,
+                    'status' => 'Failed to get resource owner: '.$e->getMessage(),
+                ]);
             }
 
-            // Use this to interact with an API on the users behalf
-            echo $token->getToken();
+            $user = User::where('idir_user_guid', 'ilike', $idir_user['idir_user_guid'])->first();
+
+            //if it is a new IDIR user, register the user first
+            if (is_null($user)) {
+                $this->newUser($idir_user);
+
+                return Inertia::render('Auth/Login', [
+                    'loginAttempt' => true,
+                    'hasAccess' => false,
+                    'status' => 'Please contact YEAF Admin to grant you access.',
+                ]);
+
+                //if the user has been disabled
+            } elseif ($user->disabled === true) {
+                return Inertia::render('Auth/Login', [
+                    'loginAttempt' => true,
+                    'hasAccess' => false,
+                    'status' => 'Access denied. Please contact YEAF Admin.',
+                ]);
+            }
+
+            //else the user has access
+            Auth::login($user);
+
+            return Redirect::route('dashboard');
         }
     }
 
@@ -115,6 +143,21 @@ class UserController extends Controller
     }
 
     /**
+     * Display the login view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
+    public function login(Request $request)
+    {
+        return Inertia::render('Auth/Login', [
+            'loginAttempt' => false,
+            'hasAccess' => false,
+            'status' => session('status'),
+        ]);
+    }
+
+    /**
      * Log the user out of the application.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -127,5 +170,57 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+
+    private function newUser($idir_user)
+    {
+        $user = User::where('user_id', 'ilike', $idir_user['idir_username'])->first();
+        if(is_null($user))
+        {
+            $user = new User();
+            $user->user_id = Str::upper($idir_user['idir_username']);
+            $user->first_name = $idir_user['given_name'];
+            $user->last_name = $idir_user['family_name'];
+            $user->email = $idir_user['email'];
+        }
+        $user->access_type = 'U';
+        $user->disabled = true;
+        $user->idir_user_guid = $idir_user['idir_user_guid'];
+        $user->password = Hash::make($idir_user['idir_username']);
+        $user->save();
+//
+////        $sub_user_id = Str::upper(Str::substr($idir_user['idir_username'], 0, 4));
+//        $legacy_idir = User::where('user_id', $idir_user['idir_username'])->where('idir_user_guid', null)->first();
+//
+//        //if found a user that has not been synced
+//        if (! is_null($legacy_idir)) {
+//            //user_id from MS Access came with only 4 characters
+//            //we need to use full IDIR ID and GUID
+//
+//            $comments = Comment::where('user_id', $idir_user['idir_username'])->withTrashed()->get();
+//            foreach ($comments as $comment) {
+//                $comment->auditor_user_id = Str::upper($idir_user['idir_username']);
+//                $comment->save();
+//            }
+//
+//            $incidents = Grant::where('officer_user_id', $sub_user_id)->withTrashed()->get();
+//            foreach ($incidents as $incident) {
+//                $incident->auditor_user_id = Str::upper($idir_user['idir_username']);
+//                $incident->save();
+//            }
+//
+//            $comments = CaseComment::where('staff_user_id', $sub_user_id)->withTrashed()->get();
+//            foreach ($comments as $comment) {
+//                $comment->staff_user_id = Str::upper($idir_user['idir_username']);
+//                $comment->save();
+//            }
+//
+//            //disable legacy account
+//            $legacy_idir->disabled = true;
+//            $legacy_idir->deleted_at = date('Y-m-d H:i:s', strtotime('now'));
+//            $legacy_idir->user_id = mt_rand() . '-' . $legacy_idir->user_id . '-DELETED';
+//            $legacy_idir->save();
+//        }
     }
 }
