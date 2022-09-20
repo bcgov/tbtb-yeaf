@@ -32,6 +32,20 @@ Route::middleware(['auth', 'active'])->group(function () {
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
 
+        Route::name('maintenance.')->group(function () {
+//            Route::get('/maintenance/schools', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('schools.list');
+            Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
+            Route::get('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffShow'])->name('staff.show');
+            Route::post('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+
+            Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
+            Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
+
+//            Route::prefix('maintenance')->group(function () {
+//                Route::resource('ministry', App\Http\Controllers\MaintenanceController::class);
+//                Route::resource('school', App\Http\Controllers\InstitutionController::class);
+//            });
+        });
     });
 });
 //require __DIR__.'/auth.php';

@@ -10,17 +10,23 @@ export BUILD_NAMESPACE := $(or $(BUILD_NAMESPACE), 06cb9b-tools)
 export DOMAIN := $(or $(DOMAIN), apps.silver.devops.gov.bc.ca)
 export HOST_PREFIX := $(or $(HOST_PREFIX), tbtb-yeaf)
 export SOURCE_REPOSITORY_BRANCH := $(or $(SOURCE_REPOSITORY_BRANCH), dev)
-export BACKUP_POSTGRESQL_APP_NAME := $(or $(BACKUP_POSTGRESQL_APP_NAME), yeaf-patroni-backup)
-export BACKUP_CONFIGMAP_NAME := $(or $(BACKUP_CONFIGMAP_NAME), yeaf-patroni-backup-conf)
+export BACKUP_POSTGRESQL_APP_NAME := $(or $(BACKUP_POSTGRESQL_APP_NAME), tbtb-yeaf-patroni-backup)
+export BACKUP_CONFIGMAP_NAME := $(or $(BACKUP_CONFIGMAP_NAME), tbtb-yeaf-patroni-backup-conf)
 
 #if
 ifeq ($(SOURCE_REPOSITORY_BRANCH),dev)
 define OC_USER_ID
 "1009370000"
 endef
+define PARAM_FILE
+"dev.env"
+endef
 else
 define OC_USER_ID
 "1009380000"
+endef
+define PARAM_FILE
+"prod.env"
 endef
 endif
 
@@ -69,6 +75,7 @@ print-status:
 	@echo " | REPO_NAME: 		$(SOURCE_REPOSITORY_REF) |"
 	@echo " | REPO_BRANCH:						$(SOURCE_REPOSITORY_BRANCH) |"
 	@echo " | OC_USER_ID: 					$(OC_USER_ID) |"
+	@echo " | PARAM_FILE: 					$(PARAM_FILE) |"
 
 #	"$(HOST_PREFIX)-$(BUILD_NAMESPACE).apps.silver.devops.gov.bc.ca.$(DOMAIN)"
 	@echo " +---------------------------------------------------------+ "
@@ -76,13 +83,8 @@ print-status:
 build-web:
 	test -n "$(BUILD_REF)"
 	test -n "$(BUILD_NAMESPACE)"
-# 	@echo "+\n++ SET secret Web\n+"
-# 	@oc -n $(BUILD_NAMESPACE) process -f $(BUILD_TEMPLATE_PATH) -p TAG=$(BUILD_TAG) -p SOURCE_REPOSITORY_REF=$(BUILD_REF) -p NAME=$(Web) | oc -n $(BUILD_NAMESPACE) apply -f -
-# 	@oc -n $(BUILD_NAMESPACE) start-build bc/$(Web) --wait
-# 	@oc apply -f bc.yaml
-# 	@oc -n $(BUILD_NAMESPACE) set build-secret --pull bc/$(Web) $(GIT_SECRET_KEY)
 	@echo "+\n++ PROCESSING Web\n+"
-	@oc -n $(BUILD_NAMESPACE) process -f bc.yaml -p OC_USER_ID=$(OC_USER_ID) -p NAME=$(HOST_PREFIX) -p BUILD_NAMESPACE=$(BUILD_NAMESPACE) -p IMAGE_TAG=$(BUILD_TAG) -p REPO_NAME=$(SOURCE_REPOSITORY_REF) -p REPO_BRANCH=$(SOURCE_REPOSITORY_BRANCH) | oc -n $(BUILD_NAMESPACE) apply -f -
+	@oc -n $(BUILD_NAMESPACE) process -f bc.yaml --param-file=$(PARAM_FILE) | oc -n $(BUILD_NAMESPACE) apply -f -
 	@echo "+\n++ BUILDING Web\n+"
 	@oc -n $(BUILD_NAMESPACE) start-build bc/$(HOST_PREFIX) --wait
 	@echo "+\n++ FINISHED BUILDING Web\n+"
@@ -92,26 +94,23 @@ deploy-web:
 	test -n "$(NAMESPACE)"
 	test -n "$(BUILD_NAMESPACE)"
 	@echo "+\n++ Deploying Web into $(NAMESPACE)\n+"
-	@oc -n $(NAMESPACE) process -f dc_latest.yaml -p LABEL_NAME=$(LABEL_NAME) -p NAME=$(HOST_PREFIX) -p IMAGE_TAG=$(BUILD_TAG) -p BUILD_NAMESPACE=$(BUILD_NAMESPACE) -p NAMESPACE=$(NAMESPACE) -p REPO_BRANCH=$(SOURCE_REPOSITORY_BRANCH) | oc -n $(NAMESPACE) apply -f -
+	@oc -n $(NAMESPACE) process -f dc_latest.yaml --param-file=$(PARAM_FILE) | oc -n $(NAMESPACE) apply -f -
 	$(call rollout_and_wait,dc/$(HOST_PREFIX))
 	@echo "+\n++ FINISHED Deploying Web\n+"
 
 build-patroni:
-	@oc -n $(BUILD_NAMESPACE) process -f patroni-build.yaml -p NAME=tbtb-yeaf-patroni -p TAG="12-latest" -p BASE_IMAGE_NAME=postgres -p BASE_IMAGE_TAG="12" -p SOURCE_REPOSITORY_REF="master" -p SOURCE_CONTEXT_DIR="apps/pgsql/patroni/docker" | oc -n $(BUILD_NAMESPACE) apply -f -
+	@oc -n $(BUILD_NAMESPACE) process -f patroni-build.yaml --param-file=$(PARAM_FILE) | oc -n $(BUILD_NAMESPACE) apply -f -
 	@oc -n $(BUILD_NAMESPACE) start-build bc/tbtb-yeaf-patroni --wait
 
 deploy-patroni:
-	@oc -n $(NAMESPACE) process -f patroni-deploy.yaml -p LABEL_NAME=$(LABEL_NAME) -p BUILD_NAMESPACE=$(BUILD_NAMESPACE) -p IMAGE_STREAM_TAG=patroni:12-latest | oc -n $(NAMESPACE) apply -f -
+	@oc -n $(NAMESPACE) process -f patroni-deploy.yaml --param-file=$(PARAM_FILE) | oc -n $(NAMESPACE) apply -f -
 
 # Create the POSTGRES structure
 db-backup-build-postgresql:
 	test -n "$(BUILD_NAMESPACE)"
 	test -n "$(BACKUP_POSTGRESQL_APP_NAME)"
 	@echo "+\n++ Creating build resources for database backups on $(BUILD_NAMESPACE)\n+"
-	oc -n $(BUILD_NAMESPACE) process -f backup-build.yaml \
-		-p NAME=$(BACKUP_POSTGRESQL_APP_NAME) OUTPUT_IMAGE_TAG=v1 \
-		-p BASE_IMAGE_FOR_BUILD=artifacts.developer.gov.bc.ca/docker-remote/centos/postgresql-12-centos7:20200917-804ef01 \
-		| oc -n $(BUILD_NAMESPACE) apply -f -
+	oc -n $(BUILD_NAMESPACE) process -f backup-build.yaml --param-file=$(PARAM_FILE) | oc -n $(BUILD_NAMESPACE) apply -f -
 	@oc -n $(BUILD_NAMESPACE) start-build bc/yeaf-patroni-backup --wait
 
 db-backup-deploy-postgresql:
@@ -119,21 +118,4 @@ db-backup-deploy-postgresql:
 	test -n "$(BUILD_NAMESPACE)"
 	test -n "$(BACKUP_POSTGRESQL_APP_NAME)"
 	@echo "+\n++ Creating deploy config resoures for database backups on $(NAMESPACE)\n+"
-	oc -n $(NAMESPACE) process -f backup-deploy.yaml \
-  	-p NAME=$(BACKUP_POSTGRESQL_APP_NAME) \
-  	-p IMAGE_NAMESPACE=$(BUILD_NAMESPACE) \
-  	-p SOURCE_IMAGE_NAME=$(BACKUP_POSTGRESQL_APP_NAME) \
-  	-p TAG_NAME=v1 \
-		-p FTP_SECRET_KEY=$(BACKUP_POSTGRESQL_APP_NAME)-ftp-secret \
-  	-p BACKUP_VOLUME_NAME=$(BACKUP_POSTGRESQL_APP_NAME)-pvc \
-		-p BACKUP_VOLUME_SIZE=20Gi \
-  	-p VERIFICATION_VOLUME_SIZE=5Gi \
-  	-p ENVIRONMENT_NAME=$(NAMESPACE) \
-		-p CONFIG_MAP_NAME=$(BACKUP_CONFIGMAP_NAME) \
-		-p VERIFICATION_VOLUME_NAME=$(BACKUP_POSTGRESQL_APP_NAME)-verification-pvc \
-		-p DATABASE_SERVER_NAME=PATRONI_MASTER \
-		-p DATABASE_SECRET_NAME=patroni-creds \
-		-p DATABASE_SECRET_USER_KEY_NAME=superuser-username \
-		-p DATABASE_SECRET_PASSWORD_KEY_NAME=superuser-password \
-  	-p ENVIRONMENT_FRIENDLY_NAME='$(NAMESPACE) POSTGRESQL DB Backups' \
-		| oc -n $(NAMESPACE) apply -f -
+	oc -n $(NAMESPACE) process -f backup-deploy.yaml --param-file=$(PARAM_FILE) | oc -n $(NAMESPACE) apply -f -

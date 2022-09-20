@@ -44,11 +44,11 @@ nav.navbar{
 <!--                            Reports-->
 <!--                        </BreezeNavLink>-->
 <!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <BreezeNavLink class="nav-link" :href="route('maintenance.area-of-audit.index')" :active="route().current('maintenance.*')">-->
-<!--                            Maintenance-->
-<!--                        </BreezeNavLink>-->
-<!--                    </li>-->
+                    <li class="nav-item">
+                        <BreezeNavLink class="nav-link" :href="route('maintenance.ministry.show')" :active="route().current('maintenance.*')">
+                            Maintenance
+                        </BreezeNavLink>
+                    </li>
 <!--                    <li class="nav-item">-->
 <!--                        <BreezeNavLink class="nav-link" :href="route('archive')" :active="route().current('archive')">-->
 <!--                            Archive-->

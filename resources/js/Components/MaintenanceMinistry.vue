@@ -136,7 +136,7 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 
 export default {
-    name: 'MaintenanceAreas',
+    name: 'MaintenanceMinistry',
     components: {
         BreezeInput, BreezeLabel, Link
     },
@@ -171,7 +171,7 @@ export default {
         },
         editArea: function ()
         {
-            this.editForm.put(route('maintenance.area-of-audit.update', [this.editForm.id]), {
+            this.editForm.put(route('maintenance.ministry.update', [this.editForm.id]), {
                 onSuccess: () => {
                     this.showSuccessAlert();
                     this.editForm.reset('area_of_audit_code', 'description');
@@ -190,7 +190,7 @@ export default {
         newArea: function ()
         {
 
-            this.newForm.post(route('maintenance.area-of-audit.store'), {
+            this.newForm.post(route('maintenance.ministry.store'), {
                 onSuccess: () => {
                     this.showSuccessAlert();
                     this.newForm.reset('area_of_audit_code', 'description');
