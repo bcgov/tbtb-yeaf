@@ -39,7 +39,8 @@ objects:
               namespace: ${BUILD_NAMESPACE}
             containerNames:
               - ${NAME}
-      replicas: ${MIN_REPLICAS}
+      minReplicas: ${MIN_REPLICAS}
+      maxReplicas: ${MAX_REPLICAS}
       revisionHistoryLimit: 5
       selector:
         deploymentconfig: ${NAME}
