@@ -109,10 +109,11 @@ objects:
       name: ${NAME}
     spec:
       scaleTargetRef:
+        apiVersion: apps.openshift.io/v1
         kind: DeploymentConfig
         name: ${NAME}
-      minReplicas: 1
-      maxReplicas: 3
+      minReplicas: ${MIN_REPLICAS}
+      maxReplicas: ${MAX_REPLICAS}
       metrics:
         - type: Resource
           resource:
