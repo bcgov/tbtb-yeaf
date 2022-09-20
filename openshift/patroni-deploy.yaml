@@ -1,20 +1,20 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-  name: ${NAME}
+  name: ${PATRONI_NAME}
   annotations:
     description: >-
       Patroni Postgresql database cluster, with persistent storage.
 labels:
   project: ${PROJECT}
-  service: ${NAME}
+  service: ${PATRONI_NAME}
 objects:
   - apiVersion: v1
     kind: Service
     metadata:
-      name: ${NAME}-master
+      name: ${PATRONI_NAME}-master
       labels:
-        cluster-name: ${NAME}
+        cluster-name: ${PATRONI_NAME}
     spec:
       ports:
         - port: 5432
@@ -22,27 +22,27 @@ objects:
           targetPort: 5432
       selector:
         role: master
-        cluster-name: ${NAME}
+        cluster-name: ${PATRONI_NAME}
   - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
-      name: ${NAME}
+      name: ${PATRONI_NAME}
       labels:
-        cluster-name: ${NAME}
+        cluster-name: ${PATRONI_NAME}
         app.kubernetes.io/part-of: ${LABEL_NAME}
     spec:
       replicas: ${{REPLICAS}}
       revisionHistoryLimit: 10
       selector:
         matchLabels:
-          statefulset: ${NAME}
-          cluster-name: ${NAME}
-      serviceName: ${NAME}
+          statefulset: ${PATRONI_NAME}
+          cluster-name: ${PATRONI_NAME}
+      serviceName: ${PATRONI_NAME}
       template:
         metadata:
           labels:
-            statefulset: ${NAME}
-            cluster-name: ${NAME}
+            statefulset: ${PATRONI_NAME}
+            cluster-name: ${PATRONI_NAME}
         spec:
           affinity:
             podAntiAffinity:
@@ -52,7 +52,7 @@ objects:
                       - key: statefulset
                         operator: In
                         values:
-                          - ${NAME}
+                          - ${PATRONI_NAME}
                   topologyKey: "kubernetes.io/hostname"
           containers:
             - env:
@@ -72,39 +72,39 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: superuser-username
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: PATRONI_SUPERUSER_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: superuser-password
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: PATRONI_REPLICATION_USERNAME
                   valueFrom:
                     secretKeyRef:
                       key: replication-username
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: PATRONI_REPLICATION_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: replication-password
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: APP_USER
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: APP_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-password
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: APP_DATABASE
                   valueFrom:
                     secretKeyRef:
                       key: database-name
-                      name: ${NAME}-creds
+                      name: ${PATRONI_NAME}-creds
                 - name: PATRONI_SCOPE
-                  value: ${NAME}
+                  value: ${PATRONI_NAME}
                 - name: PATRONI_NAME
                   valueFrom:
                     fieldRef:
@@ -122,7 +122,7 @@ objects:
                   value: 0.0.0.0:8008
               image: ${IMAGE_REGISTRY}/${BUILD_NAMESPACE}/${IMAGE_STREAM_TAG}
               imagePullPolicy: Always
-              name: ${NAME}
+              name: ${PATRONI_NAME}
               ports:
                 - containerPort: 8008
                   protocol: TCP
@@ -144,13 +144,13 @@ objects:
                     - /usr/share/scripts/patroni/health_check.sh
               volumeMounts:
                 - mountPath: /home/postgres/pgdata
-                  name: ${NAME}
-          serviceAccountName: ${NAME}
+                  name: ${PATRONI_NAME}
+          serviceAccountName: ${PATRONI_NAME}
       updateStrategy:
         type: RollingUpdate
       volumeClaimTemplates:
         - metadata:
-            name: ${NAME}
+            name: ${PATRONI_NAME}
           spec:
             storageClassName: ${STORAGE_CLASS}
             accessModes:
@@ -159,7 +159,7 @@ objects:
               requests:
                 storage: ${PVC_SIZE}
 parameters:
-  - name: NAME
+  - name: PATRONI_NAME
     value: tbtb-yeaf-patroni
   - name: LABEL_NAME
     required: true
