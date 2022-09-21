@@ -170,12 +170,12 @@ objects:
                   value: ${MONGODB_AUTHENTICATION_DATABASE}
                 - name: TABLE_SCHEMA
                   value: ${TABLE_SCHEMA}
-                - name: ${DATABASE_SERVER_NAME}_USER
+                - name: DATABASE_USER
                   valueFrom:
                     secretKeyRef:
                       name: ${DATABASE_SECRET_NAME}
                       key: ${DATABASE_SECRET_USER_KEY_NAME}
-                - name: ${DATABASE_SERVER_NAME}_PASSWORD
+                - name: DATABASE_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: ${DATABASE_SECRET_NAME}
