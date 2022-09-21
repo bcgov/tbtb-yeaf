@@ -39,7 +39,7 @@ objects:
               namespace: ${BUILD_NAMESPACE}
             containerNames:
               - ${NAME}
-      replicas: 1
+      replicas: ${{MIN_REPLICAS}}
       revisionHistoryLimit: 5
       selector:
         deploymentconfig: ${NAME}
@@ -112,8 +112,8 @@ objects:
         apiVersion: apps.openshift.io/v1
         kind: DeploymentConfig
         name: ${NAME}
-      minReplicas: 2
-      maxReplicas: 3
+      minReplicas: ${{MIN_REPLICAS}}
+      maxReplicas: ${{MAX_REPLICAS}}
       metrics:
         - type: Resource
           resource:
