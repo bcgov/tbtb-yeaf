@@ -27,7 +27,8 @@ class StaffEditRequest extends FormRequest
         return [
             'tele.*' => 'Telephone number field is not valid.',
             'access_type.*' => 'Access Type field is not valid.',
-            'disabled.*' => 'Status field is not valid.',
+            'disabled.required' => 'Status field is required.',
+            'disabled.boolean' => 'Status field is invalid.',
         ];
     }
 
@@ -57,11 +58,19 @@ class StaffEditRequest extends FormRequest
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
 
-        if (! isset($this->disabled)) {
-            $this->merge(['disabled' => false]);
-        }else{
-            $this->merge(['disabled' => true]);
-        }
+        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
 
+    }
+
+
+    /**
+     * Convert to boolean
+     *
+     * @param $booleable
+     * @return boolean
+     */
+    private function toBoolean($booleable)
+    {
+        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

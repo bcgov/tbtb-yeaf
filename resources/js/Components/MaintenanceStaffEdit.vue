@@ -57,7 +57,7 @@
 
             </div>
             <div class="card-footer">
-                <BreezeValidationErrors class="mt-4" />
+                <BreezeValidationErrors class="p-3" />
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-outline-success" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

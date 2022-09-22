@@ -68,8 +68,8 @@ export default {
         this.sortClmn = this.url.searchParams.get("sort");
         this.sortType = this.url.searchParams.get("direction");
 
-        if (this.url.pathname === '/dashboard') {
-            this.path = 'dashboard';
+        if (this.url.pathname === '/students') {
+            this.path = 'students';
         }
 
         let search = this.url.pathname.split('student-search/');

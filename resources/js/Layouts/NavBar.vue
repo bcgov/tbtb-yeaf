@@ -19,7 +19,7 @@ nav.navbar{
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark shadow">
         <div class="container-fluid">
-            <Link class="navbar-brand" :href="route('dashboard')">
+            <Link class="navbar-brand" :href="route('students.index')">
                 <BreezeApplicationLogo width="126" height="34" class="d-inline-block align-text-top me-3" />
                 <span class="d-none d-lg-inline">YEAF - Youth Educational Assistance Fund</span>
             </Link>
@@ -29,11 +29,6 @@ nav.navbar{
             </button>
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav flex-row flex-wrap ms-md-auto" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </BreezeNavLink>
-                    </li>
                     <li class="nav-item">
                         <BreezeNavLink class="nav-link" :href="route('students.index')" :active="route().current('students.*')">
                             Students

@@ -17,24 +17,14 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
-     */
-    public function dashboard()
-    {
-        $students = new Student();
-        $students = $this->paginateGrants($students);
-
-        return Inertia::render('Dashboard', ['status' => true, 'results' => $students]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $students = new Student();
+        $students = $this->paginateGrants($students);
+
+        return Inertia::render('Students', ['status' => true, 'results' => $students]);
     }
 
     /**

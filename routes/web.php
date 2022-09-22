@@ -24,7 +24,7 @@ Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'
 
 Route::middleware(['auth', 'active'])->group(function () {
 
-    Route::get('/dashboard', [App\Http\Controllers\StudentController::class, 'dashboard'])->name('dashboard');
+//    Route::get('/dashboard', [App\Http\Controllers\StudentController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\StudentController::class);
 
 //    Route::resource('case-funding', App\Http\Controllers\CaseFundingController::class);

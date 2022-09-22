@@ -16,7 +16,7 @@
         <div class="mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4 mt-3">
+                    <div class="col-md-3 mt-3">
                         <div class="card">
                             <div class="card-header">
                                 YEAF Students Search
@@ -26,34 +26,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 mt-3">
+                    <div class="col-md-9 mt-3">
                         <div class="card mb-3">
                             <div class="card-header">
                                 YEAF Students
                                 <Link :href="route('students.create')" class="btn btn-sm btn-success float-end">New Student</Link>
                             </div>
                             <div class="card-body">
-                                <div v-if="results != null" class="table-responsive pb-3">
+                                <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
                                         <thead>
-                                            <StudentsHeader></StudentsHeader>
+                                        <StudentsHeader></StudentsHeader>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="(row, i) in results.data">
-                                                <th scope="row"><Link :href="route('students.show', [row.id])" v-html="row.sin" /></th>
-                                                <td>{{ row.first_name }} {{ row.last_name}}</td>
-                                                <td>{{ row.institution_code }}<br/><small v-if="row.institution != null">{{ row.institution.institution_name }}</small></td>
-                                                <td>{{ row.open_date }}</td>
-                                                <td>{{ row.reactivate_date }}</td>
-                                                <td>{{ row.incident_status }}</td>
-                                                <td>{{ row.auditor_user_id }}</td>
-                                                <td><a :href="'/reports/download/' + row.id" class="btn btn-sm btn-outline-secondary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
-                                                        <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
-                                                    </svg>
-                                                </a></td>
-                                            </tr>
+                                        <tr v-for="(row, i) in results.data">
+                                            <th scope="row"><Link :href="route('students.show', [row.id])">{{ row.sin }}</Link></th>
+                                            <td>{{ row.first_name }}</td>
+                                            <td>{{ row.last_name}}</td>
+                                            <td>{{ formatMoney(row.life) }}</td>
+                                            <td>
+                                                <span v-if="(row.overaward_amount - row.overaward_deducted_amount) < 0" class="badge rounded-pill text-bg-danger fs-6">{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
+                                                <span v-else>{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
+                                            </td>
+                                            <td>
+                                                <span v-if="row.investigate" class="badge rounded-pill text-bg-danger fs-6">Yes</span>
+                                                <span v-else class="badge rounded-pill text-bg-success fs-6">No</span>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <BreezePagination :links="results.links" :active-page="results.current_page" />
@@ -79,7 +78,7 @@ import BreezeLabel from "@/Components/Label";
 import BreezePagination from "@/Components/Pagination";
 
 export default {
-    name: 'Cases',
+    name: 'Students',
     components: {
         BreezeAuthenticatedLayout, StudentSearchBox, StudentsHeader, Head, Link, BreezeInput, BreezeSelect, BreezeLabel, BreezePagination
     },
@@ -87,12 +86,15 @@ export default {
         results: Object,
     },
     data() {
-        return {
-
-        }
     },
     methods: {
-
+        countOveraward: function(a, b){
+            let c = a - b;
+            return this.formatMoney(c);
+        },
+        formatMoney: function (a){
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(a);
+        }
     },
     watch: {
     },

@@ -94,7 +94,7 @@ class UserController extends Controller
             //else the user has access
             Auth::login($user);
 
-            return Redirect::route('dashboard');
+            return Redirect::route('students.index');
         }
     }
 
@@ -131,7 +131,7 @@ class UserController extends Controller
      */
     public function dashboard(Request $request)
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Students');
     }
 
     /**
