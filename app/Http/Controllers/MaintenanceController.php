@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StaffEditRequest;
 use App\Http\Requests\MinistryEditRequest;
+use App\Models\Admin;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +49,7 @@ class MaintenanceController extends Controller
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
-            $user->start_date = $request->start_date;
-            $user->end_date = $request->end_date;
+            $user->tele = $request->tele;
             $user->access_type = $request->access_type;
             $user->disabled = $request->disabled;
             $user->save();
@@ -67,27 +68,25 @@ class MaintenanceController extends Controller
      */
     public function ministryShow(Request $request): \Inertia\Response
     {
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $user, 'page' => 'staff-edit']);
+        $admin = Admin::first();
+        $provinces = Province::where('country_code', 'CAN')->select('province_code')->get();
+        return Inertia::render('Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
     }
 
     /**
      * Display a listing of the resource.
      *
      * @param  \App\Http\Requests\MinistryEditRequest  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function ministryEdit(MinistryEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function ministryEdit(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
-            $user->start_date = $request->start_date;
-            $user->end_date = $request->end_date;
-            $user->access_type = $request->access_type;
-            $user->disabled = $request->disabled;
-            $user->save();
+
         }
 
-        return Redirect::route('maintenance.staff.list');
+        return Redirect::route('maintenance.ministry.show');
     }
     /**
      * Display a listing of the resource.

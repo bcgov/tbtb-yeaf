@@ -8,61 +8,51 @@
             <div class="card-body">
 
 
+                <div class="card-body">
 
-                <div>
-                    <BreezeLabel for="user_id" value="User ID" />
-                    <BreezeInput id="user_id" type="text" class="mt-1 block w-full" v-model="form.user_id" required />
-                </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="first_name" value="First Name" />
-                    <BreezeInput id="first_name" type="text" class="mt-1 block w-full" v-model="form.first_name" required autofocus autocomplete="first_name" />
-                </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="last_name" value="Last Name" />
-                    <BreezeInput id="last_name" type="text" class="mt-1 block w-full" v-model="form.last_name" required autocomplete="last_name" />
-                </div>
+                    <div>
+                        <BreezeLabel for="user_id" value="User ID" />
+                        <BreezeInput id="user_id" type="text" class="mt-1 block w-full bg-indigo-50" v-model="form.user_id" disabled="disabled" />
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="email" value="Email" />
-                    <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required />
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="first_name" value="First Name" />
+                        <BreezeInput id="first_name" type="text" class="mt-1 block w-full bg-indigo-50" v-model="form.first_name" disabled="disabled" />
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="start_date" value="Start Date" />
-                    <BreezeInput id="start_date" type="date" class="mt-1 block w-full" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.start_date" required />
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="last_name" value="Last Name" />
+                        <BreezeInput id="last_name" type="text" class="mt-1 block w-full bg-indigo-50" v-model="form.last_name" disabled="disabled" />
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="access_type" value="Access Type" />
-                    <BreezeSelect id="access_type" type="text" class="mt-1 block w-full" v-model="form.access_type" required>
-                        <option value="A">Admin</option>
-                        <option value="U">User</option>
-                    </BreezeSelect>
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="email" value="Email" />
+                        <BreezeInput id="email" type="email" class="mt-1 block w-full bg-indigo-50" v-model="form.email" disabled="disabled" />
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="disabled" value="Status" />
-                    <BreezeSelect id="disabled" class="mt-1 block w-full" v-model="form.disabled" required>
-                        <option value="false">Active</option>
-                        <option value="true">Disabled</option>
-                    </BreezeSelect>
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="tele" value="Telephone #" />
+                        <BreezeInput id="tele" type="text" class="mt-1 block w-full" v-model="form.tele" required />
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="disabled_date" value="Disabled Date" />
-                    <BreezeInput id="disabled_date" type="date" class="mt-1 block w-full" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.end_date" />
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="access_type" value="Access Type" />
+                        <BreezeSelect id="access_type" type="text" class="mt-1 block w-full" v-model="form.access_type" required>
+                            <option value="A">Admin</option>
+                            <option value="U">User</option>
+                        </BreezeSelect>
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="password" value="Password" />
-                    <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" autocomplete="new-password" />
-                </div>
+                    <div class="mt-4">
+                        <BreezeLabel for="disabled" value="Status" />
+                        <BreezeSelect id="disabled" class="mt-1 block w-full" v-model="form.disabled" required>
+                            <option value="false">Active</option>
+                            <option value="true">Disabled</option>
+                        </BreezeSelect>
+                    </div>
 
-                <div class="mt-4">
-                    <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                    <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" autocomplete="new-password" />
                 </div>
 
             </div>
@@ -173,9 +163,6 @@ export default {
     },
     mounted() {
         let tmpObj = this.results;
-        tmpObj.password = '';
-        tmpObj.password_confirmation = '';
-
         this.form = useForm(tmpObj);
     }
 }

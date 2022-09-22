@@ -16,7 +16,7 @@
         <div class="mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4 mt-3">
+                    <div class="col-md-3 mt-3">
                         <div class="card">
                             <div class="card-header">
                                 YEAF Students Search
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 mt-3">
+                    <div class="col-md-9 mt-3">
                         <div class="card mb-3">
                             <div class="card-header">
                                 YEAF Students

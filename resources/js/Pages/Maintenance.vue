@@ -16,7 +16,7 @@
         <div class="mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4 mt-3">
+                    <div class="col-md-3 mt-3">
                         <div class="card">
                             <div class="card-header">
                                 Maintenance Menu
@@ -26,10 +26,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 mt-3">
-                        <MaintenanceMinistry v-if="page === 'ministry'" :results="results"></MaintenanceMinistry>
-                        <MaintenanceSchools v-if="page === 'school'" :results="results"></MaintenanceSchools>
-
+                    <div class="col-md-9 mt-3">
+                        <MaintenanceMinistry v-if="page === 'ministry'" :results="results" :provinces="provinces"></MaintenanceMinistry>
                         <MaintenanceStaff v-if="page === 'staff'" :results="results"></MaintenanceStaff>
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
                     </div>
@@ -56,6 +54,7 @@ export default {
     props: {
         results: Object,
         page: String,
+        provinces: Object,
     },
     data() {
         return {

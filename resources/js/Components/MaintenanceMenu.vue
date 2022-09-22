@@ -1,14 +1,8 @@
 <template>
 
     <div class="list-group">
-        <Link :href="route('maintenance.area-of-audit.index')" class="list-group-item list-group-item-action" :class="page === 'area-of-audit' ? 'active' : ''">
-            Areas of Audit
-        </Link>
-        <Link :href="route('maintenance.school.index')" class="list-group-item list-group-item-action" :class="page === 'school' ? 'active' : ''">Schools</Link>
-        <a href="/maintenance/school" class="list-group-item list-group-item-action" :class="page === 'nature-of-offence' ? 'active' : ''">Nature of Offence</a>
-        <a href="/maintenance/school" class="list-group-item list-group-item-action" :class="page === 'referral-sources' ? 'active' : ''">Referral Sources</a>
-        <a href="/maintenance/school" class="list-group-item list-group-item-action" :class="page === 'sanction-types' ? 'active' : ''">Sanction Types</a>
-        <a href="/maintenance/staff" class="list-group-item list-group-item-action" :class="(page === 'staff' || page === 'staff-edit') ? 'active' : ''">Staff</a>
+        <Link :href="route('maintenance.ministry.show')" class="list-group-item list-group-item-action" :class="page === 'ministry' ? 'active' : ''">Ministry</Link>
+        <Link :href="route('maintenance.staff.list')" class="list-group-item list-group-item-action" :class="page === 'staff' ? 'active' : ''">Staff</Link>
     </div>
 </template>
 <script setup>
