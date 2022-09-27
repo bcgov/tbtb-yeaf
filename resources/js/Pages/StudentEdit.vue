@@ -58,7 +58,12 @@
                                             <StudentEditStudentTab @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
 
                                         </div>
-                                        <div class="tab-pane fade" id="grant-tab-pane" role="tabpanel" aria-labelledby="grant-tab" tabindex="0">...</div>
+                                        <div class="tab-pane fade" id="grant-tab-pane" role="tabpanel" aria-labelledby="grant-tab" tabindex="0">
+                                            <StudentEditGrantTab :result="result" :schools="schools"
+                                                                 :batches="batches" :program_types="program_types"
+                                                                 :program_years="program_years" :all_staff="all_staff"
+                                                                 :active_staff="active_staff"></StudentEditGrantTab>
+                                        </div>
                                         <div class="tab-pane fade" id="comment-tab-pane" role="tabpanel" aria-labelledby="comment-tab" tabindex="0">...</div>
                                     </div>
 
@@ -89,11 +94,13 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import StudentSearchBox from '@/Components/StudentSearch.vue';
 import StudentEditStudentTab from "@/Components/StudentEditStudentTab.vue";
+import StudentEditGrantTab from "@/Components/StudentEditGrantTab.vue";
 
 export default {
     name: 'StudentEdit',
     components: {
         StudentEditStudentTab,
+        StudentEditGrantTab,
         BreezeAuthenticatedLayout, StudentSearchBox, Head, Link
     },
     props: {
@@ -101,7 +108,15 @@ export default {
         now: String,
         countries: Object,
         provinces: Object,
-    },
+
+        program_types: Object,
+        program_years: Object,
+        schools: Object,
+        batches: Object,
+        active_staff: Object,
+        all_staff: Object,
+
+},
     data() {
         return {
             grantTabVisible: true,

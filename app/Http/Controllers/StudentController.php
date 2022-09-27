@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentUpdateRequest;
+use App\Models\Batch;
 use App\Models\Country;
+use App\Models\Institution;
+use App\Models\Program;
+use App\Models\ProgramYear;
 use App\Models\Province;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -60,7 +65,21 @@ class StudentController extends Controller
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
-        return Inertia::render('StudentEdit', ['status' => true, 'result' => $student, 'countries' => $countries, 'provinces' => $provinces]);
+        $program_types = Program::orderBy('program_description', 'asc')->get();
+        $program_years = ProgramYear::orderBy('year_start', 'desc')->get();
+        $schools = Institution::orderBy('name', 'asc')->get();
+        $batches = Batch::orderBy('batch_number', 'desc')->get();
+        $active_staff = User::where('disabled', 'false')->orderBy('user_id', 'asc')->get();
+        $all_staff = User::orderBy('user_id', 'asc')->get();
+
+        return Inertia::render('StudentEdit', ['status' => true,
+            'program_types' => $program_types,
+            'program_years' => $program_years,
+            'schools' => $schools,
+            'batches' => $batches,
+            'active_staff' => $active_staff,
+            'all_staff' => $all_staff,
+            'result' => $student, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
