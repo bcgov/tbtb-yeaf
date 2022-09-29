@@ -103,7 +103,8 @@ class StudentController extends Controller
     public function update(StudentUpdateRequest $request, Student $student)
     {
 
-        return Redirect::route('students.show', [$student->id]);    }
+        return Redirect::route('students.show', [$student->id]);
+    }
 
     /**
      * Remove the specified resource from storage.

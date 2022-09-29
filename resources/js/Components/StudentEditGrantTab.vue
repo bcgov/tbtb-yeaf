@@ -17,7 +17,7 @@ tr {
             </h2>
             <div :id="'collapse'+i" class="accordion-collapse collapse" :class="i===0?'show':''" :aria-labelledby="'heading'+i" data-bs-parent="#accordionGrant">
                 <div class="accordion-body">
-                    <form>
+                    <form @submit.prevent="updateGrant(i)">
                         <div class="row g-3">
 
 
@@ -36,6 +36,61 @@ tr {
                                 <BreezeInput type="text" class="form-control" :id="'inputDateReceived'+i" v-model="grant.application_receive_date" />
                             </div>
 
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputProgramType'+i" class="form-label" value="Program Type" />
+                                <BreezeSelect class="form-select" :id="'inputProgramType'+i" v-model="grant.program_code">
+                                    <option v-for="(pt,j) in program_types" :value="pt.program_code">{{ pt.program_description }}</option>
+                                </BreezeSelect>
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputProgramYear'+i" class="form-label" value="Program Year" />
+                                <BreezeSelect class="form-select" :id="'inputProgramYear'+i" v-model="grant.program_year_id">
+                                    <option value=""></option>
+                                    <option v-for="(py,j) in program_years" :value="py.program_year_id">{{ py.year_start }}/{{ py.year_end }}</option>
+                                </BreezeSelect>
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputProgramOfficer'+i" class="form-label" value="Program Officer" />
+                                <BreezeSelect class="form-select" :id="'inputProgramOfficer'+i" v-model="grant.officer_user_id">
+                                    <option v-for="(officer,j) in all_staff" :value="officer.user_id">{{ officer.first_name }} {{ officer.last_name }}</option>
+                                </BreezeSelect>
+                            </div>
+
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputStartDate'+i" class="form-label" value="Study Start Date" />
+                                <BreezeInput type="text" class="form-control" :id="'inputStartDate'+i" v-model="grant.study_start_date" />
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputEndDate'+i" class="form-label" value="Study End Date" />
+                                <BreezeInput type="text" class="form-control" :id="'inputEndDate'+i" v-model="grant.study_end_date" />
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputAge'+i" class="form-label" value="Age" />
+                                <BreezeInput type="text" class="form-control" :id="'inputAge'+i" v-model="grant.age" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputApplicationNumber'+i" class="form-label" value="Application #" />
+                                <BreezeInput type="text" class="form-control" :id="'inputApplicationNumber'+i" v-model="grant.application_number" />
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputApplicationType'+i" class="form-label" value="Application Type" />
+                                <BreezeSelect class="form-select" :id="'inputApplicationType'+i" v-model="grant.application_type">
+                                    <option value=""></option>
+                                    <option value="SFAS Extract">SFAS Extract</option>
+                                    <option value="Paper Application">Paper Application</option>
+                                </BreezeSelect>
+                            </div>
+                            <div class="col-md-4">
+                                <BreezeLabel :for="'inputApplicationStatus'+i" class="form-label" value="Application Status" />
+                                <BreezeSelect class="form-select" :id="'inputApplicationStatus'+i" v-model="grant.status_code">
+                                    <option value="A">Approved</option>
+                                    <option value="D">Denied</option>
+                                    <option value="P">Pending</option>
+                                </BreezeSelect>
+                            </div>
+
+
                             <div v-if="grant.errors != undefined" class="row">
                                 <div class="col-12">
                                     <div v-if="grant.hasErrors == true" class="alert alert-danger mt-3">
@@ -49,7 +104,8 @@ tr {
 
                         </div>
                         <div class="card-footer mt-3">
-                            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="grant.processing">Update Grant</button>
+                            <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Evaluate App</button>
+<!--                            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="grant.processing">Evaluate App</button>-->
                         </div>
 
 
@@ -109,39 +165,11 @@ export default {
     },
     methods: {
 
-        updateStudent: function ()
+        updateStudent: function (index)
         {
 
 
-            this.editForm = useForm({
-
-                student_id: this.editForm.student_id,
-                last_name: this.editForm.last_name,
-                first_name: this.editForm.first_name,
-                sin: this.editForm.sin,
-                birth_date: this.editForm.birth_date,
-                address: this.editForm.address,
-                city: this.editForm.city,
-                province: this.editForm.province,
-                postal_code: this.editForm.postal_code,
-                country: this.editForm.country,
-                tele: this.editForm.tele,
-                email: this.editForm.email,
-                gender: this.editForm.gender,
-                overaward_flag: this.editForm.overaward_flag,
-                investigate: this.editForm.area_of_audit_code,
-                pen: this.editForm.pen,
-                pd: this.editForm.pd,
-                institution_student_number: this.editForm.institution_student_number,
-
-                life: this.result.life,
-                overaward_amount: this.result.overaward_amount,
-                overaward_deducted_amount: this.result.overaward_deducted_amount,
-
-
-            });
-
-            this.editForm.put(route('students.update', this.result.id), {
+            this.grantForms[index].put(route('grants.update', this.grantForms[index].id), {
                 onSuccess: () => {
                     this.showSuccessAlert();
                 },
@@ -173,6 +201,34 @@ export default {
         {
             window.history.back();
         },
+
+        evaluateGrant: function(index){
+            let grant = this.grantForms[index];
+            grant.evaluationValid = false;
+
+            if(grant.application_receive_date == null || grant.program_year_id === ''){
+                alert("You must fill in at least the program year and the date received before evaluating the application.");
+            }else{
+                if(grant.status_code === 'A' && grant.total_yeaf_award > 0){
+                    alert("Once an award has been made, you cannot 'evaluate' an application.");
+                }else if(grant.program_year_id === ''){
+                    alert("You must select a program year.");
+                }else{
+
+                    this.grantForms[index].put(route('grants.evaluate', this.grantForms[index].id), {
+                        onSuccess: () => {
+                            this.showSuccessAlert();
+                        },
+                        onFailure: () => {
+                        },
+                        onError: () => {
+                        },
+                        preserveState: false,
+
+                    });
+                }
+            }
+        }
 
     },
     watch: {
