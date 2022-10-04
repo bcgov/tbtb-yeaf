@@ -83,28 +83,82 @@ tr {
                             </div>
                             <div class="col-md-4">
                                 <BreezeLabel :for="'inputApplicationStatus'+i" class="form-label" value="Application Status" />
-                                <BreezeSelect class="form-select" :id="'inputApplicationStatus'+i" v-model="grant.status_code">
+                                <BreezeSelect @change="cboStatus_BeforeUpdate(i)" class="form-select" :id="'inputApplicationStatus'+i" v-model="grant.status_code">
                                     <option value="A">Approved</option>
                                     <option value="D">Denied</option>
                                     <option value="P">Pending</option>
                                 </BreezeSelect>
                             </div>
+                        </div>
 
+                        <div v-if="grant.status_code === 'P'" class="card mt-3">
+                            <div class="card-header">Pending Reasons<button class="btn btn-sm float-end btn-success">add row +</button></div>
+                            <div class="card-body">
+                                <div class="row mb-3" v-for="(grantPending, j) in grant.grant_pending_ineligibles">
+                                    <div class="col-md-10">
+                                        <BreezeLabel class="form-label" value="Pending Reason" />
+                                        <BreezeSelect class="form-select" v-model="grantPending.ineligible_code_id">
+                                            <template v-for="ineligible in ineligibles">
+                                                <option v-if="ineligible.code_type === 'P' && ineligible.active_flag === true" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                            </template>
+                                        </BreezeSelect>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <BreezeLabel class="form-label" value="Clear?" />
+                                        <div class="form-check form-switch">
+                                            <BreezeInput type="checkbox" role="switch" class="form-check-input" v-model="grantPending.cleared_flag" />
+                                        </div>
+                                    </div>
+                                </div><!-- end existing rows -->
+                                <div class="row mb-3" v-for="(grantPending, j) in grant.new_grant_pending_ineligibles">
+                                    <div class="col-md-10">
+                                        <BreezeSelect class="form-select" v-model="grantPending.ineligible_code_id">
+                                            <template v-for="ineligible in ineligibles">
+                                                <option v-if="ineligible.code_type === 'P' && ineligible.active_flag === true" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                            </template>
+                                        </BreezeSelect>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check form-switch">
+                                            <BreezeInput type="checkbox" role="switch" class="form-check-input" v-model="grantPending.cleared_flag" />
+                                        </div>
+                                    </div>
+                                </div><!-- end existing rows -->
 
-                            <div v-if="grant.errors != undefined" class="row">
-                                <div class="col-12">
-                                    <div v-if="grant.hasErrors == true" class="alert alert-danger mt-3">
-                                        <ul>
-                                            <li v-for="err in grant.errors">{{ err }}</li>
-                                        </ul>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <BreezeLabel class="form-label" value="Custom Pending Reason" />
+                                        <textarea class="form-control" v-model="grant.custom_pending_reason"></textarea>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div v-if="grant.status_code === 'D'" class="card mt-3">
+                            <div class="card-header">Denied Reasons</div>
+                            <div class="card-body">
+                                <div class="col-md-4">
+                                    <BreezeSelect class="form-select">
+                                        <template v-for="ineligible in ineligibles">
+                                            <option v-if="ineligible.code_type === 'D' && ineligible.active_flag === true" :value="ineligible.ineligible_code_type">{{ ineligible.description }}</option>
+                                        </template>
+                                    </BreezeSelect>
+                                </div>
+                            </div>
+                        </div>
 
 
+                        <div v-if="grant.errors != undefined" class="row">
+                            <div class="col-12">
+                                <div v-if="grant.hasErrors == true" class="alert alert-danger mt-3">
+                                    <ul>
+                                        <li v-for="err in grant.errors">{{ err }}</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer mt-3">
-                            <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Evaluate App</button>
+                            <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Save &amp; Evaluate App</button>
 <!--                            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="grant.processing">Evaluate App</button>-->
                         </div>
 
@@ -129,6 +183,7 @@ tr {
 
 </template>
 <script>
+import axios from 'axios';
 import {Link, useForm} from '@inertiajs/inertia-vue3';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
@@ -149,6 +204,7 @@ export default {
         program_years: Object,
         schools: Object,
         batches: Object,
+        ineligibles: Object,
         active_staff: Object,
         all_staff: Object,
 
@@ -164,11 +220,31 @@ export default {
         }
     },
     methods: {
+        cboStatus_BeforeUpdate: function (index)
+        {
+            let cancel = false;
+            let grant = this.grantForms[index];
+            grant.evaluationValid = true;
+            if(grant.institution_id == null || grant.study_end_date == null || grant.study_start_date == null || grant.program_code == null || grant.program_year_id == null)
+            {
+                alert("You cannot change the status to Approved until all required fields are filled in.");
+                cancel = true;
+            }
 
+            if(grant.total_yeaf_award > 0 && grant.status_code === 'A')
+            {
+                alert("You cannot change the status from Approved when an award has been given.");
+                cancel = true;
+            }
+
+            if(cancel){
+                this.grantForms[index].status_code = this.result.grants[index].status_code;
+                grant.evaluationValid = false;
+                return false;
+            }
+        },
         updateStudent: function (index)
         {
-
-
             this.grantForms[index].put(route('grants.update', this.grantForms[index].id), {
                 onSuccess: () => {
                     this.showSuccessAlert();
@@ -204,28 +280,36 @@ export default {
 
         evaluateGrant: function(index){
             let grant = this.grantForms[index];
-            grant.evaluationValid = false;
+            grant.evaluationValid = true;
 
             if(grant.application_receive_date == null || grant.program_year_id === ''){
                 alert("You must fill in at least the program year and the date received before evaluating the application.");
+                grant.evaluationValid = false;
             }else{
                 if(grant.status_code === 'A' && grant.total_yeaf_award > 0){
                     alert("Once an award has been made, you cannot 'evaluate' an application.");
+                    grant.evaluationValid = false;
                 }else if(grant.program_year_id === ''){
                     alert("You must select a program year.");
+                    grant.evaluationValid = false;
                 }else{
+                    let vm = this;
+                    vm.formSubmitting = true;
 
-                    this.grantForms[index].put(route('grants.evaluate', this.grantForms[index].id), {
-                        onSuccess: () => {
-                            this.showSuccessAlert();
-                        },
-                        onFailure: () => {
-                        },
-                        onError: () => {
-                        },
-                        preserveState: false,
-
-                    });
+                    let formData = new FormData();
+                    formData.append('frm', JSON.stringify(this.grantForms[index]));
+                    axios({
+                        url: route('grants.evaluate', this.grantForms[index].id),
+                        data: formData,
+                        method: 'post',
+                        headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'}
+                    })
+                        .then(function (response) {
+                            vm.showSuccessAlert();
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 }
             }
         }
@@ -237,10 +321,7 @@ export default {
     computed: {
     },
     mounted() {
-        for(let i=0; i<this.result.grants.length; i++)
-        {
-            this.grantForms.push(useForm(this.result.grants[i]));
-        }
+        this.grantForms = JSON.parse(JSON.stringify(this.result.grants));
     }
 }
 

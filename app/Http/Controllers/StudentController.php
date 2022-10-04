@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Batch;
 use App\Models\Country;
+use App\Models\Ineligible;
 use App\Models\Institution;
 use App\Models\Program;
 use App\Models\ProgramYear;
@@ -61,7 +62,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        $student = Student::where('id', $student->id)->with('grants', 'appeals', 'comments')->first();
+        $student = Student::where('id', $student->id)->with('grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'appeals', 'comments')->first();
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
@@ -71,12 +72,14 @@ class StudentController extends Controller
         $batches = Batch::orderBy('batch_number', 'desc')->get();
         $active_staff = User::where('disabled', 'false')->orderBy('user_id', 'asc')->get();
         $all_staff = User::orderBy('user_id', 'asc')->get();
+        $ineligibles = Ineligible::orderBy('code_id', 'asc')->get();
 
         return Inertia::render('StudentEdit', ['status' => true,
             'program_types' => $program_types,
             'program_years' => $program_years,
             'schools' => $schools,
             'batches' => $batches,
+            'ineligibles' => $ineligibles,
             'active_staff' => $active_staff,
             'all_staff' => $all_staff,
             'result' => $student, 'countries' => $countries, 'provinces' => $provinces]);

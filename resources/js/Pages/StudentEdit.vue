@@ -62,7 +62,7 @@
                                             <StudentEditGrantTab :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
-                                                                 :active_staff="active_staff"></StudentEditGrantTab>
+                                                                 :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
                                         </div>
                                         <div class="tab-pane fade" id="comment-tab-pane" role="tabpanel" aria-labelledby="comment-tab" tabindex="0">...</div>
                                     </div>
@@ -113,6 +113,7 @@ export default {
         program_years: Object,
         schools: Object,
         batches: Object,
+        ineligibles: Object,
         active_staff: Object,
         all_staff: Object,
 

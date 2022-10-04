@@ -19,6 +19,21 @@ class Grant extends Model
         return $this->belongsTo('App\Models\ProgramYear', 'program_year_id', 'program_year_id');
     }
 
+    public function grantIneligibles()
+    {
+        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id');
+    }
+
+    public function grantPendingIneligibles()
+    {
+        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'P');
+    }
+
+    public function grantDeniedIneligibles()
+    {
+        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'D');
+    }
+
     public function scopeIsPending($query)
     {
         return $query->where('status_code', 'P');

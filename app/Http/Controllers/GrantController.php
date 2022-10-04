@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GrantEditRequest;
 use App\Models\Appeal;
 use App\Models\Grant;
 use App\Models\GrantIneligible;
@@ -114,25 +115,153 @@ Call CheckAge(False, True)
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Grant  $grant
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function evaluateApp(Request $request, Grant $grant)
+    public function evaluateApp(GrantEditRequest $request, Grant $grant)
     {
+//        dd($request->all());
+
+        Grant::update($request->validated());
+
         $this->clearFlags($request, $grant);
-        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
-        list($msg, $app_ineligible) = $this->checkMaxYears(false, true, $grant, $msg, $app_ineligible);
-        list($msg, $app_ineligible) = $this->datewatch(false, true);
+
+        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(true, false, $grant);
+        if($msg != '' || $app_ineligible == true){
+            return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
+        }
+
+        list($msg, $app_ineligible) = $this->checkMaxYears(true, false, $grant, $msg, $app_ineligible);
+        if($msg != '' || $app_ineligible == true){
+            return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
+        }
+
+        list($msg, $app_ineligible) = $this->datewatch(true, false, $grant, $msg, $app_ineligible);
+        if($msg != '' || $app_ineligible == true){
+            return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
+        }
+        list($msg, $app_ineligible) = $this->checkProgramYear(true, false, $grant, $msg, $app_ineligible);
 
 
-        return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status]);
+
+//        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
+//        list($msg, $app_ineligible) = $this->checkMaxYears(false, true, $grant, $msg, $app_ineligible);
+//        list($msg, $app_ineligible) = $this->datewatch(false, true, $grant, $msg, $app_ineligible);
+//        list($msg, $app_ineligible) = $this->checkProgramYear(false, true, $grant, $msg, $app_ineligible);
+//        $this->setStatus($grant);
+
+//        return Redirect::route('students.show', [$grant->student()->id]);
+        $grant = Grant::find($grant->id);
+
+
+        return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
 
     }
-    private function datewatch($messageFlag, $createIneligibleFlag)
+
+
+    private function setStatus(Grant $grant)
     {
-        // get the code
-        //Private Sub datewatch(tMsgFlg, tCreateIneligibleflg)
+        $record = null;
+        if(!is_null($grant)){
+//            $record = DB::select(DB::raw("select yeaf_grants.grant_id,
+//       SUM(CASE WHEN ygi.ineligible_code_type = 'P' THEN 1 ELSE 0 END) AS PendingCnt,
+//       SUM(CASE WHEN ygi.ineligible_code_type = 'D' THEN 1 ELSE 0 END) AS DeniedCnt
+//from yeaf_grants
+//    join yeaf_grant_ineligibles ygi on yeaf_grants.grant_id = ygi.grant_id
+//WHERE ygi.cleared_flag=false AND yeaf_grants.grant_id=$grant->grant_id
+//group by yeaf_grants.grant_id
+//order by yeaf_grants.grant_id asc ;"));
+
+            $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function($query) {$query->where('ineligible_code_type', 'P');}],'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function($query) {$query->where('ineligible_code_type', 'D');}],'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
+        }
+
+        if(!is_null($record)){
+            $record = $record[0];
+            if($record->DeniedCnt > 0){
+                $status = 'D';
+            }elseif ($record->PendingCnt > 0){
+                $status = 'P';
+            }
+        }else{
+            $status = 'P';
+        }
+
+        if($status != '' && $status != $grant->status_code){
+            $grant->status_code = $status;
+            $grant->status_date = date('Y-m-d', strtotime('now'));
+            $grant->save();
+        }
+
+        return null;
+    }
+
+    private function checkProgramYear($messageFlag, $createIneligibleFlag, Grant $grant, $msg="", $app_ineligible=false)
+    {
+        //if existing app start date is greater than this end date or existing app end date is less than this start date,
+        //then this app is okay, otherwise it overlaps an existing app
+        $same_program_year = Grant::where('student_id', $grant->student_id)
+            ->where('total_yeaf_award', '>', 0)
+            ->where('grant_id', '!=', $grant->grant_id)
+            ->where('program_year_id', $grant->py->program_year_id)
+            ->get();
+        if($same_program_year->count() > 0){
+            if($messageFlag){
+                $msg = "There are other applications for this person with an award for the same program year.";
+            }
+            if($createIneligibleFlag){
+                $this->addIneligibleReason($grant, "11");
+                $app_ineligible = true;
+            }
+        }
+
+
+        return [$msg, $app_ineligible];
 
     }
+
+    private function datewatch($messageFlag, $createIneligibleFlag, Grant $grant, $msg="", $app_ineligible=false)
+    {
+        $date1 = '';
+        $date2 = '';
+        $dateprogram = 0;
+        if(!is_null($grant->study_start_date) && !is_null($grant->study_end_date)){
+            $date1 = new Carbon($grant->study_start_date);
+            $date2 = new carbon($grant->study_end_date);
+
+            $dateprogram = $date2->diffInDays($date1);
+            if($dateprogram < 81){
+                if($messageFlag){
+                    $msg = "The end date is shorter than 12 weeks. <br/><br/>This application does not meet the course length criteria.<br/><br/>Program Length Error";
+                }
+                if($createIneligibleFlag){
+                    $this->addIneligibleReason($grant, "05");
+                    $app_ineligible = true;
+                }
+            }
+
+            //if existing app start date is greater than this end date or existing app end date is less than this start date
+            //then this app is okay, otherwise it overlaps an existing app
+            $same_program_period = Grant::where('student_id', $grant->student_id)
+                ->where('study_start_date', '<=', date('Y-m-d', strtotime($grant->study_end_date)))
+                ->where('study_end_date', '>=', date('Y-m-d', strtotime($grant->study_start_date)))
+//                ->whereNot(DB::raw('("study_start_date" > ' . date('Y-m-d', strtotime($grant->study_end_date)) . ' OR "study_end_date" < ' . date('Y-m-d', strtotime($grant->study_start_date)) . ')'))
+                ->where('grant_id', '!=', $grant->grant_id)
+                ->where('total_yeaf_award', '>', 0)
+                ->get();
+            if($same_program_period->count() > 0){
+                if($messageFlag){
+                    $msg = "There are other applications with overlapping program periods.";
+                }
+                if($createIneligibleFlag){
+                    $this->addIneligibleReason($grant, "10");
+                    $app_ineligible = true;
+                }
+            }
+        }
+
+        return [$msg, $app_ineligible];
+
+    }
+
     private function checkMaxYears($messageFlag, $createIneligibleFlag, Grant $grant, $msg="", $app_ineligible=false)
     {
 
@@ -232,7 +361,7 @@ group by yeaf_grants.program_year_id"));
 
     }
 
-    private function addIneligibleReason($grant, $ineligible_code_id)
+    private function addIneligibleReason(Grant $grant, $ineligible_code_id)
     {
         $grant_ineligibles = GrantIneligible::where('grant_id', $grant->grant_id)->where('ineligible_code_id', $ineligible_code_id)->get();
         if($grant_ineligibles->count() > 0){
@@ -245,7 +374,7 @@ group by yeaf_grants.program_year_id"));
         }
     }
 
-    private function createGrantIneligible($grant, $ineligible_code_id, $ineligible_code_type)
+    private function createGrantIneligible(Grant $grant, $ineligible_code_id, $ineligible_code_type)
     {
         $grant_ineligible = new GrantIneligible();
         $grant_ineligible->grant_id = $grant->id;
