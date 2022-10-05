@@ -142,6 +142,7 @@ Call CheckAge(False, True)
         $grant = $this->update($request, $grant);
         $this->updatePendingIneligibles($grant, $request);
         $this->updateDeniedIneligibles($grant, $request);
+        $this->updateAppeals($grant, $request);
 
         $this->clearFlags($request, $grant);
 
@@ -195,42 +196,91 @@ Call CheckAge(False, True)
         if(isset($request->new_pending_reasons)) {
             foreach ($request->new_pending_reasons as $pending)
             {
-                $grant_ineligible = new GrantIneligible();
-                $grant_ineligible->grant_id = $grant->grant_id;
-                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
-                $grant_ineligible->ineligible_code_type = "P";
-                $grant_ineligible->cleared_flag = $pending->cleared_flag;
-                $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
-                $grant_ineligible->save();
+                if($pending->ineligible_code_id != 0) {
+                    $grant_ineligible = new GrantIneligible();
+                    $grant_ineligible->grant_id = $grant->grant_id;
+                    $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
+                    $grant_ineligible->ineligible_code_type = "P";
+                    $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                    $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
+                    $grant_ineligible->save();
+                }
             }
         }
 
         return null;
     }
+
     private function updateDeniedIneligibles(Grant $grant, $request)
     {
         //update existing records
         if(isset($request->grant_denial_ineligibles)){
-            foreach ($request->grant_denial_ineligibles as $pending)
+            foreach ($request->grant_denial_ineligibles as $denied)
             {
-                $grant_ineligible = GrantIneligible::find($pending->id);
-                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
-                $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                $grant_ineligible = GrantIneligible::find($denied->id);
+                $grant_ineligible->ineligible_code_id = $denied->ineligible_code_id;
+                $grant_ineligible->cleared_flag = $denied->cleared_flag;
                 $grant_ineligible->save();
             }
         }
 
         //add new records
         if(isset($request->new_denial_reasons)) {
-            foreach ($request->new_denial_reasons as $pending)
+            foreach ($request->new_denial_reasons as $denied)
             {
-                $grant_ineligible = new GrantIneligible();
-                $grant_ineligible->grant_id = $grant->grant_id;
-                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
-                $grant_ineligible->ineligible_code_type = "D";
-                $grant_ineligible->cleared_flag = $pending->cleared_flag;
-                $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
-                $grant_ineligible->save();
+                if($denied->ineligible_code_id != 0){
+                    $grant_ineligible = new GrantIneligible();
+                    $grant_ineligible->grant_id = $grant->grant_id;
+                    $grant_ineligible->ineligible_code_id = $denied->ineligible_code_id;
+                    $grant_ineligible->ineligible_code_type = "D";
+                    $grant_ineligible->cleared_flag = $denied->cleared_flag;
+                    $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
+                    $grant_ineligible->save();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function updateAppeals(Grant $grant, $request)
+    {
+        //update existing records
+        if(isset($request->appeals)){
+            foreach ($request->appeals as $appeal)
+            {
+                $grant_appeal = Appeal::find($appeal->id);
+                $grant_appeal->adjudicated_by_user_id = $appeal->adjudicated_by_user_id;
+                $grant_appeal->updated_by_user_id = Str::upper(Auth::user()->user_id);
+                $grant_appeal->appeal_code = $appeal->appeal_code;
+                $grant_appeal->appeal_date = $appeal->appeal_date;
+                $grant_appeal->status_code = $appeal->status_code;
+                $grant_appeal->status_affective_date = $appeal->status_affective_date;
+                $grant_appeal->other_appeal_explain = $appeal->other_appeal_explain;
+                $grant_appeal->save();
+            }
+        }
+
+        //add new records
+        if(isset($request->new_appeals)) {
+            foreach ($request->new_appeals as $appeal)
+            {
+                if($appeal->appeal_code != 0) {
+                    $last_appeal_id = Appeal::orderByDesc('appeal_id')->first();
+                    $grant_appeal = new Appeal();
+                    $grant_appeal->grant_id = $grant->grant_id;
+                    $grant_appeal->appeal_id = $last_appeal_id->appeal_id + 1;
+                    $grant_appeal->student_id = $grant->student_id;
+                    $grant_appeal->program_year_id = $grant->program_year_id;
+                    $grant_appeal->adjudicated_by_user_id = $appeal->adjudicated_by_user_id;
+                    $grant_appeal->updated_by_user_id = Str::upper(Auth::user()->user_id);
+                    $grant_appeal->appeal_code = $appeal->appeal_code;
+                    $grant_appeal->appeal_date = $appeal->appeal_date;
+                    $grant_appeal->status_code = $appeal->status_code;
+                    $grant_appeal->status_affective_date = $appeal->status_affective_date;
+                    $grant_appeal->other_appeal_explain = $appeal->other_appeal_explain;
+                    $grant_appeal->save();
+                }
             }
         }
 
