@@ -19,6 +19,11 @@ class Grant extends Model
         return $this->belongsTo('App\Models\ProgramYear', 'program_year_id', 'program_year_id');
     }
 
+    public function appeals()
+    {
+        return $this->hasMany('App\Models\Appeal', 'grant_id', 'grant_id');
+    }
+
     public function grantIneligibles()
     {
         return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id');

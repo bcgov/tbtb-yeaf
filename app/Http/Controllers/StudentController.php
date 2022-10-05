@@ -62,7 +62,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        $student = Student::where('id', $student->id)->with('grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'appeals', 'comments')->first();
+        $student = Student::where('id', $student->id)->with('grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'grants.appeals', 'comments')->first();
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
@@ -72,7 +72,7 @@ class StudentController extends Controller
         $batches = Batch::orderBy('batch_number', 'desc')->get();
         $active_staff = User::where('disabled', 'false')->orderBy('user_id', 'asc')->get();
         $all_staff = User::orderBy('user_id', 'asc')->get();
-        $ineligibles = Ineligible::orderBy('code_id', 'asc')->get();
+        $ineligibles = Ineligible::orderBy('description')->get();
 
         return Inertia::render('StudentEdit', ['status' => true,
             'program_types' => $program_types,

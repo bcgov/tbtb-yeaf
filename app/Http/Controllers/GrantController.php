@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use phpDocumentor\Reflection\Types\Boolean;
 use Response;
@@ -77,13 +78,31 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\GrantEditRequest  $request
      * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Grant $grant)
+    public function update(GrantEditRequest $request, Grant $grant)
     {
-        //
+        $grant->institution_id = $request->institution_id;
+        $grant->program_name = $request->program_name;
+        $grant->application_receive_date = $request->application_receive_date;
+        $grant->program_code = $request->program_code;
+        $grant->program_year_id = $request->program_year_id;
+        $grant->officer_user_id = $request->officer_user_id;
+        $grant->study_start_date = $request->study_start_date;
+        $grant->study_end_date = $request->study_end_date;
+        $grant->age = $request->age;
+        $grant->application_number = $request->application_number;
+        $grant->application_type = $request->application_type;
+        $grant->status_code = $request->status_code;
+        $grant->last_evaluation_date = date('Y-m-d', strtotime('now'));
+
+        $grant->custom_pending_reason = $request->custom_pending_reason;
+        $grant->custom_denial_reason = $request->custom_denial_reason;
+        $grant->save();
+
+        return Grant::find($grant->id);
     }
 
     /**
@@ -113,15 +132,16 @@ Call CheckAge(False, True)
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\GrantEditRequest  $request
      * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function evaluateApp(GrantEditRequest $request, Grant $grant)
     {
-//        dd($request->all());
 
-        Grant::update($request->validated());
+        $grant = $this->update($request, $grant);
+        $this->updatePendingIneligibles($grant, $request);
+        $this->updateDeniedIneligibles($grant, $request);
 
         $this->clearFlags($request, $grant);
 
@@ -158,6 +178,64 @@ Call CheckAge(False, True)
     }
 
 
+    private function updatePendingIneligibles(Grant $grant, $request)
+    {
+        //update existing records
+        if(isset($request->grant_pending_ineligibles)){
+            foreach ($request->grant_pending_ineligibles as $pending)
+            {
+                $grant_ineligible = GrantIneligible::find($pending->id);
+                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
+                $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                $grant_ineligible->save();
+            }
+        }
+
+        //add new records
+        if(isset($request->new_pending_reasons)) {
+            foreach ($request->new_pending_reasons as $pending)
+            {
+                $grant_ineligible = new GrantIneligible();
+                $grant_ineligible->grant_id = $grant->grant_id;
+                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
+                $grant_ineligible->ineligible_code_type = "P";
+                $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
+                $grant_ineligible->save();
+            }
+        }
+
+        return null;
+    }
+    private function updateDeniedIneligibles(Grant $grant, $request)
+    {
+        //update existing records
+        if(isset($request->grant_denial_ineligibles)){
+            foreach ($request->grant_denial_ineligibles as $pending)
+            {
+                $grant_ineligible = GrantIneligible::find($pending->id);
+                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
+                $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                $grant_ineligible->save();
+            }
+        }
+
+        //add new records
+        if(isset($request->new_denial_reasons)) {
+            foreach ($request->new_denial_reasons as $pending)
+            {
+                $grant_ineligible = new GrantIneligible();
+                $grant_ineligible->grant_id = $grant->grant_id;
+                $grant_ineligible->ineligible_code_id = $pending->ineligible_code_id;
+                $grant_ineligible->ineligible_code_type = "D";
+                $grant_ineligible->cleared_flag = $pending->cleared_flag;
+                $grant_ineligible->created_by = Str::upper(Auth::user()->user_id);
+                $grant_ineligible->save();
+            }
+        }
+
+        return null;
+    }
     private function setStatus(Grant $grant)
     {
         $record = null;

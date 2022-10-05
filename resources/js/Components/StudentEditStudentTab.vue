@@ -13,19 +13,19 @@ tr {
             <div class="col-md-3">
                 <div class="form-check form-switch">
                     <label for="inputInvestigate" class="form-check-label">Freeze</label>
-                    <BreezeInput @change="$emit('investigate')" type="checkbox" role="switch" class="form-check-input" id="inputInvestigate" v-model="editForm.investigate" />
+                    <input @change="$emit('investigate')" type="checkbox" role="switch" class="form-check-input" id="inputInvestigate" v-model="editForm.investigate" />
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-check form-switch">
                     <label for="inputOverride" class="form-check-label">Override</label>
-                    <BreezeInput type="checkbox" role="switch" class="form-check-input" id="inputOverride" v-model="editForm.overaward_flag" />
+                    <input type="checkbox" role="switch" class="form-check-input" id="inputOverride" v-model="editForm.overaward_flag" />
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-check form-switch">
                     <label for="inputDisabilitySwitch" class="form-check-label">Permanent Disability (Documentation required)</label>
-                    <BreezeInput class="form-check-input" type="checkbox" role="switch" id="inputDisabilitySwitch" v-model="editForm.pd" />
+                    <input class="form-check-input" type="checkbox" role="switch" id="inputDisabilitySwitch" v-model="editForm.pd" />
                 </div>
             </div>
 
