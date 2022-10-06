@@ -25,7 +25,7 @@
                         <div class="col-md-8 mt-3 mb-5">
                             <div class="card">
                                 <div v-if="result != null" class="card-header">
-                                    YEAF Edit Student
+                                    YEAF Edit Student<button v-if="activeTab==='grant'" type="button" class="btn btn-success float-end">New Grant</button>
                                     <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>
                                     <span v-if="overawardFlagVisible == true" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">Over Award</span>
 <!--                                    <a :href="'/reports/download/' + editForm.id" class="btn rounded-pill btn-outline-secondary shadow-none float-end" data-bs-toggle="tooltip" data-bs-title="Download Student Report">-->
@@ -42,29 +42,29 @@
 
 
                                     <ul class="nav nav-tabs mb-3" id="myStudentTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
+                                        <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
                                             <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
                                         </li>
-                                        <li v-if="grantTabVisible" class="nav-item" role="presentation">
+                                        <li @click="switchActiveTab('grant')" v-if="grantTabVisible" class="nav-item" role="presentation">
                                             <button class="nav-link" id="grant-tab" data-bs-toggle="tab" data-bs-target="#grant-tab-pane" type="button" role="tab" aria-controls="grant-tab-pane" aria-selected="false">Grant</button>
                                         </li>
-                                        <li class="nav-item" role="presentation">
+                                        <li @click="switchActiveTab('comment')" class="nav-item" role="presentation">
                                             <button class="nav-link" id="comment-tab" data-bs-toggle="tab" data-bs-target="#comment-tab-pane" type="button" role="tab" aria-controls="comment-tab-pane" aria-selected="false">Comment</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade show active" id="student-tab-pane" role="tabpanel" aria-labelledby="student-tab" tabindex="0">
 
-                                            <StudentEditStudentTab @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
+                                            <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
 
                                         </div>
                                         <div class="tab-pane fade" id="grant-tab-pane" role="tabpanel" aria-labelledby="grant-tab" tabindex="0">
-                                            <StudentEditGrantTab :result="result" :schools="schools"
+                                            <StudentEditGrantTab v-if="activeTab==='grant'" :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
                                                                  :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
                                         </div>
-                                        <div class="tab-pane fade" id="comment-tab-pane" role="tabpanel" aria-labelledby="comment-tab" tabindex="0">...</div>
+                                        <div class="tab-pane fade" v-if="activeTab==='comment'" id="comment-tab-pane" role="tabpanel" aria-labelledby="comment-tab" tabindex="0">...</div>
                                     </div>
 
 
@@ -123,9 +123,14 @@ export default {
             grantTabVisible: true,
             overawardFlagVisible: false,
             editForm: null,
+            activeTab: 'student',
         }
     },
     methods: {
+        switchActiveTab: function (tab)
+        {
+            this.activeTab = tab;
+        },
         updateTabs: function(){
             this.grantTabVisible = !this.grantTabVisible;
         },

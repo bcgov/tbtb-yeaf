@@ -86,6 +86,7 @@ class GrantController extends Controller
     {
         $grant->institution_id = $request->institution_id;
         $grant->program_name = $request->program_name;
+        $grant->program_other_description = $request->program_other_description;
         $grant->application_receive_date = $request->application_receive_date;
         $grant->program_code = $request->program_code;
         $grant->program_year_id = $request->program_year_id;
@@ -97,6 +98,17 @@ class GrantController extends Controller
         $grant->application_type = $request->application_type;
         $grant->status_code = $request->status_code;
         $grant->last_evaluation_date = date('Y-m-d', strtotime('now'));
+
+        if($request->status_code === 'A' && $request->total_yeaf_award > 0)
+        {
+            $grant->total_yeaf_award = $request->total_yeaf_award;
+            $grant->cheque_batch_number = $request->cheque_batch_number;
+            $grant->cheque_issue_date = $request->cheque_issue_date;
+            $grant->withdrawal = $request->withdrawal;
+            $grant->withdrawal_date = $request->withdrawal_date;
+            $grant->overaward = $request->overaward;
+            $grant->overaward_deducted_amount = $request->overaward_deducted_amount;
+        }
 
         $grant->custom_pending_reason = $request->custom_pending_reason;
         $grant->custom_denial_reason = $request->custom_denial_reason;

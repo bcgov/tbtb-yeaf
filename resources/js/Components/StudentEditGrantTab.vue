@@ -33,23 +33,27 @@ tr {
                             </div>
                             <div class="col-md-4">
                                 <BreezeLabel :for="'inputDateReceived'+i" class="form-label" value="Date Received" />
-                                <BreezeInput type="text" class="form-control" :id="'inputDateReceived'+i" v-model="grant.application_receive_date" />
+                                <BreezeInput type="date" class="form-control" :id="'inputDateReceived'+i" v-model="grant.application_receive_date" />
                             </div>
 
-                            <div class="col-md-4">
+                            <div :class="grant.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
                                 <BreezeLabel :for="'inputProgramType'+i" class="form-label" value="Program Type" />
                                 <BreezeSelect class="form-select" :id="'inputProgramType'+i" v-model="grant.program_code">
                                     <option v-for="(pt,j) in program_types" :value="pt.program_code">{{ pt.program_description }}</option>
                                 </BreezeSelect>
                             </div>
-                            <div class="col-md-4">
+                            <div v-if="grant.program_code === 'I'" class="col-md-3">
+                                <BreezeLabel :for="'inputProgramOtherDescription'+i" class="form-label" value="Program Other Desc" />
+                                <BreezeInput type="text" class="form-control" :id="'inputProgramOtherDescription'+i" v-model="grant.program_other_description" />
+                            </div>
+                            <div :class="grant.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
                                 <BreezeLabel :for="'inputProgramYear'+i" class="form-label" value="Program Year" />
                                 <BreezeSelect class="form-select" :id="'inputProgramYear'+i" v-model="grant.program_year_id">
                                     <option value=""></option>
                                     <option v-for="(py,j) in program_years" :value="py.program_year_id">{{ py.year_start }}/{{ py.year_end }}</option>
                                 </BreezeSelect>
                             </div>
-                            <div class="col-md-4">
+                            <div :class="grant.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
                                 <BreezeLabel :for="'inputProgramOfficer'+i" class="form-label" value="Program Officer" />
                                 <BreezeSelect class="form-select" :id="'inputProgramOfficer'+i" v-model="grant.officer_user_id">
                                     <option v-for="(officer,j) in all_staff" :value="officer.user_id">{{ officer.first_name }} {{ officer.last_name }}</option>
@@ -58,11 +62,11 @@ tr {
 
                             <div class="col-md-4">
                                 <BreezeLabel :for="'inputStartDate'+i" class="form-label" value="Study Start Date" />
-                                <BreezeInput type="text" class="form-control" :id="'inputStartDate'+i" v-model="grant.study_start_date" />
+                                <BreezeInput type="date" class="form-control" :id="'inputStartDate'+i" v-model="grant.study_start_date" />
                             </div>
                             <div class="col-md-4">
                                 <BreezeLabel :for="'inputEndDate'+i" class="form-label" value="Study End Date" />
-                                <BreezeInput type="text" class="form-control" :id="'inputEndDate'+i" v-model="grant.study_end_date" />
+                                <BreezeInput type="date" class="form-control" :id="'inputEndDate'+i" v-model="grant.study_end_date" />
                             </div>
                             <div class="col-md-4">
                                 <BreezeLabel :for="'inputAge'+i" class="form-label" value="Age" />
@@ -91,6 +95,61 @@ tr {
                             </div>
                         </div>
 
+                        <div v-if="grant.status_code === 'A'" class="card mt-3">
+                            <div class="card-header">Approved Application
+                                <button v-if="grant.total_yeaf_award <= 0 || grant.total_yeaf_award == 0 || grant.cheque_batch_number == null" @click="giveAward(i)" type="button" class="btn btn-sm float-end btn-success">Give Award</button>
+                                <button v-if="checkLocked(i)" type="button" class="btn btn-sm float-end btn-danger" @click="unlock(i)">Locked</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="YEAF Award" />
+                                        <BreezeInput type="text" class="form-control" v-model="grant.total_yeaf_award" :disabled="checkLocked(i)" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Processing Batch" />
+                                        <BreezeSelect class="form-select" v-model="grant.cheque_batch_number" :disabled="checkLocked(i)">
+                                            <template v-for="batch in batches">
+                                                <option :value="batch.batch_number">{{ batch.batch_human_date }} | {{ batch.batch_date }}</option>
+                                            </template>
+                                        </BreezeSelect>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Date Issued" />
+                                        <BreezeInput type="date" class="form-control" v-model="grant.cheque_issue_date" :disabled="checkLocked(i)" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Withdrawal?" />
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" role="switch" class="form-check-input" v-model="grant.withdrawal" :disabled="checkLocked(i)" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Withdrawal Date" />
+                                        <BreezeInput type="date" class="form-control" v-model="grant.withdrawal_date" :disabled="checkLocked(i) || !grant.withdrawal" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="&nbsp;" />
+                                        <div class="d-grid"><button type="button" class="btn btn-success" :disabled="checkLocked(i) || !grant.withdrawal">Withdrawal Letter</button></div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Overaward Amount" />
+                                        <BreezeInput type="text" class="form-control" v-model="grant.overaward" @change.prevent="overaward(i)" :disabled="checkLocked(i)" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel class="form-label" value="Overaward Deducted" />
+                                        <BreezeInput type="text" class="form-control" v-model="grant.overaward_deducted_amount" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div v-if="grant.status_code === 'P'" class="card mt-3">
                             <div class="card-header">Pending Reasons<button @click="newReason(i, 'P')" type="button" class="btn btn-sm float-end btn-success">add row +</button></div>
                             <div class="card-body">
@@ -99,7 +158,7 @@ tr {
                                         <BreezeLabel v-if="j===0" class="form-label" value="Pending Reason" />
                                         <BreezeSelect class="form-select" v-model="grantPending.ineligible_code_id">
                                             <template v-for="ineligible in ineligibles">
-                                                <option v-if="ineligible.code_type === 'P'" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                                <option v-if="ineligible.code_type === 'P'" :disabled="ineligible.active_flag === false" :value="ineligible.code_id">{{ ineligible.description }}</option>
                                             </template>
                                         </BreezeSelect>
                                     </div>
@@ -115,7 +174,7 @@ tr {
                                     <div class="col-md-10">
                                         <BreezeSelect class="form-select" v-model="grantPending.ineligible_code_id">
                                             <template v-for="ineligible in ineligibles">
-                                                <option v-if="ineligible.code_type === 'P'" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                                <option v-if="ineligible.code_type === 'P'" :disabled="ineligible.active_flag === false" :value="ineligible.code_id">{{ ineligible.description }}</option>
                                             </template>
                                         </BreezeSelect>
                                     </div>
@@ -143,7 +202,7 @@ tr {
                                         <BreezeLabel v-if="j===0" class="form-label" value="Deny Reason" />
                                         <BreezeSelect class="form-select" v-model="grantDenied.ineligible_code_id">
                                             <template v-for="ineligible in ineligibles">
-                                                <option v-if="ineligible.code_type === 'D'" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                                <option v-if="ineligible.code_type === 'D'" :disabled="ineligible.active_flag === false" :value="ineligible.code_id">{{ ineligible.description }}</option>
                                             </template>
                                         </BreezeSelect>
                                     </div>
@@ -159,7 +218,7 @@ tr {
                                     <div class="col-md-10">
                                         <BreezeSelect class="form-select" v-model="grantDenied.ineligible_code_id">
                                             <template v-for="ineligible in ineligibles">
-                                                <option v-if="ineligible.code_type === 'D'" :value="ineligible.code_id">{{ ineligible.description }}</option>
+                                                <option v-if="ineligible.code_type === 'D'" :disabled="ineligible.active_flag === false" :value="ineligible.code_id">{{ ineligible.description }}</option>
                                             </template>
                                         </BreezeSelect>
                                     </div>
@@ -186,7 +245,7 @@ tr {
                                 <div class="row mb-3" v-for="(appeal, j) in grant.appeals">
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Appeal Date" />
-                                        <BreezeInput class="form-control" v-model="appeal.appeal_date" />
+                                        <BreezeInput type="date" class="form-control" v-model="appeal.appeal_date" />
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Type" />
@@ -210,7 +269,7 @@ tr {
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Status Date" />
-                                        <BreezeInput class="form-control" v-model="appeal.status_affective_date" />
+                                        <BreezeInput type="date" class="form-control" v-model="appeal.status_affective_date" />
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Reason (Other)" />
@@ -222,7 +281,7 @@ tr {
                                 <div class="row mb-3" v-for="(appeal, j) in grant.new_appeals">
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Appeal Date" />
-                                        <BreezeInput class="form-control" v-model="appeal.appeal_date" />
+                                        <BreezeInput type="date" class="form-control" v-model="appeal.appeal_date" />
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Type" />
@@ -246,7 +305,7 @@ tr {
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Status Date" />
-                                        <BreezeInput class="form-control" v-model="appeal.status_affective_date" />
+                                        <BreezeInput type="date" class="form-control" v-model="appeal.status_affective_date" />
                                     </div>
                                     <div class="col-md-2">
                                         <BreezeLabel v-if="j===0" class="form-label" value="Reason (Other)" />
@@ -325,7 +384,36 @@ export default {
         }
     },
     methods: {
+        overaward: function (index)
+        {
+            if(this.grantForms[index].overaward > this.grantForms[index].total_yeaf_award){
+                alert("The Overaward amount cannot be larger than the amount awarded");
+                this.grantForms[index].overaward = this.result.grants[index].overaward;
+            }
 
+            this.grantForms[index].total_yeaf_award -= this.grantForms[index].overaward;
+            this.grantForms[index].overaward_deducted_amount = this.grantForms[index].overaward;
+        },
+        unlock: function (index)
+        {
+            let check = confirm('Are you sure you want to unlock this grant? This will reset the YEAF Award fied to zero.');
+            if(check){
+                this.grantForms[index].total_yeaf_award = 0;
+            }
+        },
+        giveAward: function (index)
+        {
+            for(let i = 0; i<this.program_years.length; i++){
+                if(this.program_years[i].program_year_id == this.grantForms[index].program_year_id){
+                    this.grantForms[index].total_yeaf_award = this.program_years[i].grant_amount;
+                    break;
+                }
+            }
+        },
+        checkLocked: function (index)
+        {
+            return (this.result.grants[index].total_yeaf_award > 0 && this.result.grants[index].cheque_batch_number != null);
+        },
         //type is P|D
         newReason: function (index, type)
         {
@@ -393,7 +481,7 @@ export default {
                 cancel = true;
             }
 
-            if(grant.total_yeaf_award > 0 && grant.status_code === 'A')
+            if(this.result.grants[index].total_yeaf_award > 0 && this.result.grants[index].status_code === 'A')
             {
                 alert("You cannot change the status from Approved when an award has been given.");
                 cancel = true;
@@ -448,7 +536,7 @@ export default {
                 alert("You must fill in at least the program year and the date received before evaluating the application.");
                 grant.evaluationValid = false;
             }else{
-                if(grant.status_code === 'A' && grant.total_yeaf_award > 0){
+                if(this.result.grants[index].status_code === 'A' && this.result.grants[index].total_yeaf_award > 0){
                     alert("Once an award has been made, you cannot 'evaluate' an application.");
                     grant.evaluationValid = false;
                 }else if(grant.program_year_id === ''){
