@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GrantEditRequest;
+use App\Http\Requests\GrantStoreRequest;
 use App\Models\Appeal;
 use App\Models\Grant;
 use App\Models\GrantIneligible;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +47,14 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\GrantStoreRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(GrantStoreRequest $request)
     {
-        //
+        $grant = Grant::create($request->validated());
+        $student = Student::where('student_id', $grant->student_id)->first();
+        return Redirect::route('students.show', [$student->id]);
     }
 
     /**
