@@ -316,17 +316,17 @@ tr {
                             </div>
                         </div>
 
-                        <div v-if="grant.errors != undefined" class="row">
+                        <div v-if="grant.msg != undefined" class="row">
                             <div class="col-12">
-                                <div v-if="grant.hasErrors == true" class="alert alert-danger mt-3">
+                                <div class="alert alert-danger mt-3">
                                     <ul>
-                                        <li v-for="err in grant.errors">{{ err }}</li>
+                                        <li v-html="grant.msg"></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer mt-3">
-                            <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Save &amp; Evaluate App</button>
+                            <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Save &amp; Evaluate Grant</button>
 <!--                            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="grant.processing">Evaluate App</button>-->
                         </div>
 
@@ -555,7 +555,12 @@ export default {
                         headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'}
                     })
                         .then(function (response) {
-                            vm.showSuccessAlert();
+                            if(response.data.msg !== ''){
+                                vm.grantForms[index].msg = response.data.msg;
+                            }else{
+                                vm.showSuccessAlert();
+                                window.location.href = '/students/' + vm.result.id;
+                            }
                         })
                         .catch(function (error) {
                             console.log(error);

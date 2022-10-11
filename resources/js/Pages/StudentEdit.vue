@@ -45,11 +45,11 @@
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
                                             <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
                                         </li>
-                                        <li @click="switchActiveTab('grant')" v-if="grantTabVisible" class="nav-item" role="presentation">
-                                            <button class="nav-link" id="grant-tab" data-bs-toggle="tab" data-bs-target="#grant-tab-pane" type="button" role="tab" aria-controls="grant-tab-pane" aria-selected="false">Grant</button>
+                                        <li @click="switchActiveTab('grants')" v-if="grantTabVisible" class="nav-item" role="presentation">
+                                            <button class="nav-link" id="grants-tab" data-bs-toggle="tab" data-bs-target="#grants-tab-pane" type="button" role="tab" aria-controls="grants-tab-pane" aria-selected="false">Grants</button>
                                         </li>
-                                        <li @click="switchActiveTab('comment')" class="nav-item" role="presentation">
-                                            <button class="nav-link" id="comment-tab" data-bs-toggle="tab" data-bs-target="#comment-tab-pane" type="button" role="tab" aria-controls="comment-tab-pane" aria-selected="false">Comment</button>
+                                        <li @click="switchActiveTab('comments')" class="nav-item" role="presentation">
+                                            <button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-tab-pane" type="button" role="tab" aria-controls="comments-tab-pane" aria-selected="false">Comments</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
@@ -58,13 +58,13 @@
                                             <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
 
                                         </div>
-                                        <div class="tab-pane fade" id="grant-tab-pane" role="tabpanel" aria-labelledby="grant-tab" tabindex="0">
-                                            <StudentEditGrantTab v-if="activeTab==='grant'" :result="result" :schools="schools"
+                                        <div class="tab-pane fade" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="0">
+                                            <StudentEditGrantTab v-if="activeTab==='grants'" :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
                                                                  :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
                                         </div>
-                                        <div class="tab-pane fade" v-if="activeTab==='comment'" id="comment-tab-pane" role="tabpanel" aria-labelledby="comment-tab" tabindex="0">...</div>
+                                        <div class="tab-pane fade" v-if="activeTab==='comments'" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="0">...</div>
                                     </div>
 
 

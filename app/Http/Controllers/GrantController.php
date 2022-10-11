@@ -162,22 +162,28 @@ Call CheckAge(False, True)
 
         $this->clearFlags($request, $grant);
 
-        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(true, false, $grant);
+        list($msg, $app_ineligible, $appeal_status, $age) = $this->checkAge(true, true, $grant);
+        if($msg != '' || $app_ineligible == true){
+            return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
+        }else{
+            $grant->age = $age;
+            $grant->save();
+        }
+
+        list($msg, $app_ineligible) = $this->checkMaxYears(true, true, $grant, $msg, $app_ineligible);
         if($msg != '' || $app_ineligible == true){
             return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
         }
 
-        list($msg, $app_ineligible) = $this->checkMaxYears(true, false, $grant, $msg, $app_ineligible);
+        list($msg, $app_ineligible) = $this->datewatch(true, true, $grant, $msg, $app_ineligible);
         if($msg != '' || $app_ineligible == true){
             return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
         }
-
-        list($msg, $app_ineligible) = $this->datewatch(true, false, $grant, $msg, $app_ineligible);
+        list($msg, $app_ineligible) = $this->checkProgramYear(true, true, $grant, $msg, $app_ineligible);
         if($msg != '' || $app_ineligible == true){
             return Response::json(['status' => true, "msg" => $msg, "app_ineligible" => $app_ineligible, "appeal_status" => $appeal_status, "grant" => $grant]);
         }
-        list($msg, $app_ineligible) = $this->checkProgramYear(true, false, $grant, $msg, $app_ineligible);
-
+        $this->setStatus($grant);
 
 
 //        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
@@ -318,15 +324,13 @@ Call CheckAge(False, True)
             $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function($query) {$query->where('ineligible_code_type', 'P');}],'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function($query) {$query->where('ineligible_code_type', 'D');}],'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
         }
 
+        $status = 'P';
         if(!is_null($record)){
-            $record = $record[0];
             if($record->DeniedCnt > 0){
                 $status = 'D';
             }elseif ($record->PendingCnt > 0){
                 $status = 'P';
             }
-        }else{
-            $status = 'P';
         }
 
         if($status != '' && $status != $grant->status_code){
@@ -374,7 +378,7 @@ Call CheckAge(False, True)
             $dateprogram = $date2->diffInDays($date1);
             if($dateprogram < 81){
                 if($messageFlag){
-                    $msg = "The end date is shorter than 12 weeks. <br/><br/>This application does not meet the course length criteria.<br/><br/>Program Length Error";
+                    $msg = "The end date is shorter than 12 weeks. <br/>This application does not meet the course length criteria.<br/>Program Length Error.";
                 }
                 if($createIneligibleFlag){
                     $this->addIneligibleReason($grant, "05");
@@ -488,7 +492,7 @@ group by yeaf_grants.program_year_id"));
                 };
             }
         }
-        return [$msg, $app_ineligible, $appeal_status];
+        return [$msg, $app_ineligible, $appeal_status, $age];
     }
 
     private function ageCalc(Grant $grant){
@@ -502,7 +506,6 @@ group by yeaf_grants.program_year_id"));
         $birth_date_m = date('mmdd', strtotime($grant->student->birth_date));
 
         return (intval($yDate) - intval($birth_date_y)) + ( intval($mDate) < intval($birth_date_m) );
-
     }
 
     private function addIneligibleReason(Grant $grant, $ineligible_code_id)
