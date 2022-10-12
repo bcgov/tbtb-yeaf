@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('batch_number')->unique();
             $table->date('batch_date')->nullable()->comment('Date the batch closed');
-
         });
     }
 

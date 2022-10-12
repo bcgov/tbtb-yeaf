@@ -412,7 +412,7 @@ export default {
         },
         checkLocked: function (index)
         {
-            return (this.result.grants[index].total_yeaf_award > 0 && this.result.grants[index].cheque_batch_number != null);
+            return (this.result.grants[index].total_yeaf_award > 0 && this.result.grants[index].cheque_batch_number != null) || this.grantForms[index].total_yeaf_award === 0;
         },
         //type is P|D
         newReason: function (index, type)

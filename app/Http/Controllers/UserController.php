@@ -34,7 +34,7 @@ class UserController extends Controller
 
             return Redirect::to($authUrl);
 
-            // Check given state against previously stored one to mitigate CSRF attack
+        // Check given state against previously stored one to mitigate CSRF attack
         } elseif (! $request->has('state') || ($request->state !== $request->session()->get('oauth2state'))) {
             $request->session()->forget('oauth2state');
             //Invalid state, make sure HTTP sessions are enabled
@@ -82,7 +82,7 @@ class UserController extends Controller
                     'status' => 'Please contact YEAF Admin to grant you access.',
                 ]);
 
-                //if the user has been disabled
+            //if the user has been disabled
             } elseif ($user->disabled === true) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
@@ -172,12 +172,10 @@ class UserController extends Controller
         return redirect('/');
     }
 
-
     private function newUser($idir_user)
     {
         $user = User::where('user_id', 'ilike', $idir_user['idir_username'])->first();
-        if(is_null($user))
-        {
+        if (is_null($user)) {
             $user = new User();
             $user->user_id = Str::upper($idir_user['idir_username']);
             $user->first_name = $idir_user['given_name'];
@@ -190,7 +188,7 @@ class UserController extends Controller
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();
 //
-////        $sub_user_id = Str::upper(Str::substr($idir_user['idir_username'], 0, 4));
+        ////        $sub_user_id = Str::upper(Str::substr($idir_user['idir_username'], 0, 4));
 //        $legacy_idir = User::where('user_id', $idir_user['idir_username'])->where('idir_user_guid', null)->first();
 //
 //        //if found a user that has not been synced

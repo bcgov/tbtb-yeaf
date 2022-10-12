@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class StaffEditRequest extends FormRequest
 {
@@ -53,21 +52,18 @@ class StaffEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
         if (isset($this->tele)) {
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
 
         $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
-
     }
-
 
     /**
      * Convert to boolean
      *
      * @param $booleable
-     * @return boolean
+     * @return bool
      */
     private function toBoolean($booleable)
     {

@@ -30,7 +30,6 @@ return new class extends Migration
             $table->timestamps();
         });
         DB::update("alter table yeaf_institutions alter column institution_id set default nextval('yeaf_institutions_id_seq'::regclass)-1;");
-
     }
 
     /**

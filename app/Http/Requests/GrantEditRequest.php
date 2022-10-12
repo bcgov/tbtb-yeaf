@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class GrantEditRequest extends FormRequest
 {
@@ -49,7 +48,7 @@ class GrantEditRequest extends FormRequest
     protected function prepareForValidation()
     {
         $form = json_decode($this->frm);
-        foreach ($form as $item => $value){
+        foreach ($form as $item => $value) {
             $this->merge([$item => $value]);
         }
         $this->merge(['frm' => null]);
@@ -61,15 +60,13 @@ class GrantEditRequest extends FormRequest
 //        }
 //
 //        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
-
     }
-
 
     /**
      * Convert to boolean
      *
      * @param $booleable
-     * @return boolean
+     * @return bool
      */
     private function toBoolean($booleable)
     {

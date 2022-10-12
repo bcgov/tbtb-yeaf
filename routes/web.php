@@ -33,7 +33,6 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
-
         Route::name('maintenance.')->group(function () {
 //            Route::get('/maintenance/schools', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('schools.list');
             Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');

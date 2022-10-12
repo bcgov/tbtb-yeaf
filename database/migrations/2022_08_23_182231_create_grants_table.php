@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('grant_id')->unique();
 
-
             $table->bigInteger('institution_id')->nullable();
             $table->foreign('institution_id')->references('institution_id')->on('institutions');
 
@@ -81,11 +80,9 @@ return new class extends Migration
             $table->date('application_receive_date')->nullable()->comment('Date application was received by the ministry');
             $table->date('last_evaluation_date')->nullable()->comment('Last time application was evaluated using the "Evaluate" button');
 
-
             $table->timestamps();
         });
         DB::update("alter table yeaf_grants alter column grant_id set default nextval('yeaf_grants_id_seq'::regclass)-1;");
-
     }
 
     /**

@@ -21,7 +21,6 @@ return new class extends Migration
 
             $table->string('province_code', 2);
             $table->string('province_name');
-
         });
     }
 

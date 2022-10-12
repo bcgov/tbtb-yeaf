@@ -66,7 +66,6 @@ class GrantStoreRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
         if (isset($this->application_receive_date)) {
             $this->merge(['application_receive_date' => date('Y-m-d', strtotime($this->application_receive_date))]);
         }
@@ -84,20 +83,18 @@ class GrantStoreRequest extends FormRequest
         $this->merge([
             'grant_id' => intval($last_grant->grant_id) + 1,
             'creator_user_id' => Str::upper(Auth::user()->user_id),
-            'update_user_id' => Str::upper(Auth::user()->user_id)
+            'update_user_id' => Str::upper(Auth::user()->user_id),
         ]);
 
         //
 //        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
-
     }
-
 
     /**
      * Convert to boolean
      *
      * @param $booleable
-     * @return boolean
+     * @return bool
      */
     private function toBoolean($booleable)
     {

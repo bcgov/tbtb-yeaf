@@ -39,9 +39,8 @@ return new class extends Migration
             $table->string('institution_student_number', 12)->nullable();
             $table->timestamps();
         });
-        DB::update("alter sequence yeaf_students_id_seq restart with 43;");
+        DB::update('alter sequence yeaf_students_id_seq restart with 43;');
         DB::update("alter table yeaf_students alter column student_id set default nextval('yeaf_students_id_seq'::regclass)-1;");
-
     }
 
     /**

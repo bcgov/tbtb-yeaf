@@ -23,7 +23,6 @@ return new class extends Migration
             $table->bigInteger('grant_id')->nullable();
             $table->foreign('grant_id')->references('grant_id')->on('grants');
 
-
             $table->string('ineligible_code_id')->nullable();
             $table->foreign('ineligible_code_id')->references('code_id')->on('ineligibles');
 

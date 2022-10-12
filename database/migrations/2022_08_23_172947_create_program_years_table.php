@@ -29,7 +29,6 @@ return new class extends Migration
         });
 
         DB::update("alter table yeaf_program_years alter column program_year_id set default nextval('yeaf_program_years_id_seq'::regclass)-1;");
-
     }
 
     /**

@@ -19,7 +19,6 @@ return new class extends Migration
 
             $table->integer('appeal_id')->unique();
 
-
             $table->string('student_id');
             $table->foreign('student_id')->references('student_id')->on('students');
 
@@ -42,11 +41,9 @@ return new class extends Migration
 
             $table->string('other_appeal_explain')->nullable()->comment('If Appeal code of "other" selected, then enter the explanation here');
 
-
             $table->timestamps();
         });
         DB::update("alter table yeaf_appeals alter column appeal_id set default nextval('yeaf_appeals_id_seq'::regclass)-1;");
-
     }
 
     /**

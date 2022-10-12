@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class Batch extends Model
 {
     use HasFactory;
+
     protected $appends = ['batch_human_date'];
 
     public function getBatchHumanDateAttribute()
     {
         $date = date('F Y', strtotime($this->batch_date));
-        return Str::endsWith($this->batch_date, '15') ? $date . ' - Mid' : $date . ' - End';
+
+        return Str::endsWith($this->batch_date, '15') ? $date.' - Mid' : $date.' - End';
     }
 }

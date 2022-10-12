@@ -13,13 +13,11 @@ use App\Models\Province;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class StudentController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -82,7 +80,7 @@ class StudentController extends Controller
             'ineligibles' => $ineligibles,
             'active_staff' => $active_staff,
             'all_staff' => $all_staff,
-            'result' => $student, 'countries' => $countries, 'provinces' => $provinces]);
+            'result' => $student, 'countries' => $countries, 'provinces' => $provinces, ]);
     }
 
     /**
@@ -105,7 +103,6 @@ class StudentController extends Controller
      */
     public function update(StudentUpdateRequest $request, Student $student)
     {
-
         return Redirect::route('students.show', [$student->id]);
     }
 
@@ -125,7 +122,6 @@ class StudentController extends Controller
         if (request()->filter_sin !== null) {
             $grants = $grants->where('sin', request()->filter_sin);
         }
-
 
         if (request()->filter_fname !== null) {
             $grants = $grants->where('first_name', 'ILIKE', request()->filter_fname);

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StaffEditRequest;
 use App\Http\Requests\MinistryEditRequest;
+use App\Http\Requests\StaffEditRequest;
 use App\Models\Admin;
 use App\Models\Province;
 use App\Models\User;
@@ -58,7 +58,6 @@ class MaintenanceController extends Controller
         return Redirect::route('maintenance.staff.list');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -70,6 +69,7 @@ class MaintenanceController extends Controller
     {
         $admin = Admin::first();
         $provinces = Province::where('country_code', 'CAN')->select('province_code')->get();
+
         return Inertia::render('Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
     }
 
@@ -83,11 +83,11 @@ class MaintenanceController extends Controller
     public function ministryEdit(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
-
         }
 
         return Redirect::route('maintenance.ministry.show');
     }
+
     /**
      * Display a listing of the resource.
      *

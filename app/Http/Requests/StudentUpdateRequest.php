@@ -90,22 +90,20 @@ class StudentUpdateRequest extends FormRequest
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
 
-
         if (! isset($this->overaward_flag)) {
             $this->merge(['overaward_flag' => false]);
-        }else{
+        } else {
             $this->merge(['overaward_flag' => true]);
         }
         if (! isset($this->investigate)) {
             $this->merge(['investigate' => false]);
-        }else{
+        } else {
             $this->merge(['investigate' => true]);
         }
         if (! isset($this->pd)) {
             $this->merge(['pd' => false]);
-        }else{
+        } else {
             $this->merge(['pd' => true]);
         }
-
     }
 }

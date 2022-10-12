@@ -10,7 +10,6 @@ class Comment extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     /**
      * The attributes that should be cast.
      *
@@ -19,5 +18,4 @@ class Comment extends Model
     protected $casts = [
         'date' => 'datetime',
     ];
-
 }
