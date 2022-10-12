@@ -4,14 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>YEAF - Report</title>
+    <title>YEAF - Student Letter</title>
     <style>
         body{
-            line-height: 1.6rem;
+            line-height: 1.1rem;
             font-size: 14px;
             margin: 130px 30px 30px 30px;
         }
-        header { position: fixed; top: 0px; left: 0px; right: 0px; height: 120px; }
+        header { position: fixed; top: 0px; left: 0px; right: 0px; height: 120px; border-bottom: #0b2e13 1px solid; }
+        footer { font-family: sans-serif; position: fixed; bottom: 12px; left: 0px; right: 0px; height: 80px; font-size: 10px;
+            border-top: #0b2e13 1px solid; line-height: 1rem;}
         td{
             vertical-align: top;
         }
@@ -20,7 +22,10 @@
             margin-bottom: 0; padding-bottom: 0;
         }
         table{
-            border-bottom: #0b2e13 1px solid; width: 100%;
+            width: 100%;
+        }
+        img{
+            width: 125px;
         }
     </style>
 </head>
@@ -28,170 +33,84 @@
     <header>
         <table>
             <tr>
-                <td style="text-align: left; width: 25%;"><small>{{ $now_d }}<br/>{{ $now_t }}</small></td>
-                <td style="text-align: center; width: 50%;">Ministry of Advance Education<br/>Verification Statistics System<br/><strong>Verification Report</strong></td>
+                <td style="text-align: left; width: 25%;"><img src="{{ public_path('/images/bc_sq_logo.png') }}"></td>
+                <td style="text-align: center; width: 50%;"></td>
                 <td style="text-align: left; width: 25%;"></td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong>Student: {{ $case->last_name }}, {{ $case->first_name }}</strong></td>
-                <td style="text-align: left;"><strong>SIN: {{ $case->sin }}</strong></td>
             </tr>
         </table>
     </header>
 
     <table>
-        <tr>
-            <td style="width: 40%;"><strong>Case Status:</strong> {{ $case->incident_status }}</td>
-            <td style="width: 60%;"><strong>School:</strong> {{ $case->institution->institution_code }} | {{ $case->institution->institution_name }}</td>
-        </tr>
-        <tr>
-            <td><strong>Open Date:</strong> {{ $case->open_date }}</td>
-            <td><strong>Primary Area of Audit:</strong> {{ $case->primaryAudit->description }}</td>
-        </tr>
-        <tr>
-            <td><strong>Severity:</strong> {{ $case->severity === 'A' ? 'Audit' : 'Investigation' }}</td>
-            <td><strong>Referred by:</strong> {{ $case->referral->description }}</td>
-        </tr>
-        <tr>
-            <td><strong>Auditor/Date:</strong> {{ $case->auditor_user_id }} {{ $case->audit_date }}</td>
-            <td><strong>Investigator/Date:</strong> {{ $case->investigator_user_id }} {{ $case->investigation_date }}</td>
-        </tr>
+        <tr><td style="text-align: right;">{{ $now_d }}</td></tr>
         <tr>
             <td>
-                <strong>Primary Area of Audit:</strong>
-                {{ $case->primaryAudit->description }} <small>({{$case->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small>
-            </td>
-            <td>
-                <strong>Additional Areas of Audit:</strong>
-                <ul>
-                    @foreach($case->audits as $audit)
-                        <li>{{$audit->audit->description}} <small>({{$audit->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small></li>
-                    @endforeach
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>Nature of Offence:</strong>
-                <ul>
-                    @foreach($case->offences as $offence)
-                        <li>{{$offence->offence->description}}</li>
-                    @endforeach
-                </ul>
-            </td>
-            <td>
-                <strong>Sanctions:</strong>
-                <ul>
-                    @foreach($case->sanctions as $sanction)
-                        <li>{{$sanction->sanction->description}}</li>
-                    @endforeach
-                </ul>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td style="width: 50%;"><strong>Closure:</strong></td>
-            <td style="width: 50%;"></td>
-        </tr>
-        <tr>
-            <td style="padding-left: 15px;"><strong>Case Closed/Date:</strong> {{ $case->case_close === true ? 'Yes' : 'No' }} {{ $case->close_date }}</td>
-            <td style="padding-left: 15px;">
-                <strong>Reason For Closing: </strong>
-                @switch($case->reason_for_closing)
-                    @case('C')<span>Complete</span>@break
-                    @case('D')<span>Deceased</span>@break
-                    @case('N')<span>No Response</span>@break
+                {{ $student->first_name }} {{ $student->last_name }}<br/>
+                {{ $student->address }}<br/>
+                {{ $student->city }} {{ $student->province }} {{ $student->postal_code }}<br/><br/><br/>
+                Dear {{ $student->first_name }} {{ $student->last_name }}<br/><br/>
+
+
+
+                @switch($doc)
+                    @case('rptLtrApproved')
+                        @include('letters.reptLtrApproved', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
+                        @break
                 @endswitch
+
+
+
+
+
+                <br/><br/>Sincerely,<br/><br/><br/>
+                @if(is_null($officer))
+                    {{ $user->first_name }} {{ $user->last_name }}<br/>
+                    {{ $admin->contact_title }} - {{ $admin->contact_dept }}<br/>
+                @else
+                    {{ $officer->first_name }} {{ $officer->last_name }}<br/>
+                    Program Officer - Directed Programs<br/>
+                @endif
             </td>
         </tr>
-        <tr>
-            <td style="padding-left: 15px;"><strong>Case Outcome:</strong>
-                @switch($case->case_outcome)
-                    @case('S')<span>Substantiated</span>@break
-                    @case('U')<span>Unsubstantiated</span>@break
-                @endswitch
-            </td>
-            <td style="padding-left: 15px;">
-                <strong>Appealed/Outcome: </strong>
-                <span>{{ $case->appeal_flag === true ? 'Yes' : 'No' }} </span>
-                @switch($case->appeal_outcome)
-                    @case('A')<span>Approved</span>@break
-                    @case('D')<span>Denied</span>@break
-                    @case('P')<span>Approved in Part</span>@break
-                @endswitch
-            </td>
-        </tr>
-    </table>
-    <table style="page-break-after: auto;">
-        <tr>
-            <td><strong>RCMP:</strong></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td style="padding-left: 15px;">
-                <strong>Referred to RCMP/Date:</strong>
-                <span>{{ $case->rcmp_referral_flag === true ? 'Yes' : 'No' }} {{ $case->rcmp_referral_date }} </span>
-            </td>
-            <td style="padding-left: 15px;">
-                <strong>Charges Laid: </strong>
-                <span>{{ $case->charges_laid_flag === true ? 'Yes' : 'No' }} </span>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding-left: 15px;">
-                <strong>RCMP Closure Date:</strong>
-                <span>{{ $case->rcmp_closure_date }} </span>
-            </td>
-            <td style="padding-left: 15px;">
-                <strong>Convicted: </strong>
-                <span>{{ $case->conviction_flag === true ? 'Yes' : 'No' }}</span>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="padding-left: 15px;">
-                <strong>Sentence Comments: </strong>{{ $case->sentence_comment }}
-            </td>
-        </tr>
-    </table>
-    <table style="page-break-after: always;">
-        <tr>
-            <td style="width: 20%;"><strong>Funding:</strong></td>
-            <td style="width: 25%;"></td>
-            <td style="width: 15%;"></td>
-            <td style="width: 20%;"></td>
-            <td style="width: 20%;"></td>
-        </tr>
-        <tr>
-            <td style="text-align: center;"><strong>Application</strong></td>
-            <td><strong>Funding Type</strong></td>
-            <td><strong>Overaward</strong></td>
-            <td><strong>Prevented Funding</strong></td>
-            <td><strong>Total</strong></td>
-        </tr>
-        @foreach($case->funds as $fund)
-        <tr>
-            <td style="text-align: center;">{{ $fund->application_number }}</td>
-            <td>{{ $fund->fundingType->funding_type }}</td>
-            <td>${{ number_format($fund->over_award, 2, '.', ',') }}</td>
-            <td>${{ number_format($fund->prevented_funding, 2, '.', ',') }}</td>
-            <td>${{ number_format($fund->over_award + $fund->prevented_funding, 2, '.', ',') }}</td>
-        </tr>
-        @endforeach
-        <tr>
-            <td></td>
-            <td style="text-align: center;"><strong>Totals</strong></td>
-            <td><strong>${{ number_format($case->total_over_award, 2, '.', ',') }}</strong></td>
-            <td><strong>${{ number_format($case->total_prevented_funding, 2, '.', ',') }}</strong></td>
-            <td><strong>${{ number_format($case->total_award, 2, '.', ',') }}</strong></td>
-        </tr>
+{{--        --}}
+{{--        <tr>--}}
+{{--            <td>--}}
+{{--                <strong>Primary Area of Audit:</strong>--}}
+{{--                {{ $case->primaryAudit->description }} <small>({{$case->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small>--}}
+{{--            </td>--}}
+{{--            <td>--}}
+{{--                <strong>Additional Areas of Audit:</strong>--}}
+{{--                <ul>--}}
+{{--                    @foreach($case->audits as $audit)--}}
+{{--                        <li>{{$audit->audit->description}} <small>({{$audit->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small></li>--}}
+{{--                    @endforeach--}}
+{{--                </ul>--}}
+{{--            </td>--}}
+{{--        </tr>--}}
 
     </table>
-    <strong>COMMENTS:</strong>
-    @foreach($case->comments as $comment)
-        <p><strong>{{ $comment->staff_user_id }}  |  {{ $comment->comment_date }}</strong></p>
-        <p style="white-space: pre-line; line-height: 1.2rem;">{{ $comment->comment_text }}</p>
-        <hr/>
-    @endforeach
+    <footer>
+        <table>
+            <tr>
+                <td style="width: 25%;">{{ $admin->ministry }}</td>
+                <td style="width: 20%;">{{ $admin->ministry_branch }}</td>
+                <td style="width: 30%;">
+                    Mailing Address:<br/>
+                    {{ $admin->ministry_address }}<br/>
+                    {{ $admin->ministry_city }} {{ $admin->ministry_prov }} {{ $admin->ministry_postal }}<br/>
+                    {{ $admin->ministry_tele_victoria }}<br/>
+                    {{ $admin->ministry_tele_toll_free }} (Toll-free in Canada/USA)<br/>
+                    {{ $admin->ministry_tele_lower }} (B.C. Lower Mainland)<br/>
+                </td>
+                <td style="width: 25%;">
+                    Courier Address:<br/>
+                    {{ $admin->ministry_location }}<br/>
+                    {{ $admin->ministry_location_city }} {{ $admin->ministry_location_prov }} {{ $admin->ministry_location_postal }}<br/>
+                    Fax: {{ $admin->ministry_fax }}<br/>
+                    Toll-free Fax: {{ $admin->ministry_location_tele_toll_free }}
+                </td>
+            </tr>
+        </table>
+    </footer>
+
 </body>
 </html>

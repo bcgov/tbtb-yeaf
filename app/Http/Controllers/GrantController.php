@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GrantEditRequest;
 use App\Http\Requests\GrantStoreRequest;
+use App\Models\Admin;
 use App\Models\Appeal;
 use App\Models\Grant;
 use App\Models\GrantIneligible;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Response;
+use PDF;
 
 class GrantController extends Controller
 {
@@ -129,6 +131,82 @@ class GrantController extends Controller
     {
         //
     }
+
+    /**
+     * validate to export or to show errors on letter export request.
+     *
+     * @param Request $request
+     * @param \App\Models\Grant $grant
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function validateLetter(Request $request, Grant $grant)
+    {
+        $msg = "";
+        $stDocname = null;
+
+        if($grant->study_period_completion){
+            $stDocname = "rptLtrSuccessComp";
+        }elseif ($grant->status_code === 'A'){
+            if($grant->total_yeaf_award > 0){
+                if($grant->application_type == 'SFAS Extract'){
+                    $stDocname = "rptLtrApprovedSFASExtract";
+                }else{
+                    $stDocname = "rptLtrApproved";
+                }
+            }else{
+                $msg = "Status is 'Approved' but no award has been given.";
+            }
+        }else{
+            $countReasons = GrantIneligible::where('grant_id', $grant->grant_id)
+                ->where('cleared_flag', false)
+                ->where('ineligible_code_type', $grant->status_code)
+                ->count();
+            if($grant->status_code == 'P'){
+                if(is_null($grant->custom_pending_reason) && $countReasons == 0){
+                    $msg = "There are no pending reasons to include in the letter.  ";
+                }else{
+                    $stDocname = "rptLtrPending";
+                }
+            }elseif ($grant->status_code == 'D'){
+                if(is_null($grant->custom_denial_reason) && $countReasons == 0){
+                    $msg = "There are no denied reasons to include in the letter.  ";
+                }else{
+                    $stDocname = "rptLtrDenied";
+                }
+            }
+        }
+
+        return Response::json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
+
+
+    }
+
+    /**
+     * validate to export or to show errors on letter export request.
+     *
+     * @param \App\Models\Grant $grant
+     * @param null $docName
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function exportLetter(Grant $grant, $docName = null)
+    {
+
+        if(!is_null($docName)){
+
+            $doc = $docName;
+            $admin = Admin::first();
+            $student = $grant->student;
+            $officer = $grant->officer;
+            $now_d = date('F d, Y');
+            $now_t = date('H:m:i');
+            $user = Auth::user();
+            $pdf = PDF::loadView('pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
+
+            return $pdf->download(mt_rand().'-'.$grant->grant_id.'-letter.pdf');
+        }
+
+    }
+
     /*
     Call ClearFlags
     Call CheckAge(False, True)
@@ -144,7 +222,7 @@ class GrantController extends Controller
     */
 
     /**
-     * Update the specified resource in storage.
+     * update and evaluate a grant.
      *
      * @param  \App\Http\Requests\GrantEditRequest  $request
      * @param  \App\Models\Grant  $grant

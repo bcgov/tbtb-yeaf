@@ -327,7 +327,7 @@ tr {
                         </div>
                         <div class="card-footer mt-3">
                             <button @click="evaluateGrant(i)" type="button" class="btn mr-2 btn-outline-success">Save &amp; Evaluate Grant</button>
-<!--                            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="grant.processing">Evaluate App</button>-->
+                            <button v-if="result.grants[i].status_code != null" @click="exportGrant(i)" type="button" class="btn mr-2 btn-outline-primary float-end">Export Letter</button>
                         </div>
 
 
@@ -384,6 +384,26 @@ export default {
         }
     },
     methods: {
+
+        exportGrant: function (index)
+        {
+            let vm = this;
+            axios({
+                url: route('grants.validate-letter', this.grantForms[index].id),
+                method: 'get',
+                headers: {'Accept': 'application/json'}
+            })
+                .then(function (response) {
+                    if(response.data.msg === ''){
+                        window.location.href = '/grants/export-letter/' + vm.grantForms[index].id + '/' + response.data.docName;
+                    }else{
+                        vm.grantForms[index].msg = response.data.msg;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         overaward: function (index)
         {
             if(this.grantForms[index].overaward > this.grantForms[index].total_yeaf_award){

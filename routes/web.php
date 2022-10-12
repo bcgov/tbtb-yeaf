@@ -28,6 +28,8 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('grants', App\Http\Controllers\GrantController::class);
     Route::post('/grants/evaluate/{grant}', [App\Http\Controllers\GrantController::class, 'evaluateApp'])->name('grants.evaluate');
+    Route::get('/grants/validate-letter/{grant}', [App\Http\Controllers\GrantController::class, 'validateLetter'])->name('grants.validate-letter');
+    Route::get('/grants/export-letter/{grant}/{docName?}', [App\Http\Controllers\GrantController::class, 'exportLetter'])->name('grants.export-letter');
 
 //    Route::resource('case-funding', App\Http\Controllers\CaseFundingController::class);
 

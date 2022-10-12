@@ -23,6 +23,12 @@ class Grant extends Model
         return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
     }
 
+
+    public function officer()
+    {
+        return $this->belongsTo('App\Models\User', 'officer_user_id', 'user_id');
+    }
+
     public function py()
     {
         return $this->belongsTo('App\Models\ProgramYear', 'program_year_id', 'program_year_id');
