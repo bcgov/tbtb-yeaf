@@ -53,8 +53,14 @@
 
                 @switch($doc)
                     @case('rptLtrApproved')
-                        @include('letters.reptLtrApproved', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
-                        @break
+                    @include('letters.reptLtrApproved', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
+                    @break
+                    @case('rptLtrPending')
+                    @include('letters.reptLtrPending', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
+                    @break
+                    @case('rptLtrDenied')
+                    @include('letters.reptLtrDenied', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
+                    @break
                 @endswitch
 
 

@@ -89,6 +89,7 @@ class GrantController extends Controller
      */
     public function update(GrantEditRequest $request, Grant $grant)
     {
+        $grant = Grant::find($grant->id);
         $grant->institution_id = $request->institution_id;
         $grant->program_name = $request->program_name;
         $grant->program_other_description = $request->program_other_description;
@@ -258,8 +259,10 @@ class GrantController extends Controller
         if ($msg != '' || $app_ineligible == true) {
             return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
         }
-        $this->setStatus($grant);
-
+        $msg = $this->setStatus($grant);
+        if ($msg != '') {
+            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+        }
 //        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
 //        list($msg, $app_ineligible) = $this->checkMaxYears(false, true, $grant, $msg, $app_ineligible);
 //        list($msg, $app_ineligible) = $this->datewatch(false, true, $grant, $msg, $app_ineligible);
@@ -378,28 +381,25 @@ class GrantController extends Controller
     {
         $record = null;
         if (! is_null($grant)) {
-//            $record = DB::select(DB::raw("select yeaf_grants.grant_id,
-//       SUM(CASE WHEN ygi.ineligible_code_type = 'P' THEN 1 ELSE 0 END) AS PendingCnt,
-//       SUM(CASE WHEN ygi.ineligible_code_type = 'D' THEN 1 ELSE 0 END) AS DeniedCnt
-            //from yeaf_grants
-//    join yeaf_grant_ineligibles ygi on yeaf_grants.grant_id = ygi.grant_id
-            //WHERE ygi.cleared_flag=false AND yeaf_grants.grant_id=$grant->grant_id
-            //group by yeaf_grants.grant_id
-            //order by yeaf_grants.grant_id asc ;"));
 
             $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
-            $query->where('ineligible_code_type', 'P');
+            $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
             }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
-            $query->where('ineligible_code_type', 'D');
+            $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
             }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
         }
 
         $status = 'P';
+        $msg = "";
         if (! is_null($record)) {
             if ($record->DeniedCnt > 0) {
                 $status = 'D';
+                $msg = "Application Status set to Denied. Some denial reasons has not been cleared.";
             } elseif ($record->PendingCnt > 0) {
                 $status = 'P';
+                $msg = "Application Status set to Pending. Some Pending reasons has not been cleared.";
+            }else{
+                $status = $grant->status_code;
             }
         }
 
@@ -409,7 +409,7 @@ class GrantController extends Controller
             $grant->save();
         }
 
-        return null;
+        return $msg;
     }
 
     private function checkProgramYear($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)

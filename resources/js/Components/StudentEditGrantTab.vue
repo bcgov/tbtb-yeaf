@@ -579,7 +579,9 @@ export default {
                                 vm.grantForms[index].msg = response.data.msg;
                             }else{
                                 vm.showSuccessAlert();
-                                window.location.href = '/students/' + vm.result.id;
+                                setTimeout(function (){
+                                    window.location.href = '/students/' + vm.result.id;
+                                }, 3000);
                             }
                         })
                         .catch(function (error) {
