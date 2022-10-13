@@ -25,7 +25,9 @@
                         <div class="col-md-8 mt-3 mb-5">
                             <div class="card">
                                 <div v-if="result != null" class="card-header">
-                                    YEAF Edit Student<button v-if="activeTab==='grant'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
+                                    YEAF Edit Student
+                                    <button v-if="activeTab==='grants'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
+                                    <button v-if="activeTab==='comments'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
                                     <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>
                                     <span v-if="overawardFlagVisible == true" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">Over Award</span>
 <!--                                    <a :href="'/reports/download/' + editForm.id" class="btn rounded-pill btn-outline-secondary shadow-none float-end" data-bs-toggle="tooltip" data-bs-title="Download Student Report">-->
@@ -58,13 +60,15 @@
                                             <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
 
                                         </div>
-                                        <div class="tab-pane fade" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="0">
+                                        <div class="tab-pane fade" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="1">
                                             <StudentEditGrantTab v-if="activeTab==='grants'" :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
                                                                  :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
                                         </div>
-                                        <div class="tab-pane fade" v-if="activeTab==='comments'" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="0">...</div>
+                                        <div class="tab-pane fade" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="2">
+                                            <StudentEditCommentTab v-if="activeTab==='comments'" :result="result" :all_staff="all_staff"></StudentEditCommentTab>
+                                        </div>
                                     </div>
 
 
@@ -88,7 +92,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="newSchoolModalLabel">Add New Grant</h5>
+                            <h5 class="modal-title" id="newGrantModalLabel">Add New Grant</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form @submit.prevent="newGrant">
@@ -179,6 +183,44 @@
                 </div>
             </div>
 
+            <div class="modal modal-lg fade" id="newCommentModal" tabindex="-1" aria-labelledby="newCommentModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newCommentModalLabel">Add New Comment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form @submit.prevent="newComment">
+                            <div class="modal-body">
+                                <div class="card-body">
+                                    <div class="row g-3">
+
+                                        <div class="col-12">
+                                            <BreezeLabel for="newComment" class="form-label" value="Comment" />
+                                            <textarea class="form-control" id="newComment" v-model="newCommentForm.comment_text" />
+                                        </div>
+
+                                    </div>
+
+                                    <div v-if="newCommentForm.errors != undefined" class="row">
+                                        <div class="col-12">
+                                            <div v-if="newCommentForm.hasErrors == true" class="alert alert-danger mt-3">
+                                                <ul>
+                                                    <li v-for="err in newCommentForm.errors"><small>{{ err }}</small></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn mr-2 btn-outline-success" :disabled="newCommentForm.processing">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
                 <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
                     <div class="">
@@ -211,6 +253,7 @@ import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import StudentSearchBox from '@/Components/StudentSearch.vue';
 import StudentEditStudentTab from "@/Components/StudentEditStudentTab.vue";
 import StudentEditGrantTab from "@/Components/StudentEditGrantTab.vue";
+import StudentEditCommentTab from "@/Components/StudentEditCommentTab.vue";
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
@@ -220,6 +263,7 @@ export default {
     components: {
         StudentEditStudentTab,
         StudentEditGrantTab,
+        StudentEditCommentTab,
         BreezeAuthenticatedLayout, StudentSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm
     },
     props: {
@@ -260,7 +304,7 @@ export default {
                 application_number: '',
                 application_type: '',
             }),
-
+            newCommentForm: useForm({comment_text: '', student_id: ''}),
         }
     },
     methods: {
@@ -289,12 +333,12 @@ export default {
         },
         newGrant: function ()
         {
-
             this.newGrantForm.post(route('grants.store'), {
                 onSuccess: () => {
                     $("#newGrantModal").modal('hide');
                     this.showSuccessAlert();
                     this.newGrantForm.reset();
+                    this.newGrantForm.student_id = this.result.student_id;
                     this.activeTab = 'student';
                 },
                 onFailure: () => {
@@ -303,7 +347,24 @@ export default {
                     this.showFailAlert();
                 },
                 preserveState: true
-
+            });
+        },
+        newComment: function ()
+        {
+            this.newCommentForm.post(route('comments.store'), {
+                onSuccess: () => {
+                    $("#newCommentModal").modal('hide');
+                    this.showSuccessAlert();
+                    this.newCommentForm.reset();
+                    this.newCommentForm.student_id = this.result.student_id;
+                    this.activeTab = 'student';
+                },
+                onFailure: () => {
+                },
+                onError: () => {
+                    this.showFailAlert();
+                },
+                preserveState: true
             });
         },
         showSuccessAlert: function ()
@@ -331,6 +392,7 @@ export default {
         this.editForm = this.result;
         this.syncVisible();
         this.newGrantForm.student_id = this.result.student_id;
+        this.newCommentForm.student_id = this.result.student_id;
 
         // if(this.editForm != null){
         //

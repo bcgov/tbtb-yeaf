@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentStoreRequest;
+use App\Models\Student;
+use Auth;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CommentController extends Controller
 {
@@ -31,11 +35,14 @@ class CommentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CommentStoreRequest $request)
     {
-        //
+        $comment = Comment::create($request->validated());
+        $student = Student::where('student_id', $comment->student_id)->first();
+
+        return Redirect::route('students.show', [$student->id]);
     }
 
     /**
