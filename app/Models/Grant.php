@@ -24,6 +24,11 @@ class Grant extends Model
     }
 
 
+    public function batch()
+    {
+        return $this->belongsTo('App\Models\Batch', 'cheque_batch_number', 'batch_number');
+    }
+
     public function officer()
     {
         return $this->belongsTo('App\Models\User', 'officer_user_id', 'user_id');
