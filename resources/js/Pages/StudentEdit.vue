@@ -25,7 +25,7 @@
                         <div class="col-md-8 mt-3 mb-5">
                             <div class="card">
                                 <div v-if="result != null" class="card-header">
-                                    YEAF Edit Student
+                                    Edit Student
                                     <button v-if="activeTab==='grants'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
                                     <button v-if="activeTab==='comments'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
                                     <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>

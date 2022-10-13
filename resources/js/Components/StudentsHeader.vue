@@ -57,7 +57,7 @@ export default {
     props: {},
     data() {
         return {
-            sortClmn: 'open_date',
+            sortClmn: 'sin',
             sortType: 'asc',
             url: '',
             path: 'students.index',

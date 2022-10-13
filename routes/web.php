@@ -26,6 +26,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 
 //    Route::get('/dashboard', [App\Http\Controllers\StudentController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\StudentController::class);
+    Route::resource('institutions', App\Http\Controllers\InstitutionController::class);
     Route::resource('grants', App\Http\Controllers\GrantController::class);
     Route::resource('comments', App\Http\Controllers\CommentController::class);
     Route::post('/grants/evaluate/{grant}', [App\Http\Controllers\GrantController::class, 'evaluateApp'])->name('grants.evaluate');

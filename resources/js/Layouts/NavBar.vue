@@ -34,11 +34,11 @@ nav.navbar{
                             Students
                         </BreezeNavLink>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <BreezeNavLink class="nav-link" :href="route('reports')" :active="route().current('reports')">-->
-<!--                            Reports-->
-<!--                        </BreezeNavLink>-->
-<!--                    </li>-->
+                    <li class="nav-item">
+                        <BreezeNavLink class="nav-link" :href="route('institutions.index')" :active="route().current('institutions.*')">
+                            Schools
+                        </BreezeNavLink>
+                    </li>
                     <li class="nav-item">
                         <BreezeNavLink class="nav-link" :href="route('maintenance.ministry.show')" :active="route().current('maintenance.*')">
                             Maintenance

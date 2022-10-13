@@ -80,7 +80,7 @@ class StudentController extends Controller
             'ineligibles' => $ineligibles,
             'active_staff' => $active_staff,
             'all_staff' => $all_staff,
-            'result' => $student, 'countries' => $countries, 'provinces' => $provinces, ]);
+            'result' => $student, 'countries' => $countries, 'provinces' => $provinces ]);
     }
 
     /**

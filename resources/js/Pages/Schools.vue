@@ -4,7 +4,7 @@
 }
 </style>
 <template>
-    <Head title="Students" />
+    <Head title="Schools" />
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -29,29 +29,20 @@
                     <div class="col-md-9 mt-3">
                         <div class="card mb-3">
                             <div class="card-header">
-                                YEAF Students
-                                <Link :href="route('students.create')" class="btn btn-sm btn-success float-end">New Student</Link>
+                                YEAF Schools
+                                <Link :href="route('institutions.create')" class="btn btn-sm btn-success float-end">New School</Link>
                             </div>
                             <div class="card-body">
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
                                         <thead>
-                                        <StudentsHeader></StudentsHeader>
+                                        <SchoolsHeader></SchoolsHeader>
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
-                                            <th scope="row"><Link :href="route('students.show', [row.id])">{{ row.sin }}</Link></th>
-                                            <td>{{ row.first_name }}</td>
-                                            <td>{{ row.last_name}}</td>
-                                            <td>{{ formatMoney(row.life) }}</td>
-                                            <td>
-                                                <span v-if="(row.overaward_amount - row.overaward_deducted_amount) < 0" class="badge rounded-pill text-bg-danger fs-6">{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
-                                                <span v-else>{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
-                                            </td>
-                                            <td>
-                                                <span v-if="row.investigate" class="badge rounded-pill text-bg-danger fs-6">Yes</span>
-                                                <span v-else class="badge rounded-pill text-bg-success fs-6">No</span>
-                                            </td>
+                                            <th scope="row"><Link :href="route('institutions.show', [row.id])">{{ row.name }}</Link></th>
+                                            <td>{{ row.city }}</td>
+                                            <td></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -70,7 +61,7 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import StudentSearchBox from '@/Components/StudentSearch.vue';
-import StudentsHeader from '@/Components/StudentsHeader.vue';
+import SchoolsHeader from '@/Components/SchoolsHeader.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import BreezeInput from "@/Components/Input";
 import BreezeSelect from "@/Components/Select";
@@ -78,9 +69,9 @@ import BreezeLabel from "@/Components/Label";
 import BreezePagination from "@/Components/Pagination";
 
 export default {
-    name: 'Students',
+    name: 'Schools',
     components: {
-        BreezeAuthenticatedLayout, StudentSearchBox, StudentsHeader, Head, Link, BreezeInput, BreezeSelect, BreezeLabel, BreezePagination
+        BreezeAuthenticatedLayout, StudentSearchBox, SchoolsHeader, Head, Link, BreezeInput, BreezeSelect, BreezeLabel, BreezePagination
     },
     props: {
         results: Object,
