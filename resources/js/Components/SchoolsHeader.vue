@@ -40,14 +40,6 @@ export default {
         this.sortClmn = this.url.searchParams.get("sort");
         this.sortType = this.url.searchParams.get("direction");
 
-        if (this.url.pathname === '/institutions') {
-            this.path = 'institutions';
-        }
-
-        let search = this.url.pathname.split('institutions-search/');
-        if (search.length > 1) {
-            this.path = search[1];
-        }
     },
     methods: {
         switchSort: function (clmn) {

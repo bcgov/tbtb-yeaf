@@ -15,10 +15,10 @@
                         <div class="col-md-4 mt-3">
                             <div class="card">
                                 <div class="card-header">
-                                    YEAF Student Search
+                                    YEAF School Search
                                 </div>
                                 <div class="card-body">
-                                    <StudentSearchBox />
+                                    <SchoolSearchBox />
                                 </div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@ import {computed} from "vue";
 
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import StudentSearchBox from '@/Components/StudentSearch.vue';
+import SchoolSearchBox from '@/Components/SchoolSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
@@ -131,7 +131,7 @@ import BreezeSelect from "@/Components/Select";
 export default {
     name: 'SchoolEdit',
     components: {
-        BreezeAuthenticatedLayout, StudentSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm
+        BreezeAuthenticatedLayout, SchoolSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm
     },
     props: {
         result: Object,
@@ -166,29 +166,15 @@ export default {
 
             this.editForm = useForm({
 
-                student_id: this.editForm.student_id,
-                last_name: this.editForm.last_name,
-                first_name: this.editForm.first_name,
-                sin: this.editForm.sin,
-                birth_date: this.editForm.birth_date,
+                institution_id: this.editForm.institution_id,
+                name: this.editForm.name,
                 address: this.editForm.address,
                 city: this.editForm.city,
                 province: this.editForm.province,
                 postal_code: this.editForm.postal_code,
                 country: this.editForm.country,
                 tele: this.editForm.tele,
-                email: this.editForm.email,
-                gender: this.editForm.gender,
-                overaward_flag: this.editForm.overaward_flag,
-                investigate: this.editForm.area_of_audit_code,
-                pen: this.editForm.pen,
-                pd: this.editForm.pd,
-                institution_student_number: this.editForm.institution_student_number,
-
-                life: this.result.life,
-                overaward_amount: this.result.overaward_amount,
-                overaward_deducted_amount: this.result.overaward_deducted_amount,
-
+                fax: this.editForm.fax,
 
             });
 
@@ -200,7 +186,7 @@ export default {
                 },
                 onError: () => {
                 },
-                preserveState: false,
+                preserveState: true,
 
             });
         },

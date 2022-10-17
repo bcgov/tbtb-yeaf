@@ -40,7 +40,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
-                                            <th scope="row"><Link :href="route('students.show', [row.id])">{{ row.sin }}</Link></th>
+                                            <td scope="row"><Link :href="route('students.show', [row.id])">{{ row.sin }}</Link></td>
                                             <td>{{ row.first_name }}</td>
                                             <td>{{ row.last_name}}</td>
                                             <td>{{ formatMoney(row.life) }}</td>
@@ -86,6 +86,9 @@ export default {
         results: Object,
     },
     data() {
+        return {
+
+        }
     },
     methods: {
         countOveraward: function(a, b){
