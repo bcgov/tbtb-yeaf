@@ -93,6 +93,5 @@ class StudentStoreRequest extends FormRequest
 
         $last_student = Student::orderByDesc('student_id')->first();
         $this->merge(['student_id' => $last_student->student_id + 1]);
-
     }
 }

@@ -28,7 +28,8 @@ class StudentController extends Controller
     {
         $students = new Student();
         $students = $this->paginateGrants($students);
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
+
         return Inertia::render('Students', ['status' => true, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
@@ -53,10 +54,9 @@ class StudentController extends Controller
         $student = Student::create($request->validated());
         $students = new Student();
         $students = $this->paginateGrants($students);
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Students', ['status' => true, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
-
     }
 
     /**
@@ -87,7 +87,7 @@ class StudentController extends Controller
             'ineligibles' => $ineligibles,
             'active_staff' => $active_staff,
             'all_staff' => $all_staff,
-            'result' => $student, 'countries' => $countries, 'provinces' => $provinces ]);
+            'result' => $student, 'countries' => $countries, 'provinces' => $provinces, ]);
     }
 
     /**
@@ -147,7 +147,8 @@ class StudentController extends Controller
 //        return $grants->isActive()->with('institution')->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces(){
+    private function getCountriesProvinces()
+    {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 }

@@ -76,6 +76,5 @@ class InstitutionUpdateRequest extends FormRequest
         if (isset($this->fax)) {
             $this->merge(['fax' => preg_replace('/\D/', '', $this->fax)]);
         }
-
     }
 }

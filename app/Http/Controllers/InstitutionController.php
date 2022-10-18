@@ -7,8 +7,6 @@ use App\Http\Requests\InstitutionUpdateRequest;
 use App\Models\Country;
 use App\Models\Institution;
 use App\Models\Province;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class InstitutionController extends Controller
@@ -22,10 +20,9 @@ class InstitutionController extends Controller
     {
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Schools', ['status' => true, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
-
     }
 
     /**
@@ -50,10 +47,9 @@ class InstitutionController extends Controller
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
 
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Schools', ['status' => true, 'school' => $institution, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
-
     }
 
     /**
@@ -64,12 +60,10 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution)
     {
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -92,7 +86,7 @@ class InstitutionController extends Controller
     public function update(InstitutionUpdateRequest $request, Institution $institution)
     {
         Institution::where('id', $institution->id)->update($request->validated());
-        list($countries, $provinces) = $this->getCountriesProvinces();
+        [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
     }
@@ -108,17 +102,15 @@ class InstitutionController extends Controller
         //
     }
 
-
     private function paginateSchools($schools)
     {
         if (request()->filter_name !== null) {
-            $schools = $schools->where('name', 'ILIKE', '%' . request()->filter_name . '%');
+            $schools = $schools->where('name', 'ILIKE', '%'.request()->filter_name.'%');
         }
 
         if (request()->filter_city !== null) {
             $schools = $schools->where('city', 'ILIKE', request()->filter_city);
         }
-
 
         if (request()->sort !== null) {
             $schools = $schools->orderBy(request()->sort, request()->direction);
@@ -129,7 +121,8 @@ class InstitutionController extends Controller
         return $schools->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces(){
+    private function getCountriesProvinces()
+    {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 }

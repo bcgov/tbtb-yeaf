@@ -53,7 +53,6 @@ class CommentStoreRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
         $this->merge([
             'user_id' => Str::upper(Auth::user()->user_id),
         ]);

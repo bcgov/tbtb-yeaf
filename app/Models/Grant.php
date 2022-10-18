@@ -23,7 +23,6 @@ class Grant extends Model
         return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
     }
 
-
     public function batch()
     {
         return $this->belongsTo('App\Models\Batch', 'cheque_batch_number', 'batch_number');

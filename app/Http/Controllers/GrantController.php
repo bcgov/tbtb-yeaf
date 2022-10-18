@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Response;
 use PDF;
+use Response;
 
 class GrantController extends Controller
 {
@@ -136,64 +136,60 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param Request $request
-     * @param \App\Models\Grant $grant
+     * @param  Request  $request
+     * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function validateLetter(Request $request, Grant $grant)
     {
-        $msg = "";
+        $msg = '';
         $stDocname = null;
 
-        if($grant->study_period_completion){
-            $stDocname = "rptLtrSuccessComp";
-        }elseif ($grant->status_code === 'A'){
-            if($grant->total_yeaf_award > 0){
-                if($grant->application_type == 'SFAS Extract'){
-                    $stDocname = "rptLtrApprovedSFASExtract";
-                }else{
-                    $stDocname = "rptLtrApproved";
+        if ($grant->study_period_completion) {
+            $stDocname = 'rptLtrSuccessComp';
+        } elseif ($grant->status_code === 'A') {
+            if ($grant->total_yeaf_award > 0) {
+                if ($grant->application_type == 'SFAS Extract') {
+                    $stDocname = 'rptLtrApprovedSFASExtract';
+                } else {
+                    $stDocname = 'rptLtrApproved';
                 }
-            }else{
+            } else {
                 $msg = "Status is 'Approved' but no award has been given.";
             }
-        }else{
+        } else {
             $countReasons = GrantIneligible::where('grant_id', $grant->grant_id)
                 ->where('cleared_flag', false)
                 ->where('ineligible_code_type', $grant->status_code)
                 ->count();
-            if($grant->status_code == 'P'){
-                if(is_null($grant->custom_pending_reason) && $countReasons == 0){
-                    $msg = "There are no pending reasons to include in the letter.  ";
-                }else{
-                    $stDocname = "rptLtrPending";
+            if ($grant->status_code == 'P') {
+                if (is_null($grant->custom_pending_reason) && $countReasons == 0) {
+                    $msg = 'There are no pending reasons to include in the letter.  ';
+                } else {
+                    $stDocname = 'rptLtrPending';
                 }
-            }elseif ($grant->status_code == 'D'){
-                if(is_null($grant->custom_denial_reason) && $countReasons == 0){
-                    $msg = "There are no denied reasons to include in the letter.  ";
-                }else{
-                    $stDocname = "rptLtrDenied";
+            } elseif ($grant->status_code == 'D') {
+                if (is_null($grant->custom_denial_reason) && $countReasons == 0) {
+                    $msg = 'There are no denied reasons to include in the letter.  ';
+                } else {
+                    $stDocname = 'rptLtrDenied';
                 }
             }
         }
 
         return Response::json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
-
-
     }
 
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param \App\Models\Grant $grant
-     * @param null $docName
+     * @param  \App\Models\Grant  $grant
+     * @param  null  $docName
      * @return \Illuminate\Http\RedirectResponse
      */
     public function exportLetter(Grant $grant, $docName = null)
     {
-
-        if(!is_null($docName)){
-
+        if (! is_null($docName)) {
             $doc = $docName;
             $admin = Admin::first();
             $student = $grant->student;
@@ -205,7 +201,6 @@ class GrantController extends Controller
 
             return $pdf->download(mt_rand().'-'.$grant->grant_id.'-letter.pdf');
         }
-
     }
 
     /*
@@ -381,24 +376,23 @@ class GrantController extends Controller
     {
         $record = null;
         if (! is_null($grant)) {
-
             $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
-            $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
+                $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
             }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
-            $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
+                $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
             }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
         }
 
         $status = 'P';
-        $msg = "";
+        $msg = '';
         if (! is_null($record)) {
             if ($record->DeniedCnt > 0) {
                 $status = 'D';
-                $msg = "Application Status set to Denied. Some denial reasons has not been cleared.";
+                $msg = 'Application Status set to Denied. Some denial reasons has not been cleared.';
             } elseif ($record->PendingCnt > 0) {
                 $status = 'P';
-                $msg = "Application Status set to Pending. Some Pending reasons has not been cleared.";
-            }else{
+                $msg = 'Application Status set to Pending. Some Pending reasons has not been cleared.';
+            } else {
                 $status = $grant->status_code;
             }
         }
@@ -479,7 +473,6 @@ class GrantController extends Controller
 
     private function checkMaxYears($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
     {
-
         /*SELECT tblApplication.ProgYearID
         FROM tblStudent INNER JOIN tblApplication ON tblStudent.studentID = tblApplication.studentID
         WHERE (((tblApplication.total_YEAF_award)>0) AND ((tblApplication.grantID)<>[forms]![frmstudent]![sfrmApplication]![GrantId])

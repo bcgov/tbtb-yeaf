@@ -23,7 +23,6 @@ Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->nam
 Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
 
 Route::middleware(['auth', 'active'])->group(function () {
-
 //    Route::get('/dashboard', [App\Http\Controllers\StudentController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('institutions', App\Http\Controllers\InstitutionController::class);

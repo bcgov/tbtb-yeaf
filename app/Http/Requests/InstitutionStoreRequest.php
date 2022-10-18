@@ -31,7 +31,7 @@ class InstitutionStoreRequest extends FormRequest
             'name.unique' => 'Institution with the same name already exists.',
             'city.*' => 'City field is not valid.',
             'address.*' => 'Address field is not valid.',
-            'institution_id.*' => 'Institution ID is missing.'
+            'institution_id.*' => 'Institution ID is missing.',
         ];
     }
 
@@ -82,6 +82,5 @@ class InstitutionStoreRequest extends FormRequest
 
         $last_institution = Institution::orderByDesc('institution_id')->first();
         $this->merge(['institution_id' => $last_institution->institution_id + 1]);
-
     }
 }
