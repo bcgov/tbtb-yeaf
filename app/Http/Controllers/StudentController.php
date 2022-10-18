@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Batch;
 use App\Models\Country;
@@ -21,14 +22,14 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index()
     {
         $students = new Student();
         $students = $this->paginateGrants($students);
-
-        return Inertia::render('Students', ['status' => true, 'results' => $students]);
+        list($countries, $provinces) = $this->getCountriesProvinces();
+        return Inertia::render('Students', ['status' => true, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -44,12 +45,18 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  StudentStoreRequest  $request
+     * @return \Inertia\Response
      */
-    public function store(Request $request)
+    public function store(StudentStoreRequest $request)
     {
-        //
+        $student = Student::create($request->validated());
+        $students = new Student();
+        $students = $this->paginateGrants($students);
+        list($countries, $provinces) = $this->getCountriesProvinces();
+
+        return Inertia::render('Students', ['status' => true, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
+
     }
 
     /**
@@ -138,5 +145,9 @@ class StudentController extends Controller
 
         return $grants->paginate(25)->onEachSide(1)->appends(request()->query());
 //        return $grants->isActive()->with('institution')->paginate(25)->onEachSide(1)->appends(request()->query());
+    }
+
+    private function getCountriesProvinces(){
+        return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 }

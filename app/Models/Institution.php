@@ -13,15 +13,5 @@ class Institution extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'institution_id',
-        'name',
-        'address',
-        'city',
-        'country',
-        'province',
-        'postal_code',
-        'tele',
-        'fax',
-    ];
+    protected $fillable = ['institution_id', 'name', 'address', 'city', 'country', 'province', 'postal_code', 'tele', 'fax'];
 }

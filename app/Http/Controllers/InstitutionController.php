@@ -47,8 +47,6 @@ class InstitutionController extends Controller
     public function store(InstitutionStoreRequest $request)
     {
         $institution = Institution::create($request->validated());
-//        return Redirect::route('institutions.index');
-//        return Redirect::route('institutions.show', [$institution->id]);
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
 

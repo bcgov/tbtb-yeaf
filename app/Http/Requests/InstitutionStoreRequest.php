@@ -47,10 +47,8 @@ class InstitutionStoreRequest extends FormRequest
             'name' => 'required|string|unique:institutions,name',
             'address' => 'required|string',
             'city' => 'required|string',
-
             'country' => 'size:3|nullable|exists:countries,country_code',
             'province' => 'size:2|nullable|exists:provinces,province_code',
-
             'postal_code' => 'string|max:9|nullable',
             'tele' => 'max:15|string|nullable',
             'fax' => 'max:15|string|nullable',
