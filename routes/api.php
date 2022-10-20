@@ -14,31 +14,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->get('/students',
+Route::get('/students',
     function (Request $request) {
         return \App\Models\Student::get();
     }
 )->name('api.students');
-Route::middleware('auth')->get('/students-with-grants',
+
+Route::get('/students-with-grants',
     function (Request $request) {
         return \App\Models\Student::with('grants.grantIneligibles', 'comments', 'grants.appeals', 'grants.py')->get();
     }
 )->name('api.students-with-grants');
 
-Route::middleware('auth')->get('/staff',
+Route::get('/staff',
     function (Request $request) {
         return \App\Models\User::get();
     }
 )->name('api.staff');
-Route::middleware('auth')->get('/grants',
+
+Route::get('/grants',
     function (Request $request) {
         return \App\Models\Grant::get();
     }
 )->name('api.grants');
-Route::middleware('auth')->get('/comments',
+
+Route::get('/comments',
     function (Request $request) {
         return \App\Models\Grant::get();
     }
 )->name('api.comments');
-
-
