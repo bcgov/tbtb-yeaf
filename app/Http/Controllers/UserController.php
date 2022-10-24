@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AjaxRequest;
-use App\Models\Comment;
 use App\Models\Grant;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -187,6 +186,5 @@ class UserController extends Controller
         $user->idir_user_guid = $idir_user['idir_user_guid'];
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();
-
     }
 }

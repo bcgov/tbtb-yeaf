@@ -36,8 +36,6 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
-
-
         Route::name('maintenance.')->group(function () {
 //            Route::get('/maintenance/schools', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('schools.list');
             Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
@@ -47,6 +45,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
 
+            Route::get('/maintenance/reports/index', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
             Route::get('/maintenance/reports/students', [App\Http\Controllers\ReportController::class, 'students'])->name('reports.students');
             Route::get('/maintenance/reports/students-with-grants', [App\Http\Controllers\ReportController::class, 'studentsWithGrants'])->name('reports.students-with-grants');
             Route::get('/maintenance/reports/staff', [App\Http\Controllers\ReportController::class, 'staff'])->name('reports.staff');
@@ -57,7 +56,6 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::get('/maintenance/reports/program_years', [App\Http\Controllers\ReportController::class, 'py'])->name('reports.py');
             Route::get('/maintenance/reports/grant_ineligibles', [App\Http\Controllers\ReportController::class, 'grantIneligibles'])->name('reports.grantIneligibles');
         });
-
     });
 });
 //require __DIR__.'/auth.php';
