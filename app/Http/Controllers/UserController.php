@@ -187,38 +187,6 @@ class UserController extends Controller
         $user->idir_user_guid = $idir_user['idir_user_guid'];
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();
-//
-        ////        $sub_user_id = Str::upper(Str::substr($idir_user['idir_username'], 0, 4));
-//        $legacy_idir = User::where('user_id', $idir_user['idir_username'])->where('idir_user_guid', null)->first();
-//
-//        //if found a user that has not been synced
-//        if (! is_null($legacy_idir)) {
-//            //user_id from MS Access came with only 4 characters
-//            //we need to use full IDIR ID and GUID
-//
-//            $comments = Comment::where('user_id', $idir_user['idir_username'])->withTrashed()->get();
-//            foreach ($comments as $comment) {
-//                $comment->auditor_user_id = Str::upper($idir_user['idir_username']);
-//                $comment->save();
-//            }
-//
-//            $incidents = Grant::where('officer_user_id', $sub_user_id)->withTrashed()->get();
-//            foreach ($incidents as $incident) {
-//                $incident->auditor_user_id = Str::upper($idir_user['idir_username']);
-//                $incident->save();
-//            }
-//
-//            $comments = CaseComment::where('staff_user_id', $sub_user_id)->withTrashed()->get();
-//            foreach ($comments as $comment) {
-//                $comment->staff_user_id = Str::upper($idir_user['idir_username']);
-//                $comment->save();
-//            }
-//
-//            //disable legacy account
-//            $legacy_idir->disabled = true;
-//            $legacy_idir->deleted_at = date('Y-m-d H:i:s', strtotime('now'));
-//            $legacy_idir->user_id = mt_rand() . '-' . $legacy_idir->user_id . '-DELETED';
-//            $legacy_idir->save();
-//        }
+
     }
 }

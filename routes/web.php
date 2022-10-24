@@ -36,6 +36,8 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
+
+
         Route::name('maintenance.')->group(function () {
 //            Route::get('/maintenance/schools', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('schools.list');
             Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
@@ -44,12 +46,17 @@ Route::middleware(['auth', 'active'])->group(function () {
 
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
-
-//            Route::prefix('maintenance')->group(function () {
-//                Route::resource('ministry', App\Http\Controllers\MaintenanceController::class);
-//                Route::resource('school', App\Http\Controllers\InstitutionController::class);
-//            });
         });
+
+        Route::name('reports.')->group(function () {
+            Route::get('/reports/students', [App\Http\Controllers\ReportController::class, 'students'])->name('reports.students');
+            Route::get('/reports/students-with-grants', [App\Http\Controllers\ReportController::class, 'studentsWithGrants'])->name('reports.students-with-grants');
+            Route::get('/reports/staff', [App\Http\Controllers\ReportController::class, 'staff'])->name('reports.staff');
+            Route::get('/reports/grants', [App\Http\Controllers\ReportController::class, 'grants'])->name('reports.grants');
+            Route::get('/reports/comments', [App\Http\Controllers\ReportController::class, 'comments'])->name('reports.comments');
+            Route::get('/reports/appeals', [App\Http\Controllers\ReportController::class, 'appeals'])->name('reports.appeals');
+        });
+
     });
 });
 //require __DIR__.'/auth.php';
