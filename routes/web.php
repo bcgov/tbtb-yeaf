@@ -46,15 +46,16 @@ Route::middleware(['auth', 'active'])->group(function () {
 
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
-        });
 
-        Route::name('reports.')->group(function () {
-            Route::get('/reports/students', [App\Http\Controllers\ReportController::class, 'students'])->name('reports.students');
-            Route::get('/reports/students-with-grants', [App\Http\Controllers\ReportController::class, 'studentsWithGrants'])->name('reports.students-with-grants');
-            Route::get('/reports/staff', [App\Http\Controllers\ReportController::class, 'staff'])->name('reports.staff');
-            Route::get('/reports/grants', [App\Http\Controllers\ReportController::class, 'grants'])->name('reports.grants');
-            Route::get('/reports/comments', [App\Http\Controllers\ReportController::class, 'comments'])->name('reports.comments');
-            Route::get('/reports/appeals', [App\Http\Controllers\ReportController::class, 'appeals'])->name('reports.appeals');
+            Route::get('/maintenance/reports/students', [App\Http\Controllers\ReportController::class, 'students'])->name('reports.students');
+            Route::get('/maintenance/reports/students-with-grants', [App\Http\Controllers\ReportController::class, 'studentsWithGrants'])->name('reports.students-with-grants');
+            Route::get('/maintenance/reports/staff', [App\Http\Controllers\ReportController::class, 'staff'])->name('reports.staff');
+            Route::get('/maintenance/reports/grants', [App\Http\Controllers\ReportController::class, 'grants'])->name('reports.grants');
+            Route::get('/maintenance/reports/comments', [App\Http\Controllers\ReportController::class, 'comments'])->name('reports.comments');
+            Route::get('/maintenance/reports/appeals', [App\Http\Controllers\ReportController::class, 'appeals'])->name('reports.appeals');
+            Route::get('/maintenance/reports/institutions', [App\Http\Controllers\ReportController::class, 'institutions'])->name('reports.institutions');
+            Route::get('/maintenance/reports/program_years', [App\Http\Controllers\ReportController::class, 'py'])->name('reports.py');
+            Route::get('/maintenance/reports/grant_ineligibles', [App\Http\Controllers\ReportController::class, 'grantIneligibles'])->name('reports.grantIneligibles');
         });
 
     });
