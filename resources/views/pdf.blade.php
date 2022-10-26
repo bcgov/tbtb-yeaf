@@ -84,21 +84,6 @@
                 @endif
             </td>
         </tr>
-{{--        --}}
-{{--        <tr>--}}
-{{--            <td>--}}
-{{--                <strong>Primary Area of Audit:</strong>--}}
-{{--                {{ $case->primaryAudit->description }} <small>({{$case->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small>--}}
-{{--            </td>--}}
-{{--            <td>--}}
-{{--                <strong>Additional Areas of Audit:</strong>--}}
-{{--                <ul>--}}
-{{--                    @foreach($case->audits as $audit)--}}
-{{--                        <li>{{$audit->audit->description}} <small>({{$audit->audit_type === 'A' ? 'Pre-Audit' : 'Post-Audit'}})</small></li>--}}
-{{--                    @endforeach--}}
-{{--                </ul>--}}
-{{--            </td>--}}
-{{--        </tr>--}}
 
     </table>
     <footer>

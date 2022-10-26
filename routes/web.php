@@ -23,7 +23,6 @@ Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->nam
 Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
 
 Route::middleware(['auth', 'active'])->group(function () {
-//    Route::get('/dashboard', [App\Http\Controllers\StudentController::class, 'index'])->name('dashboard');
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('institutions', App\Http\Controllers\InstitutionController::class);
     Route::resource('grants', App\Http\Controllers\GrantController::class);
@@ -32,30 +31,22 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/grants/validate-letter/{grant}', [App\Http\Controllers\GrantController::class, 'validateLetter'])->name('grants.validate-letter');
     Route::get('/grants/export-letter/{grant}/{docName?}', [App\Http\Controllers\GrantController::class, 'exportLetter'])->name('grants.export-letter');
 
-//    Route::resource('case-funding', App\Http\Controllers\CaseFundingController::class);
 
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
         Route::name('maintenance.')->group(function () {
-//            Route::get('/maintenance/schools', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('schools.list');
             Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
             Route::get('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffShow'])->name('staff.show');
             Route::post('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
 
+            Route::get('/maintenance/ineligibles', [App\Http\Controllers\MaintenanceController::class, 'ineligiblesList'])->name('ineligibles.list');
+            Route::post('/maintenance/ineligibles', [App\Http\Controllers\MaintenanceController::class, 'ineligibleStore'])->name('ineligible.store');
+            Route::post('/maintenance/ineligibles/{ineligible}', [App\Http\Controllers\MaintenanceController::class, 'ineligibleEdit'])->name('ineligible.edit');
+
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
 
-            Route::get('/maintenance/reports/index', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
-            Route::get('/maintenance/reports/students', [App\Http\Controllers\ReportController::class, 'students'])->name('reports.students');
-            Route::get('/maintenance/reports/students-with-grants', [App\Http\Controllers\ReportController::class, 'studentsWithGrants'])->name('reports.students-with-grants');
-            Route::get('/maintenance/reports/staff', [App\Http\Controllers\ReportController::class, 'staff'])->name('reports.staff');
-            Route::get('/maintenance/reports/grants', [App\Http\Controllers\ReportController::class, 'grants'])->name('reports.grants');
-            Route::get('/maintenance/reports/comments', [App\Http\Controllers\ReportController::class, 'comments'])->name('reports.comments');
-            Route::get('/maintenance/reports/appeals', [App\Http\Controllers\ReportController::class, 'appeals'])->name('reports.appeals');
-            Route::get('/maintenance/reports/institutions', [App\Http\Controllers\ReportController::class, 'institutions'])->name('reports.institutions');
-            Route::get('/maintenance/reports/program_years', [App\Http\Controllers\ReportController::class, 'py'])->name('reports.py');
-            Route::get('/maintenance/reports/grant_ineligibles', [App\Http\Controllers\ReportController::class, 'grantIneligibles'])->name('reports.grantIneligibles');
+            Route::get('/maintenance/reports/{type?}', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
         });
     });
 });
-//require __DIR__.'/auth.php';

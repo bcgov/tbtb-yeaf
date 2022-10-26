@@ -12,9 +12,22 @@ class ReportController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request, $type = null)
     {
-        return Inertia::render('Maintenance', ['status' => true, 'page' => 'reports']);
+        if(is_null($type))
+            return Inertia::render('Maintenance', ['status' => true, 'page' => 'reports']);
+
+        switch ($type){
+            case 'students': return $this->students($request);
+            case 'grants': return $this->grants($request);
+            case 'staff': return $this->staff($request);
+            case 'ineligibles': return $this->ineligibles($request);
+            case 'grantIneligibles': return $this->grantIneligibles($request);
+            case 'comments': return $this->comments($request);
+            case 'appeals': return $this->appeals($request);
+            case 'programYears': return $this->programYears($request);
+            case 'studentsWithGrants': return $this->studentsWithGrants($request);
+        }
     }
 
     public function students(Request $request)
@@ -28,12 +41,12 @@ class ReportController extends Controller
     public function grants(Request $request)
     {
         return $this->jsonFileDownload('grants', \App\Models\Grant::select('grant_id', 'institution_id', 'student_id',
-            'program_year_id', 'program_code', 'checque_batch_number', 'officier_user_id', 'creator_user_id',
+            'program_year_id', 'program_code', 'cheque_batch_number', 'officer_user_id', 'creator_user_id',
             'update_user_id', 'application_number', 'age', 'eligible_need', 'total_award', 'unmet_need',
             'total_bcsl_award', 'total_yeaf_award', 'total_yeaf_award_remit', 'overaward', 'overaward_calc',
             'overaward_deducted_amount', 'reason_for_ineligibility', 'program_name', 'program_other_description',
             'status_code', 'date_issued_month', 'date_issued_year', 'application_type', 'letter_text',
-            'custom_pending_reason', 'custom_denied_reason', 'study_period_completion', 'confirmation_bcsl_remission',
+            'custom_pending_reason', 'custom_denial_reason', 'study_period_completion', 'confirmation_bcsl_remission',
             'reassess', 'overaward_cleared', 'withdrawal', 'study_start_date', 'study_end_date',
             'bcsl_remission', 'letter_date', 'cheque_issue_date', 'withdrawal_date', 'status_date', 'last_letter_produced_date',
             'application_receive_date', 'last_evaluation_date')->get());
@@ -50,10 +63,15 @@ class ReportController extends Controller
             'access_type', 'tele', 'email')->get());
     }
 
+    public function ineligibles(Request $request)
+    {
+        return $this->jsonFileDownload('ineligibles', \App\Models\Ineligible::select('code_id', 'description', 'active_flag',
+            'code_type', 'paragraph_text')->get());
+    }
     public function grantIneligibles(Request $request)
     {
-        return $this->jsonFileDownload('grantIneligibles', \App\Models\GrantIneligible::select('code_id', 'description', 'active_flag',
-            'code_type', 'paragraph_text')->get());
+        return $this->jsonFileDownload('grantIneligibles', \App\Models\GrantIneligible::select('grant_id', 'ineligible_code_id',
+        'created_by', 'cleared_flag', 'ineligible_code_type')->get());
     }
 
     public function comments(Request $request)
@@ -74,7 +92,7 @@ class ReportController extends Controller
             'province', 'state', 'postal_code', 'zip_code', 'country', 'tele', 'fax')->get());
     }
 
-    public function py(Request $request)
+    public function programYears(Request $request)
     {
         return $this->jsonFileDownload('program_years', \App\Models\ProgramYear::select('program_year_id', 'year_start', 'year_end',
             'grant_amount', 'max_years_allowed', 'min_age', 'max_age')->get());

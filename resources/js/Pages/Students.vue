@@ -30,7 +30,7 @@
                         <div class="card mb-3">
                             <div class="card-header">
                                 YEAF Students
-                                <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newStudentModal">New Student</button>
+                                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newStudentModal">New Student</button>
                             </div>
                             <div class="card-body">
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">

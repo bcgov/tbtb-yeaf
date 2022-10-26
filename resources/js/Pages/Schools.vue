@@ -31,7 +31,7 @@
                         <div class="card mb-3">
                             <div class="card-header">
                                 YEAF Schools
-                                <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newSchoolModal">New School</button>
+                                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newSchoolModal">New School</button>
 
                             </div>
                             <div class="card-body">

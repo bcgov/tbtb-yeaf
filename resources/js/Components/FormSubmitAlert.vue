@@ -6,13 +6,25 @@ export default {
     },
     props: {
         formState: Boolean|String,
-        successMsg: String,
-        failMsg: String,
+        successMsg: {
+            type: [String, null],
+            default: null,
+        },
+        failMsg: {
+            type: [String, null],
+            default: null,
+        },
     },
     data() {
         return {
             showHide: false,
+            successMessage: '',
+            failMessage: '',
         }
+    },
+    mounted() {
+        this.successMessage = this.successMsg == null ? 'Form was submitted successfully.' : this.successMsg;
+        this.failMessage = this.failMsg == null ? 'There was an error submitting this form.' : this.failMsg;
     },
     methods: {
     },
@@ -36,7 +48,7 @@ export default {
         <div v-if="formState" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
             <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
                 <div class="">
-                    <div class="toast-body">{{ successMsg }}</div>
+                    <div class="toast-body">{{ successMessage }}</div>
                     <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
@@ -44,7 +56,7 @@ export default {
         <div v-if="formState === false" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
             <div id="updateFailAlert" class="alert alert-danger alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
                 <div class="">
-                    <div class="toast-body">{{ failMsg }}</div>
+                    <div class="toast-body">{{ failMessage }}</div>
                     <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>

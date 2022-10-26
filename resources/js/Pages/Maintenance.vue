@@ -29,8 +29,9 @@
                     <div class="col-md-9 mt-3">
                         <MaintenanceMinistry v-if="page === 'ministry'" :results="results" :provinces="provinces"></MaintenanceMinistry>
                         <MaintenanceStaff v-if="page === 'staff'" :results="results"></MaintenanceStaff>
-                        <MaintenanceReports v-if="page === 'reports'"></MaintenanceReports>
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
+                        <MaintenanceIneligibles v-if="page === 'ineligibles'" :results="results"></MaintenanceIneligibles>
+                        <MaintenanceReports v-if="page === 'reports'"></MaintenanceReports>
                     </div>
                 </div>
             </div>
@@ -46,10 +47,12 @@ import MaintenanceMinistry from "@/Components/MaintenanceMinistry";
 import MaintenanceStaff from "@/Components/MaintenanceStaff";
 import MaintenanceStaffEdit from "@/Components/MaintenanceStaffEdit";
 import MaintenanceReports from "@/Components/MaintenanceReports";
+import MaintenanceIneligibles from "@/Components/MaintenanceIneligibles";
 
 export default {
     name: 'Maintenance',
     components: {
+        MaintenanceIneligibles,
         MaintenanceReports,
         MaintenanceMenu,
         BreezeAuthenticatedLayout, Head, Link, MaintenanceMinistry, MaintenanceStaff, MaintenanceStaffEdit
