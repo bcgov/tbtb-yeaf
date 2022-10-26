@@ -29,13 +29,7 @@
             </a>
         </th>
 
-        <th scope="col" style="min-width: 130px;">
-            <a href="#" @click="switchSort('invest')">
-                <span>Under Investigation</span>
-                <em v-if="sortClmn === 'invest' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
-                <em v-else class="bi bi-sort-numeric-down"></em>
-            </a>
-        </th>
+        <th scope="col" style="min-width: 130px;">Current Overaward</th>
         <th scope="col" style="min-width: 130px;">
             <a href="#" @click="switchSort('investigate')">
                 <span>Under Investigation</span>
