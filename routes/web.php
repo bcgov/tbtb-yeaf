@@ -47,6 +47,9 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
 
             Route::get('/maintenance/reports/{type?}', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+
+            Route::get('/maintenance/letters', [App\Http\Controllers\MaintenanceController::class, 'letters'])->name('letters.index');
+            Route::get('/maintenance/py-letters/{program_year}', [App\Http\Controllers\MaintenanceController::class, 'pyLetter'])->name('letters.py');
         });
     });
 });

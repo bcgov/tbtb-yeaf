@@ -5,6 +5,7 @@
         <Link :href="route('maintenance.staff.list')" class="list-group-item list-group-item-action" :class="page.split('staff').length > 1 ? 'active' : ''">Staff</Link>
         <Link :href="route('maintenance.ineligibles.list')" class="list-group-item list-group-item-action" :class="page.split('ineligibles').length > 1 ? 'active' : ''">Ineligible Reasons</Link>
         <Link :href="route('maintenance.reports.index')" class="list-group-item list-group-item-action" :class="page === 'reports' ? 'active' : ''">Reports</Link>
+        <Link :href="route('maintenance.letters.index')" class="list-group-item list-group-item-action" :class="page === 'letters' ? 'active' : ''">Cover Letters</Link>
     </div>
 </template>
 <script setup>

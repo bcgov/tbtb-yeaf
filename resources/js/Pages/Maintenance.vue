@@ -32,6 +32,7 @@
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
                         <MaintenanceIneligibles v-if="page === 'ineligibles'" :results="results"></MaintenanceIneligibles>
                         <MaintenanceReports v-if="page === 'reports'"></MaintenanceReports>
+                        <MaintenanceLetters v-if="page === 'letters'" :program_years="program_years" :batches="batches"></MaintenanceLetters>
                     </div>
                 </div>
             </div>
@@ -47,6 +48,7 @@ import MaintenanceMinistry from "@/Components/MaintenanceMinistry";
 import MaintenanceStaff from "@/Components/MaintenanceStaff";
 import MaintenanceStaffEdit from "@/Components/MaintenanceStaffEdit";
 import MaintenanceReports from "@/Components/MaintenanceReports";
+import MaintenanceLetters from "@/Components/MaintenanceLetters";
 import MaintenanceIneligibles from "@/Components/MaintenanceIneligibles";
 
 export default {
@@ -54,6 +56,7 @@ export default {
     components: {
         MaintenanceIneligibles,
         MaintenanceReports,
+        MaintenanceLetters,
         MaintenanceMenu,
         BreezeAuthenticatedLayout, Head, Link, MaintenanceMinistry, MaintenanceStaff, MaintenanceStaffEdit
     },
@@ -61,6 +64,8 @@ export default {
         results: Object,
         page: String,
         provinces: Object,
+        program_years: Object,
+        batches: Object,
     },
     data() {
         return {

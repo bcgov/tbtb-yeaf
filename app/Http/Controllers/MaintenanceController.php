@@ -7,9 +7,12 @@ use App\Http\Requests\StaffEditRequest;
 use App\Http\Requests\IneligibleEditRequest;
 use App\Http\Requests\IneligibleStoreRequest;
 use App\Models\Admin;
+use App\Models\Batch;
 use App\Models\Ineligible;
+use App\Models\ProgramYear;
 use App\Models\Province;
 use App\Models\User;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -17,6 +20,30 @@ use Inertia\Inertia;
 
 class MaintenanceController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response::render
+     */
+    public function letters(Request $request): \Inertia\Response
+    {
+
+        return Inertia::render('Maintenance', ['status' => true,
+            'program_years' => ProgramYear::orderBy('year_start', 'desc')->get(),
+            'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters']);
+    }
+
+    public function pyLetter(Request $request, ProgramYear $programYear){
+        $admin = Admin::first();
+        $now_d = date('F d, Y');
+        $now_t = date('H:m:i');
+        $user = Auth::user();
+        $pdf = PDF::loadView('py-pdf', compact('programYear', 'admin', 'user', 'now_d', 'now_t'));
+
+        return $pdf->download(mt_rand().'-'. $programYear->year_start . '_' . $programYear->year_end .'-letter.pdf');
+
+    }
     /**
      * Display a listing of the resource.
      *

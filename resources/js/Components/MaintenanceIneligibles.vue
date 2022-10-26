@@ -186,6 +186,7 @@ export default {
         return {
             newIneligibleForm: null,
             newIneligibleFormData: {
+                formState: true,
                 code_id: '', description: '', code_type: 'D', active_flag: false, paragraph_text: '',
             },
             editIneligibleForm: null,
