@@ -98,7 +98,7 @@
             <td colspan="3"><br/><br/><br/></td>
         </tr>
         <tr>
-            <td colspan="3">Attached are copies of the {{ $program_year->year_start }}/{{ $program_year->year_end }} YEAF Awards.<br/><br/></td>
+            <td colspan="3">Attached are copies of the YEAF Awards recommendations for {{ $batch->batch_human_date }}.<br/><br/></td>
         </tr>
         <tr>
             <td colspan="3">Please contact me if you have any question.<br/></td>

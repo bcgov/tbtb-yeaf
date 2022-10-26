@@ -10,7 +10,6 @@
                     <div class="card">
                         <div class="card-header">Download Year End Report Letter</div>
                         <div class="card-body row">
-
                             <div class="col-md-8">
                                 <BreezeSelect class="form-select" id="printYearEnd" v-model="selectedPy">
                                     <option value="">Select a Program Year</option>
@@ -18,11 +17,24 @@
                                 </BreezeSelect>
                             </div>
                             <div class="col-md-4"><button @click="downloadYearEnd" type="button" class="btn btn-success w-100">Submit</button> </div>
-
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Download Award Recommendations Letter</div>
+                        <div class="card-body row">
+                            <div class="col-md-8">
+                                <BreezeSelect class="form-select" id="printBatch" v-model="selectedBatch">
+                                    <option value="">Select a Batch</option>
+                                    <option v-for="batch in batches" :value="batch.id">{{ batch.batch_human_date }}</option>
+                                </BreezeSelect>
+                            </div>
+                            <div class="col-md-4"><button @click="downloadBatch" type="button" class="btn btn-success w-100">Submit</button> </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -54,8 +66,15 @@ export default {
                 return false;
             }
 
-            window.open('/maintenance/py-letters/' + this.selectedPy,'_blank');
-        }
+            window.open('/maintenance/download-letters/py/' + this.selectedPy,'_blank');
+        },
+        downloadBatch: function (){
+            if(this.selectedBatch === ''){
+                return false;
+            }
+
+            window.open('/maintenance/download-letters/batch/' + this.selectedBatch,'_blank');
+        },
     },
     watch: {
     },

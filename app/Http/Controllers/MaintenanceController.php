@@ -34,15 +34,22 @@ class MaintenanceController extends Controller
             'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters']);
     }
 
-    public function pyLetter(Request $request, ProgramYear $programYear){
+    public function downloadLetter(Request $request, $type, $extra){
         $admin = Admin::first();
         $now_d = date('F d, Y');
         $now_t = date('H:m:i');
         $user = Auth::user();
-        $pdf = PDF::loadView('py-pdf', compact('programYear', 'admin', 'user', 'now_d', 'now_t'));
+        if($type === 'py'){
+            $program_year = ProgramYear::find($extra);
+            $pdf = PDF::loadView('py-pdf', compact('program_year', 'admin', 'user', 'now_d', 'now_t'));
+            $file_name = $program_year->year_start . '_' . $program_year->year_end;
+        }elseif($type === 'batch'){
+            $batch = Batch::find($extra);
+            $pdf = PDF::loadView('batch-pdf', compact('batch', 'admin', 'user', 'now_d', 'now_t'));
+            $file_name = $batch->batch_date;
+        }
 
-        return $pdf->download(mt_rand().'-'. $programYear->year_start . '_' . $programYear->year_end .'-letter.pdf');
-
+        return $pdf->download(mt_rand().'-'. $file_name .'-letter.pdf');
     }
     /**
      * Display a listing of the resource.

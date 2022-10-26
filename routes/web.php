@@ -49,7 +49,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::get('/maintenance/reports/{type?}', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 
             Route::get('/maintenance/letters', [App\Http\Controllers\MaintenanceController::class, 'letters'])->name('letters.index');
-            Route::get('/maintenance/py-letters/{program_year}', [App\Http\Controllers\MaintenanceController::class, 'pyLetter'])->name('letters.py');
+            Route::get('/maintenance/download-letters/{type}/{extra}', [App\Http\Controllers\MaintenanceController::class, 'downloadLetter'])->name('letters.download');
         });
     });
 });
