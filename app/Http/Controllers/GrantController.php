@@ -438,9 +438,9 @@ class GrantController extends Controller
             $date2 = new carbon($grant->study_end_date);
 
             $dateprogram = $date2->diffInDays($date1);
-            if ($dateprogram < 81) {
+            if ($dateprogram < 41) {
                 if ($messageFlag) {
-                    $msg = 'The end date is shorter than 12 weeks. <br/>This application does not meet the course length criteria.<br/>Program Length Error.';
+                    $msg = 'The end date is shorter than 6 weeks. <br/>This application does not meet the course length criteria.<br/>Program Length Error.';
                 }
                 if ($createIneligibleFlag) {
                     $this->addIneligibleReason($grant, '05');
