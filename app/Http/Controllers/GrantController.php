@@ -96,7 +96,7 @@ class GrantController extends Controller
         $grant->application_receive_date = $request->application_receive_date;
         $grant->program_code = $request->program_code;
         $grant->program_year_id = $request->program_year_id;
-        $grant->officer_user_id = $request->officer_user_id;
+        $grant->officer_user_id = !is_null($request->officer_user_id) ?: Auth::user()->user_id;
         $grant->study_start_date = $request->study_start_date;
         $grant->study_end_date = $request->study_end_date;
         $grant->age = $request->age;

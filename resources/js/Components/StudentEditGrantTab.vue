@@ -554,6 +554,7 @@ export default {
                         headers: {'Accept': 'application/json', 'Content-Type': 'multipart/form-data'}
                     })
                         .then(function (response) {
+                            vm.grantForms[index] = response.data.grant;
                             if(response.data.msg !== ''){
                                 vm.grantForms[index].msg = response.data.msg;
                                 vm.grantForms[index].formState = false;
