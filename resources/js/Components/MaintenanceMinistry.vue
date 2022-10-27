@@ -341,9 +341,10 @@ export default {
     methods: {
         editArea: function () {
             this.editForm.formState = '';
-            this.editForm.put(route('maintenance.ministry.update', [this.editForm.id]), {
+            this.editForm.post(route('maintenance.ministry.update', [this.editForm.id]), {
                 onSuccess: () => {
                     this.editForm.reset();
+                    this.editForm.formState = true;
                 },
                 onFailure: () => {
                 },

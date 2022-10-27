@@ -83,26 +83,14 @@
                                                 </div>
                                             </div>
 
-
                                         </div>
                                         <div class="card-footer mt-3">
                                             <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update School</button>
                                             <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
-                                            <!--                                            <Link :href="route('student-grants.show', [result.id])" class="btn btn-outline-warning float-right mr-2">Grants</Link>-->
-                                            <!--                                            <Link :href="route('student-comments.show', [result.id])" class="btn btn-outline-dark float-right mr-2">Comments</Link>-->
                                         </div>
 
-
-                                        <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                                            <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                                                <div class="">
-                                                    <div class="toast-body">
-                                                        School record was updated successfully.
-                                                    </div>
-                                                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <FormSubmitAlert :form-state="editForm.formState"
+                                                         :success-msg="'School record was updated successfully.'"></FormSubmitAlert>
                                     </form>
 
                                 </div>
@@ -127,11 +115,12 @@ import SchoolSearchBox from '@/Components/SchoolSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'SchoolEdit',
     components: {
-        BreezeAuthenticatedLayout, SchoolSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm
+        BreezeAuthenticatedLayout, SchoolSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm, FormSubmitAlert
     },
     props: {
         result: Object,
@@ -139,13 +128,10 @@ export default {
         countries: Object,
         provinces: Object,
 
-},
+    },
     data() {
         return {
             editForm: null,
-            showFailMsg: false,
-            showSuccessMsg: false,
-
         }
     },
     methods: {
@@ -162,8 +148,6 @@ export default {
         },
         updateSchool: function ()
         {
-
-
             this.editForm = useForm({
 
                 institution_id: this.editForm.institution_id,
@@ -178,38 +162,19 @@ export default {
 
             });
 
+            this.editForm.formState = '';
             this.editForm.put(route('institutions.update', this.result.id), {
                 onSuccess: () => {
-                    this.showSuccessAlert();
+                    this.editForm.formState = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
+                    this.editForm.formState = false;
                 },
                 preserveState: true,
-
             });
         },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-            }, 5000);
-        },
-        showFailAlert: function ()
-        {
-            this.showFailMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showFailMsg = false;
-            }, 5000);
-        },
-    },
-    watch: {
-    },
-    computed: {
     },
     mounted() {
         this.editForm = this.result;

@@ -44,7 +44,7 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::post('/maintenance/ineligibles/{ineligible}', [App\Http\Controllers\MaintenanceController::class, 'ineligibleEdit'])->name('ineligible.edit');
 
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
-            Route::post('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryEdit'])->name('ministry.edit');
+            Route::post('/maintenance/ministry/{admin}', [App\Http\Controllers\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');
 
             Route::get('/maintenance/reports/{type?}', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 

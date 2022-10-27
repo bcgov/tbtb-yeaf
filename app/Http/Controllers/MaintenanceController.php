@@ -176,7 +176,7 @@ class MaintenanceController extends Controller
      * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function ministryEdit(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
+    public function ministryUpdate(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
         }

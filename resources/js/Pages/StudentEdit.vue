@@ -30,18 +30,8 @@
                                     <button v-if="activeTab==='comments'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
                                     <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>
                                     <span v-if="overawardFlagVisible == true" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">Over Award</span>
-<!--                                    <a :href="'/reports/download/' + editForm.id" class="btn rounded-pill btn-outline-secondary shadow-none float-end" data-bs-toggle="tooltip" data-bs-title="Download Student Report">-->
-<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">-->
-<!--                                            <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>-->
-<!--                                            <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>-->
-<!--                                        </svg>-->
-<!--                                    </a>-->
                                 </div>
                                 <div class="card-body" v-if="result != null">
-
-
-
-
 
                                     <ul class="nav nav-tabs mb-3" id="myStudentTab" role="tablist">
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
@@ -71,15 +61,8 @@
                                         </div>
                                     </div>
 
-
-
-
-
                                 </div>
                                 <h1 v-else class="lead">No results</h1>
-<!--                                <div class="card-footer">-->
-<!--                                    <Link :href="route('back').back()">Back</Link>-->
-<!--                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -216,31 +199,16 @@
                             <div class="modal-footer">
                                 <button type="submit" class="btn mr-2 btn-outline-success" :disabled="newCommentForm.processing">Submit</button>
                             </div>
+
+                            <FormSubmitAlert :form-state="newCommentForm.formState || newGrantForm.formState"
+                                             :success-msg="'Form was submitted successfully.'"
+                                             :fail-msg="'There was an error submitting this form.'"></FormSubmitAlert>
+
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                    <div class="">
-                        <div class="toast-body">
-                            Form was submitted successfully.
-                        </div>
-                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            </div>
-            <div v-if="showFailMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                <div id="updateFailAlert" class="alert alert-danger alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                    <div class="">
-                        <div class="toast-body">
-                            There was an error submitting this form.
-                        </div>
-                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            </div>
 
         </BreezeAuthenticatedLayout>
 
@@ -257,6 +225,7 @@ import StudentEditCommentTab from "@/Components/StudentEditCommentTab.vue";
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'StudentEdit',
@@ -264,7 +233,7 @@ export default {
         StudentEditStudentTab,
         StudentEditGrantTab,
         StudentEditCommentTab,
-        BreezeAuthenticatedLayout, StudentSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm
+        BreezeAuthenticatedLayout, StudentSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm, FormSubmitAlert
     },
     props: {
         result: Object,
@@ -287,8 +256,6 @@ export default {
             overawardFlagVisible: false,
             editForm: null,
             activeTab: 'student',
-            showFailMsg: false,
-            showSuccessMsg: false,
             newGrantForm: useForm({
                 student_id: '',
                 institution_id: '',
@@ -333,55 +300,41 @@ export default {
         },
         newGrant: function ()
         {
+            this.newGrantForm.formState = '';
             this.newGrantForm.post(route('grants.store'), {
                 onSuccess: () => {
                     $("#newGrantModal").modal('hide');
-                    this.showSuccessAlert();
                     this.newGrantForm.reset();
                     this.newGrantForm.student_id = this.result.student_id;
                     this.activeTab = 'student';
+                    this.newGrantForm.formState = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
-                    this.showFailAlert();
+                    this.newGrantForm.formState = false;
                 },
                 preserveState: true
             });
         },
         newComment: function ()
         {
+            this.newCommentForm.formState = '';
             this.newCommentForm.post(route('comments.store'), {
                 onSuccess: () => {
                     $("#newCommentModal").modal('hide');
-                    this.showSuccessAlert();
                     this.newCommentForm.reset();
                     this.newCommentForm.student_id = this.result.student_id;
                     this.activeTab = 'student';
+                    this.newCommentForm.formState = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
-                    this.showFailAlert();
+                    this.newCommentForm.formState = false;
                 },
                 preserveState: true
             });
-        },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-            }, 5000);
-        },
-        showFailAlert: function ()
-        {
-            this.showFailMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showFailMsg = false;
-            }, 5000);
         },
     },
     watch: {
@@ -393,19 +346,6 @@ export default {
         this.syncVisible();
         this.newGrantForm.student_id = this.result.student_id;
         this.newCommentForm.student_id = this.result.student_id;
-
-        // if(this.editForm != null){
-        //
-        // }else{
-        //     this.editForm = this.result;
-        //     this.editForm.processing = false;
-        // }
-        //enable tooltips
-        // setTimeout(function (){
-        //     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        //     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-        //
-        // }, 3000);
     }
 }
 </script>

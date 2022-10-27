@@ -330,17 +330,8 @@ tr {
                             <button v-if="result.grants[i].status_code != null" @click="exportGrant(i)" type="button" class="btn mr-2 btn-outline-primary float-end">Export Letter</button>
                         </div>
 
-
-                        <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                            <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                                <div class="">
-                                    <div class="toast-body">
-                                        Grant record was updated successfully.
-                                    </div>
-                                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        </div>
+                        <FormSubmitAlert :form-state="grant.formState"
+                                         :success-msg="'Grant record was updated successfully.'"></FormSubmitAlert>
                     </form>
 
                 </div>
@@ -356,11 +347,12 @@ import {Link, useForm} from '@inertiajs/inertia-vue3';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'StudentEditGrantTab',
     components: {
-        BreezeInput, BreezeLabel, Link, BreezeSelect
+        BreezeInput, BreezeLabel, Link, BreezeSelect, FormSubmitAlert
     },
     props: {
         result: Object,
@@ -379,7 +371,6 @@ export default {
     data() {
         return {
             noChanges: true,
-            showSuccessMsg: false,
             grantForms: [],
         }
     },
@@ -515,33 +506,20 @@ export default {
         },
         updateGrant: function (index)
         {
+            this.grantForms[index].formState = '';
             this.grantForms[index].put(route('grants.update', this.grantForms[index].id), {
                 onSuccess: () => {
-                    this.showSuccessAlert();
+                    this.grantForms[index].formState = true;
+                    this.noChanges = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
+                    this.grantForms[index].formState = false;
                 },
                 preserveState: false,
 
             });
-        },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-                vm.noChanges = true;
-            }, 5000);
-        },
-        formatPhoneNumber: function() {
-            let cleaned = ('' + this.editForm.tele).replace(/\D/g, '');
-            let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-            if (match) {
-                this.editForm.tele = '(' + match[1] + ') ' + match[2] + '-' + match[3];
-            }
         },
         back: function()
         {
@@ -565,6 +543,7 @@ export default {
                 }else{
                     let vm = this;
                     vm.formSubmitting = true;
+                    vm.grantForms[index].formState = '';
 
                     let formData = new FormData();
                     formData.append('frm', JSON.stringify(this.grantForms[index]));
@@ -577,8 +556,9 @@ export default {
                         .then(function (response) {
                             if(response.data.msg !== ''){
                                 vm.grantForms[index].msg = response.data.msg;
+                                vm.grantForms[index].formState = false;
                             }else{
-                                vm.showSuccessAlert();
+                                vm.grantForms[index].formState = true;
                                 setTimeout(function (){
                                     window.location.href = '/students/' + vm.result.id;
                                 }, 3000);
@@ -591,11 +571,6 @@ export default {
             }
         }
 
-    },
-    watch: {
-
-    },
-    computed: {
     },
     mounted() {
         this.grantForms = JSON.parse(JSON.stringify(this.result.grants));

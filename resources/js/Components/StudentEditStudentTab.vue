@@ -133,21 +133,11 @@ tr {
         <div class="card-footer mt-3">
             <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Student</button>
             <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
-            <!--                                            <Link :href="route('student-grants.show', [result.id])" class="btn btn-outline-warning float-right mr-2">Grants</Link>-->
-            <!--                                            <Link :href="route('student-comments.show', [result.id])" class="btn btn-outline-dark float-right mr-2">Comments</Link>-->
         </div>
 
+        <FormSubmitAlert :form-state="editForm.formState"
+                         :success-msg="'Student record was updated successfully.'"></FormSubmitAlert>
 
-        <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-            <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                <div class="">
-                    <div class="toast-body">
-                        Student record was updated successfully.
-                    </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
     </form>
 
 </template>
@@ -156,11 +146,12 @@ import {Link, useForm} from '@inertiajs/inertia-vue3';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'StudentEditStudentTab',
     components: {
-        BreezeInput, BreezeLabel, Link, BreezeSelect
+        BreezeInput, BreezeLabel, Link, BreezeSelect, FormSubmitAlert
     },
     props: {
         result: Object,
@@ -170,20 +161,13 @@ export default {
     },
     data() {
         return {
-
             noChanges: true,
-            showSuccessMsg: false,
-
             editForm: null,
-
         }
     },
     methods: {
-
         updateStudent: function ()
         {
-
-
             this.editForm = useForm({
 
                 student_id: this.editForm.student_id,
@@ -212,27 +196,22 @@ export default {
 
             });
 
+            this.editForm.formState = '';
             this.editForm.put(route('students.update', this.result.id), {
                 onSuccess: () => {
-                    this.showSuccessAlert();
+                    this.editForm.formState = true;
+                    this.noChanges = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
+                    this.editForm.formState = false;
                 },
                 preserveState: false,
 
             });
         },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-                vm.noChanges = true;
-            }, 5000);
-        },
+
         formatPhoneNumber: function() {
             let cleaned = ('' + this.editForm.tele).replace(/\D/g, '');
             let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -244,12 +223,6 @@ export default {
         {
             window.history.back();
         },
-
-    },
-    watch: {
-
-    },
-    computed: {
     },
     mounted() {
         this.editForm = this.result;

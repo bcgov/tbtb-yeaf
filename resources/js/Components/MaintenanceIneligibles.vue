@@ -203,6 +203,7 @@ export default {
             this.editIneligibleForm.post(route('maintenance.ineligible.edit', this.editIneligibleForm.id), {
                 onSuccess: (response) => {
                     $("#editIneligibleModal").modal('hide');
+                    this.editIneligibleForm.formState = true;
                 },
                 onFailure: () => {
                 },

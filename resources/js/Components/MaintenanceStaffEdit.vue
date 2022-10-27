@@ -69,30 +69,13 @@
                 </div>
 
             </div>
+            <FormSubmitAlert :form-state="form.formState"
+                             :success-msg="'Staff record was updated successfully.'"
+                             :fail-msg="'There was an error updating this form.'"></FormSubmitAlert>
+
         </form>
         <h1 v-else class="lead">No results</h1>
 
-
-        <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-            <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                <div class="">
-                    <div class="toast-body">
-                        Staff record was updated successfully.
-                    </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-        <div v-if="showFailMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-            <div id="updateFailAlert" class="alert alert-danger alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                <div class="">
-                    <div class="toast-body">
-                        There was an error updating this form.
-                    </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
     </div>
 
 </template>
@@ -103,11 +86,12 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'MaintenanceStaff',
     components: {
-        BreezeInput, BreezeLabel, BreezeButton, BreezeSelect, BreezeValidationErrors, Link, useForm
+        BreezeInput, BreezeLabel, BreezeButton, BreezeSelect, BreezeValidationErrors, Link, useForm, FormSubmitAlert
     },
     props: {
         results: Object,
@@ -115,8 +99,6 @@ export default {
     data() {
         return {
             form: '',
-            showSuccessMsg: false,
-            showFailMsg: false,
         }
     },
     methods: {
@@ -126,36 +108,18 @@ export default {
         },
         submitStaffForm: function ()
         {
-
+            this.form.formState = '';
             this.form.post(route('maintenance.staff.edit', this.results.id), {
                 onSuccess: () => {
-                    this.showSuccessAlert();
+                    this.form.formState = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
-                    this.showFailAlert();
+                    this.form.formState = false;
                 }
             });
             // form.wasSuccessful();
-        },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-                // vm.back();
-            }, 5000);
-        },
-        showFailAlert: function ()
-        {
-            this.showFailMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showFailMsg = false;
-                // vm.back();
-            }, 5000);
         },
 
     },
