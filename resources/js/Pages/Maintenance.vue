@@ -31,6 +31,7 @@
                         <MaintenanceStaff v-if="page === 'staff'" :results="results"></MaintenanceStaff>
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
                         <MaintenanceIneligibles v-if="page === 'ineligibles'" :results="results"></MaintenanceIneligibles>
+                        <MaintenanceProgramYears v-if="page === 'program-years'" :results="results"></MaintenanceProgramYears>
                         <MaintenanceReports v-if="page === 'reports'"></MaintenanceReports>
                         <MaintenanceLetters v-if="page === 'letters'" :program_years="program_years" :batches="batches"></MaintenanceLetters>
                     </div>
@@ -50,10 +51,12 @@ import MaintenanceStaffEdit from "@/Components/MaintenanceStaffEdit";
 import MaintenanceReports from "@/Components/MaintenanceReports";
 import MaintenanceLetters from "@/Components/MaintenanceLetters";
 import MaintenanceIneligibles from "@/Components/MaintenanceIneligibles";
+import MaintenanceProgramYears from "@/Components/MaintenanceProgramYears";
 
 export default {
     name: 'Maintenance',
     components: {
+        MaintenanceProgramYears,
         MaintenanceIneligibles,
         MaintenanceReports,
         MaintenanceLetters,

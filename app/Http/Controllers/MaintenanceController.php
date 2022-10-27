@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MinistryEditRequest;
+use App\Http\Requests\ProgramYearEditRequest;
+use App\Http\Requests\ProgramYearStoreRequest;
 use App\Http\Requests\StaffEditRequest;
 use App\Http\Requests\IneligibleEditRequest;
 use App\Http\Requests\IneligibleStoreRequest;
 use App\Models\Admin;
 use App\Models\Batch;
 use App\Models\Ineligible;
+use App\Models\Program;
 use App\Models\ProgramYear;
 use App\Models\Province;
 use App\Models\User;
@@ -109,18 +112,6 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Display a resource to edit.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ineligible  $ineligible
-     * @return \Inertia\Response::render
-     */
-    public function ineligiblesShow(Request $request, Ineligible $ineligible): \Inertia\Response
-    {
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $ineligible, 'page' => 'ineligibles-edit']);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\IneligibleEditRequest  $request
@@ -151,6 +142,49 @@ class MaintenanceController extends Controller
     {
         $ineligible = Ineligible::create($request->validated());
         return Redirect::route('maintenance.ineligibles.list');
+    }
+
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response::render
+     */
+    public function programYearsList(Request $request): \Inertia\Response
+    {
+        $program_years = ProgramYear::orderBy('year_start', 'desc')->get();
+
+        return Inertia::render('Maintenance', ['status' => true, 'results' => $program_years, 'page' => 'program-years']);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  ProgramYearEditRequest  $request
+     * @param  \App\Models\ProgramYear $programYear
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): \Illuminate\Http\RedirectResponse
+    {
+        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+            ProgramYear::where('id', $programYear->id)->update($request->validated());
+        }
+
+        return Redirect::route('maintenance.program-years.list');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  ProgramYearStoreRequest  $request
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function programYearStore(ProgramYearStoreRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        $py = ProgramYear::create($request->validated());
+        return Redirect::route('maintenance.program-years.list');
     }
 
 

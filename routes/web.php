@@ -43,6 +43,11 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::post('/maintenance/ineligibles', [App\Http\Controllers\MaintenanceController::class, 'ineligibleStore'])->name('ineligible.store');
             Route::post('/maintenance/ineligibles/{ineligible}', [App\Http\Controllers\MaintenanceController::class, 'ineligibleEdit'])->name('ineligible.edit');
 
+            Route::get('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearsList'])->name('program-years.list');
+            Route::post('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
+            Route::post('/maintenance/program-years/{programYear}', [App\Http\Controllers\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
+
+
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry/{admin}', [App\Http\Controllers\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');
 
