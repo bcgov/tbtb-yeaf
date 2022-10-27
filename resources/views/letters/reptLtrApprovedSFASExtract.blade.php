@@ -8,8 +8,8 @@ Please be advised that eligibility for this funding is dependent on completion o
 <br/><br/>
 We wish you continued success in your studies. If you have any questions, please contact me at
 @if(is_null($officer))
-    {{ $user->tele }}.
+    {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3',$user->tele) }}.
 @else
-    {{ $officer->tele }}.
+    {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3',$officer->tele) }}.
 @endif
 <br/>

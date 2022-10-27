@@ -47,7 +47,7 @@
                 {{ $student->first_name }} {{ $student->last_name }}<br/>
                 {{ $student->address }}<br/>
                 {{ $student->city }} {{ $student->province }} {{ $student->postal_code }}<br/><br/><br/>
-                Dear {{ $student->first_name }} {{ $student->last_name }}<br/><br/>
+                Dear {{ $student->first_name }} {{ $student->last_name }}:<br/><br/>
 
 
 

@@ -84,7 +84,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: right;">Phone:</td>
-                        <td>{{ $admin->user_tele }}</td>
+                        <td>{{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3',$admin->user_tele) }}</td>
                     </tr>
                 </table>
             </td>
