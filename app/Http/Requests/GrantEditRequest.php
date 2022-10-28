@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class GrantEditRequest extends FormRequest
 {
@@ -37,6 +38,8 @@ class GrantEditRequest extends FormRequest
     {
         return [
             'grant_id' => 'required',
+            'officer_user_id' => 'required',
+            'last_evaluation_date' => 'required',
         ];
     }
 
@@ -49,9 +52,14 @@ class GrantEditRequest extends FormRequest
     {
         $form = json_decode($this->frm);
         foreach ($form as $item => $value) {
-            $this->merge([$item => $value]);
+            if(!is_object($value))
+                $this->merge([$item => $value]);
+        }
+        if(is_null($this->officer_user_id)){
+            $this->merge(['officer_user_id' => Auth::user()->user_id]);
         }
         $this->merge(['frm' => null]);
+        $this->merge(['last_evaluation_date' => date('Y-m-d', strtotime('now'))]);
 
 //
 //
@@ -60,16 +68,5 @@ class GrantEditRequest extends FormRequest
 //        }
 //
 //        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
-    }
-
-    /**
-     * Convert to boolean
-     *
-     * @param $booleable
-     * @return bool
-     */
-    private function toBoolean($booleable)
-    {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

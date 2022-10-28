@@ -10,7 +10,7 @@ tr {
 <template>
 
 <div>
-    <p v-if="result.comments.length === 0" class="text-center leading-5">No comments.</p>
+    <p v-if="result.comments.length === 0" class="text-center leading-5">No Comments.</p>
     <ul v-else class="list-group list-group-flush">
         <li class="list-group-item">
             <div class="row">

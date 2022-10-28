@@ -26,8 +26,8 @@
                             <div class="card">
                                 <div v-if="result != null" class="card-header">
                                     Edit Student
-                                    <button v-if="activeTab==='grants'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
-                                    <button v-if="activeTab==='comments'" type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
+                                    <button v-if="activeTab==='grants'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
+                                    <button v-if="activeTab==='comments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
                                     <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>
                                     <span v-if="overawardFlagVisible == true" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">Over Award</span>
                                 </div>
@@ -35,29 +35,30 @@
 
                                     <ul class="nav nav-tabs mb-3" id="myStudentTab" role="tablist">
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
+                                            <button class="nav-link" :class="activeTab==='student' ? 'active':''" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
                                         </li>
                                         <li @click="switchActiveTab('grants')" v-if="grantTabVisible" class="nav-item" role="presentation">
-                                            <button class="nav-link" id="grants-tab" data-bs-toggle="tab" data-bs-target="#grants-tab-pane" type="button" role="tab" aria-controls="grants-tab-pane" aria-selected="false">Grants</button>
+                                            <button class="nav-link" :class="activeTab==='grants' ? 'active':''" id="grants-tab" data-bs-toggle="tab" data-bs-target="#grants-tab-pane" type="button" role="tab" aria-controls="grants-tab-pane" aria-selected="false">Grants</button>
                                         </li>
                                         <li @click="switchActiveTab('comments')" class="nav-item" role="presentation">
-                                            <button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-tab-pane" type="button" role="tab" aria-controls="comments-tab-pane" aria-selected="false">Comments</button>
+                                            <button class="nav-link" :class="activeTab==='comments' ? 'active':''" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-tab-pane" type="button" role="tab" aria-controls="comments-tab-pane" aria-selected="false">Comments</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
-                                        <div class="tab-pane fade show active" id="student-tab-pane" role="tabpanel" aria-labelledby="student-tab" tabindex="0">
-
-                                            <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs" @override="updateOverride" :result="result" :countries="countries" :provinces="provinces"></StudentEditStudentTab>
-
+                                        <div class="tab-pane fade" :class="activeTab==='student' ? 'active show':''" id="student-tab-pane" role="tabpanel" aria-labelledby="student-tab" tabindex="0">
+                                            <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs"
+                                                                   @override="updateOverride" :result="result"
+                                                                   :countries="countries" :provinces="provinces"></StudentEditStudentTab>
                                         </div>
-                                        <div class="tab-pane fade" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="1">
+                                        <div class="tab-pane fade" :class="activeTab==='grants' ? 'active show':''" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="1">
                                             <StudentEditGrantTab v-if="activeTab==='grants'" :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
                                                                  :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
                                         </div>
-                                        <div class="tab-pane fade" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="2">
-                                            <StudentEditCommentTab v-if="activeTab==='comments'" :result="result" :all_staff="all_staff"></StudentEditCommentTab>
+                                        <div class="tab-pane fade" :class="activeTab==='comments' ? 'active show':''" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="2">
+                                            <StudentEditCommentTab v-if="activeTab==='comments'" :result="result"
+                                                                   :all_staff="all_staff"></StudentEditCommentTab>
                                         </div>
                                     </div>
 

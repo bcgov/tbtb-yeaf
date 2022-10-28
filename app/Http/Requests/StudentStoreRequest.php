@@ -82,6 +82,9 @@ class StudentStoreRequest extends FormRequest
         if (isset($this->last_name)) {
             $this->merge(['last_name' => Str::title($this->last_name)]);
         }
+        if (isset($this->postal_code)) {
+            $this->merge(['postal_code' => Str::upper($this->postal_code)]);
+        }
 
         if (isset($this->sin)) {
             //\D means "anything that isn't a digit":
