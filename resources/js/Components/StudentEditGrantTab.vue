@@ -72,7 +72,7 @@ tr {
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputAge'+i" class="form-label" value="Age" />
-                                    <BreezeInput type="text" class="form-control" :id="'inputAge'+i" v-model="grant.age" />
+                                    <BreezeInput type="text" class="form-control" :id="'inputAge'+i" v-model="grant.age" readonly="readonly" />
                                 </div>
 
                                 <div class="col-md-4">
@@ -322,7 +322,7 @@ tr {
                                 <div class="col-12">
                                     <div class="alert alert-danger mt-3">
                                         <ul>
-                                            <li v-html="grant.msg"></li>
+                                            <li v-for="msg in grant.msg" v-html="msg"></li>
                                         </ul>
                                     </div>
                                 </div>

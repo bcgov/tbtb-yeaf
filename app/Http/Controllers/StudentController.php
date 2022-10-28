@@ -110,6 +110,8 @@ class StudentController extends Controller
      */
     public function update(StudentUpdateRequest $request, Student $student)
     {
+        Student::where('id', $student->id)->update($request->validated());
+        $student = Student::find($student->id);
         return Redirect::route('students.show', [$student->id]);
     }
 

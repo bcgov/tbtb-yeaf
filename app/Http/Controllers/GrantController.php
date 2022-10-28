@@ -233,30 +233,48 @@ class GrantController extends Controller
 
         $this->clearFlags($request, $grant);
 
+        $overall_app_ineligible = false;
+        $overall_messages = [];
         [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true, true, $grant);
+        $grant->age = $age;
+        $grant->save();
+        $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
+
         if ($msg != '' || $app_ineligible == true) {
-            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
-        } else {
-            $grant->age = $age;
-            $grant->save();
+            if(!is_null($msg)) $overall_messages[] = $msg;
+            if($app_ineligible==true) $overall_app_ineligible = true;
+//
+//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
 
         [$msg, $app_ineligible] = $this->checkMaxYears(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+            if(!is_null($msg)) $overall_messages[] = $msg;
+            if($app_ineligible==true) $overall_app_ineligible = true;
+//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
 
         [$msg, $app_ineligible] = $this->datewatch(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+            if(!is_null($msg)) $overall_messages[] = $msg;
+            if($app_ineligible==true) $overall_app_ineligible = true;
+//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
         [$msg, $app_ineligible] = $this->checkProgramYear(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+            if(!is_null($msg)) $overall_messages[] = $msg;
+            if($app_ineligible==true) $overall_app_ineligible = true;
+//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
         $msg = $this->setStatus($grant);
         if ($msg != '') {
-            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+            if(!is_null($msg)) $overall_messages[] = $msg;
+//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
 //        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
 //        list($msg, $app_ineligible) = $this->checkMaxYears(false, true, $grant, $msg, $app_ineligible);
@@ -266,8 +284,12 @@ class GrantController extends Controller
 
 //        return Redirect::route('students.show', [$grant->student()->id]);
         $grant = Grant::find($grant->id);
+        $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
-        return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible, 'appeal_status' => $appeal_status, 'grant' => $grant]);
+        return Response::json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
+            'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+//        return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
+//            'appeal_status' => $appeal_status, 'grant' => $return_grant]);
     }
 
     private function updatePendingIneligibles(Grant $grant, $request)
@@ -374,14 +396,11 @@ class GrantController extends Controller
 
     private function setStatus(Grant $grant)
     {
-        $record = null;
-        if (! is_null($grant)) {
-            $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
-                $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
-            }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
-                $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
-            }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
-        }
+        $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
+            $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
+        }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
+            $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
+        }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
 
         $status = 'P';
         $msg = '';

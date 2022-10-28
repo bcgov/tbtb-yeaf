@@ -46,7 +46,7 @@ class StudentUpdateRequest extends FormRequest
             'address' => 'required|string',
             'city' => 'required|string',
 
-            'birth_date' => 'nullable|date_format:Y-m-d',
+            'birth_date' => 'required|date_format:Y-m-d',
 
             'country' => 'size:3|nullable|exists:countries,country_code',
             'province' => 'size:2|nullable|exists:provinces,province_code',

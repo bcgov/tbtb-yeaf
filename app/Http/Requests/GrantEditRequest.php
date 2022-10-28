@@ -52,14 +52,18 @@ class GrantEditRequest extends FormRequest
     {
         $form = json_decode($this->frm);
         foreach ($form as $item => $value) {
-            if(!is_object($value))
+            if(!is_object($value)){
                 $this->merge([$item => $value]);
+            }else{
+                $this->merge([$item => json_encode($value)]);
+            }
         }
         if(is_null($this->officer_user_id)){
             $this->merge(['officer_user_id' => Auth::user()->user_id]);
         }
         $this->merge(['frm' => null]);
         $this->merge(['last_evaluation_date' => date('Y-m-d', strtotime('now'))]);
+
 
 //
 //

@@ -207,7 +207,7 @@ export default {
                 onError: () => {
                     this.editForm.formState = false;
                 },
-                preserveState: false,
+                preserveState: true,
 
             });
         },
