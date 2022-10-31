@@ -412,7 +412,7 @@ class GrantController extends Controller
                 $status = 'P';
                 $msg = 'Application Status set to Pending. Some Pending reasons has not been cleared.';
             } else {
-                $status = $grant->status_code;
+                $status = is_null($grant->status_code) ? 'P' : $grant->status_code;
             }
         }
 

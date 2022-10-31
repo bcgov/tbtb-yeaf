@@ -559,7 +559,7 @@ export default {
                     })
                         .then(function (response) {
                             vm.grantForms[index] = response.data.grant;
-                            if(response.data.msg !== ''){
+                            if(response.data.msg !== '' && response.data.msg.length > 0){
                                 vm.grantForms[index].msg = response.data.msg;
                                 vm.grantForms[index].formState = false;
                             }else{
