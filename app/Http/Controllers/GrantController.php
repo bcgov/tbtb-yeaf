@@ -270,6 +270,7 @@ class GrantController extends Controller
 //            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
 //                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
         }
+        $grant = Grant::find($grant->id);
         $msg = $this->setStatus($grant);
         if ($msg != '') {
             if(!is_null($msg)) $overall_messages[] = $msg;

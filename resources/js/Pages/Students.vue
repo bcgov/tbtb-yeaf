@@ -73,7 +73,7 @@
                         <h5 class="modal-title" id="newStudentModalLabel">Add New Student</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form v-if="newStudentForm != null" @submit.prevent="newStudent">
+                    <form data-test="true" v-if="newStudentForm != null" @submit.prevent="newStudent">
                         <div class="modal-body">
                             <div class="card-body">
 
@@ -267,6 +267,8 @@ export default {
     },
     mounted() {
         this.newStudentForm = useForm(this.newStudentFormData);
+        let vm = this;
+        setTimeout(function (){ vm.generateTestValues(); }, 3000);
     }
 }
 </script>
