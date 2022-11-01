@@ -26,6 +26,7 @@ class ReportController extends Controller
             case 'comments': return $this->comments($request);
             case 'appeals': return $this->appeals($request);
             case 'programYears': return $this->programYears($request);
+            case 'batches': return $this->batches($request);
             case 'studentsWithGrants': return $this->studentsWithGrants($request);
         }
     }
@@ -96,6 +97,11 @@ class ReportController extends Controller
     {
         return $this->jsonFileDownload('program_years', \App\Models\ProgramYear::select('program_year_id', 'year_start', 'year_end',
             'grant_amount', 'max_years_allowed', 'min_age', 'max_age')->get());
+    }
+
+    public function batches(Request $request)
+    {
+        return $this->jsonFileDownload('batches', \App\Models\Batch::select('batch_number', 'batch_date')->get());
     }
 
     private function jsonFileDownload($name, $data)

@@ -22166,7 +22166,6 @@ __webpack_require__.r(__webpack_exports__);
     setTimeout(function () {
       vm.generateTestValues();
     }, 3000);
-    console.log("dev");
   }
 });
 
@@ -24543,6 +24542,18 @@ var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_20 = ["href"];
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_22 = ["href"];
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
     href: _ctx.route('maintenance.reports.index', 'students'),
@@ -24592,7 +24603,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn btn-light w-100 mb-3"
   }, "Download Ineligibles", 8
   /* PROPS */
-  , _hoisted_18), _hoisted_19])]);
+  , _hoisted_18), _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    href: _ctx.route('maintenance.reports.index', 'batches'),
+    target: "_blank",
+    "class": "btn btn-link w-100 mb-3"
+  }, "Download Batches", 8
+  /* PROPS */
+  , _hoisted_20), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+    href: _ctx.route('maintenance.reports.index', 'programYears'),
+    target: "_blank",
+    "class": "btn btn-link w-100 mb-3"
+  }, "Download Program Years", 8
+  /* PROPS */
+  , _hoisted_22), _hoisted_23])]);
 }
 
 /***/ }),
