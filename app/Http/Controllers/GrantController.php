@@ -199,7 +199,13 @@ class GrantController extends Controller
             $user = Auth::user();
             $pdf = PDF::loadView('pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
 
-            return $pdf->download(mt_rand().'-'.$grant->grant_id.'-letter.pdf');
+            $file_name = $student->first_name . '-' . $student->last_name . '-' . match ($grant->status_code) {
+                'A' => 'approval-letter',
+                'D' => 'denial-letter',
+                'P' => 'pending-letter',
+            };
+
+            return $pdf->download($file_name . '.pdf');
         }
     }
 
