@@ -322,7 +322,10 @@ tr {
                                 <div class="col-12">
                                     <div class="alert alert-danger mt-3">
                                         <ul>
-                                            <li v-for="msg in grant.msg" v-html="msg"></li>
+                                            <li v-if="typeof (grant.msg) === 'string'" v-html="msg"></li>
+                                            <template v-else>
+                                                <li v-for="msg in grant.msg" v-html="msg"></li>
+                                            </template>
                                         </ul>
                                     </div>
                                 </div>
