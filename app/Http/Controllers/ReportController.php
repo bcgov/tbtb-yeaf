@@ -14,10 +14,11 @@ class ReportController extends Controller
      */
     public function index(Request $request, $type = null)
     {
-        if(is_null($type))
+        if (is_null($type)) {
             return Inertia::render('Maintenance', ['status' => true, 'page' => 'reports']);
+        }
 
-        switch ($type){
+        switch ($type) {
             case 'students': return $this->students($request);
             case 'grants': return $this->grants($request);
             case 'staff': return $this->staff($request);
@@ -69,10 +70,11 @@ class ReportController extends Controller
         return $this->jsonFileDownload('ineligibles', \App\Models\Ineligible::select('code_id', 'description', 'active_flag',
             'code_type', 'paragraph_text')->get());
     }
+
     public function grantIneligibles(Request $request)
     {
         return $this->jsonFileDownload('grantIneligibles', \App\Models\GrantIneligible::select('grant_id', 'ineligible_code_id',
-        'created_by', 'cleared_flag', 'ineligible_code_type')->get());
+            'created_by', 'cleared_flag', 'ineligible_code_type')->get());
     }
 
     public function comments(Request $request)

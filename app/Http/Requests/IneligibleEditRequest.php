@@ -41,7 +41,7 @@ class IneligibleEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'code_id' => 'required|unique:ineligibles,code_id,' . $this->id,
+            'code_id' => 'required|unique:ineligibles,code_id,'.$this->id,
             'active_flag' => 'required|boolean',
             'code_type' => 'required|in:D,P',
             'description' => 'required',

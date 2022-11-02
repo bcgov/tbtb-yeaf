@@ -35,16 +35,6 @@ class GrantController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\GrantStoreRequest  $request
@@ -56,28 +46,6 @@ class GrantController extends Controller
         $student = Student::where('student_id', $grant->student_id)->first();
 
         return Redirect::route('students.show', [$student->id]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Grant  $grant
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Grant $grant)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Grant  $grant
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Grant $grant)
-    {
-        //
     }
 
     /**
@@ -120,17 +88,6 @@ class GrantController extends Controller
         $grant->save();
 
         return Grant::find($grant->id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Grant  $grant
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Grant $grant)
-    {
-        //
     }
 
     /**
@@ -199,28 +156,15 @@ class GrantController extends Controller
             $user = Auth::user();
             $pdf = PDF::loadView('pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
 
-            $file_name = $student->first_name . '-' . $student->last_name . '-' . match ($grant->status_code) {
+            $file_name = $student->first_name.'-'.$student->last_name.'-'.match ($grant->status_code) {
                 'A' => 'approval-letter',
                 'D' => 'denial-letter',
                 'P' => 'pending-letter',
             };
-            return $pdf->download($file_name . '.pdf');
+
+            return $pdf->download($file_name.'.pdf');
         }
     }
-
-    /*
-    Call ClearFlags
-    Call CheckAge(False, True)
-    ' check how many years the person has received money
-       Call CheckMaxYrs(False, True)
-       Call datewatch(False, True)
-       Call CheckProgramYr(False, True)
-       Call SetStatus
-       Call DisplayBasedOnStatus
-    '--> turn this off to see if it will stop denial reasons from disappearing when new
-    '--> Me.Refresh
-     ' Me.sfrmAppIneligible.Requery
-    */
 
     /**
      * update and evaluate a grant.
@@ -246,56 +190,54 @@ class GrantController extends Controller
         $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
         if ($msg != '' || $app_ineligible == true) {
-            if(!is_null($msg)) $overall_messages[] = $msg;
-            if($app_ineligible==true) $overall_app_ineligible = true;
-//
-//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            if (! is_null($msg)) {
+                $overall_messages[] = $msg;
+            }
+            if ($app_ineligible == true) {
+                $overall_app_ineligible = true;
+            }
         }
 
         [$msg, $app_ineligible] = $this->checkMaxYears(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            if(!is_null($msg)) $overall_messages[] = $msg;
-            if($app_ineligible==true) $overall_app_ineligible = true;
-//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            if (! is_null($msg)) {
+                $overall_messages[] = $msg;
+            }
+            if ($app_ineligible == true) {
+                $overall_app_ineligible = true;
+            }
         }
 
         [$msg, $app_ineligible] = $this->datewatch(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            if(!is_null($msg)) $overall_messages[] = $msg;
-            if($app_ineligible==true) $overall_app_ineligible = true;
-//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            if (! is_null($msg)) {
+                $overall_messages[] = $msg;
+            }
+            if ($app_ineligible == true) {
+                $overall_app_ineligible = true;
+            }
         }
         [$msg, $app_ineligible] = $this->checkProgramYear(true, true, $grant, $msg, $app_ineligible);
         if ($msg != '' || $app_ineligible == true) {
-            if(!is_null($msg)) $overall_messages[] = $msg;
-            if($app_ineligible==true) $overall_app_ineligible = true;
-//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            if (! is_null($msg)) {
+                $overall_messages[] = $msg;
+            }
+            if ($app_ineligible == true) {
+                $overall_app_ineligible = true;
+            }
         }
         $grant = Grant::find($grant->id);
         $msg = $this->setStatus($grant);
         if ($msg != '') {
-            if(!is_null($msg)) $overall_messages[] = $msg;
-//            return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//                'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            if (! is_null($msg)) {
+                $overall_messages[] = $msg;
+            }
         }
-//        list($msg, $app_ineligible, $appeal_status) = $this->checkAge(false, true, $grant);
-//        list($msg, $app_ineligible) = $this->checkMaxYears(false, true, $grant, $msg, $app_ineligible);
-//        list($msg, $app_ineligible) = $this->datewatch(false, true, $grant, $msg, $app_ineligible);
-//        list($msg, $app_ineligible) = $this->checkProgramYear(false, true, $grant, $msg, $app_ineligible);
-//        $this->setStatus($grant);
-
-//        return Redirect::route('students.show', [$grant->student()->id]);
         $grant = Grant::find($grant->id);
         $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
         return Response::json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
-            'appeal_status' => $appeal_status, 'grant' => $return_grant]);
-//        return Response::json(['status' => true, 'msg' => $msg, 'app_ineligible' => $app_ineligible,
-//            'appeal_status' => $appeal_status, 'grant' => $return_grant]);
+            'appeal_status' => $appeal_status, 'grant' => $return_grant, ]);
     }
 
     private function updatePendingIneligibles(Grant $grant, $request)
@@ -498,17 +440,6 @@ class GrantController extends Controller
 
     private function checkMaxYears($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
     {
-        /*SELECT tblApplication.ProgYearID
-        FROM tblStudent INNER JOIN tblApplication ON tblStudent.studentID = tblApplication.studentID
-        WHERE (((tblApplication.total_YEAF_award)>0) AND ((tblApplication.grantID)<>[forms]![frmstudent]![sfrmApplication]![GrantId])
-        AND ((tblApplication.studentID)=[forms]![frmStudent]![studentID]))
-        GROUP BY tblApplication.ProgYearID;
-        */
-        /*
-         * select yeaf_grants.program_year_id from yeaf_students
-         * inner join yeaf_grants on yeaf_students.student_id = yeaf_grants.student_id
-         * where yeaf_grants.total_yeaf_award > 0 AND yeaf_grants.grant_id <> 511 AND yeaf_grants.student_id='5421'
-        group by yeaf_grants.program_year_id;*/
         $results = DB::select(DB::raw("select yeaf_grants.program_year_id from yeaf_students
     inner join yeaf_grants on yeaf_students.student_id = yeaf_grants.student_id
 where yeaf_grants.total_yeaf_award > 0 AND yeaf_grants.grant_id <> $grant->id AND yeaf_grants.student_id='".$grant->student->student_id."'

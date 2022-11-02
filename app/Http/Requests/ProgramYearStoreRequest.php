@@ -59,7 +59,6 @@ class ProgramYearStoreRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
         if (isset($this->year_start)) {
             $this->merge(['year_start' => preg_replace('/\D/', '', $this->year_start)]);
         }

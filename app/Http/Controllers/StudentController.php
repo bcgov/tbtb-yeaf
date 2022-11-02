@@ -13,7 +13,6 @@ use App\Models\ProgramYear;
 use App\Models\Province;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -31,16 +30,6 @@ class StudentController extends Controller
         [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Students', ['status' => true, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -91,17 +80,6 @@ class StudentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Student $student)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\StudentUpdateRequest  $request
@@ -112,18 +90,8 @@ class StudentController extends Controller
     {
         Student::where('id', $student->id)->update($request->validated());
         $student = Student::find($student->id);
-        return Redirect::route('students.show', [$student->id]);
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Student $student)
-    {
-        //
+        return Redirect::route('students.show', [$student->id]);
     }
 
     private function paginateGrants($grants)
@@ -146,7 +114,6 @@ class StudentController extends Controller
         }
 
         return $grants->paginate(25)->onEachSide(1)->appends(request()->query());
-//        return $grants->isActive()->with('institution')->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
     private function getCountriesProvinces()

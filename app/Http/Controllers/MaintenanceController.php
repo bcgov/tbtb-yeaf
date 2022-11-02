@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IneligibleEditRequest;
+use App\Http\Requests\IneligibleStoreRequest;
 use App\Http\Requests\MinistryEditRequest;
 use App\Http\Requests\ProgramYearEditRequest;
 use App\Http\Requests\ProgramYearStoreRequest;
 use App\Http\Requests\StaffEditRequest;
-use App\Http\Requests\IneligibleEditRequest;
-use App\Http\Requests\IneligibleStoreRequest;
 use App\Models\Admin;
 use App\Models\Batch;
 use App\Models\Ineligible;
-use App\Models\Program;
 use App\Models\ProgramYear;
 use App\Models\Province;
 use App\Models\User;
-use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use PDF;
 
 class MaintenanceController extends Controller
 {
@@ -31,29 +30,30 @@ class MaintenanceController extends Controller
      */
     public function letters(Request $request): \Inertia\Response
     {
-
         return Inertia::render('Maintenance', ['status' => true,
             'program_years' => ProgramYear::orderBy('year_start', 'desc')->get(),
-            'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters']);
+            'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters', ]);
     }
 
-    public function downloadLetter(Request $request, $type, $extra){
+    public function downloadLetter(Request $request, $type, $extra)
+    {
         $admin = Admin::first();
         $now_d = date('F d, Y');
         $now_t = date('H:m:i');
         $user = Auth::user();
-        if($type === 'py'){
+        if ($type === 'py') {
             $program_year = ProgramYear::find($extra);
             $pdf = PDF::loadView('py-pdf', compact('program_year', 'admin', 'user', 'now_d', 'now_t'));
-            $file_name = $program_year->year_start . '_' . $program_year->year_end;
-        }elseif($type === 'batch'){
+            $file_name = $program_year->year_start.'_'.$program_year->year_end;
+        } elseif ($type === 'batch') {
             $batch = Batch::find($extra);
             $pdf = PDF::loadView('batch-pdf', compact('batch', 'admin', 'user', 'now_d', 'now_t'));
             $file_name = $batch->batch_date;
         }
 
-        return $pdf->download(mt_rand().'-'. $file_name .'-letter.pdf');
+        return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -141,10 +141,9 @@ class MaintenanceController extends Controller
     public function ineligibleStore(IneligibleStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
         $ineligible = Ineligible::create($request->validated());
+
         return Redirect::route('maintenance.ineligibles.list');
     }
-
-
 
     /**
      * Display a listing of the resource.
@@ -163,7 +162,7 @@ class MaintenanceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  ProgramYearEditRequest  $request
-     * @param  \App\Models\ProgramYear $programYear
+     * @param  \App\Models\ProgramYear  $programYear
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): \Illuminate\Http\RedirectResponse
@@ -184,9 +183,9 @@ class MaintenanceController extends Controller
     public function programYearStore(ProgramYearStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
         $py = ProgramYear::create($request->validated());
+
         return Redirect::route('maintenance.program-years.list');
     }
-
 
     /**
      * Display a listing of the resource.

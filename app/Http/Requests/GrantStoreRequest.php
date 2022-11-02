@@ -84,7 +84,7 @@ class GrantStoreRequest extends FormRequest
 //        var_dump(isset($this->officer_user_id));
 //        var_dump(is_null($this->officer_user_id));
 //        var_dump($this->officer_user_id);
-        if(!isset($this->officer_user_id) || is_null($this->officer_user_id)){
+        if (! isset($this->officer_user_id) || is_null($this->officer_user_id)) {
 //            echo('in');
             $this->merge(['officer_user_id' => \Illuminate\Support\Facades\Auth::user()->user_id]);
         }

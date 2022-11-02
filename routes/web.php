@@ -31,7 +31,6 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/grants/validate-letter/{grant}', [App\Http\Controllers\GrantController::class, 'validateLetter'])->name('grants.validate-letter');
     Route::get('/grants/export-letter/{grant}/{docName?}', [App\Http\Controllers\GrantController::class, 'exportLetter'])->name('grants.export-letter');
 
-
     //authenticated admin routes
     Route::group(['middleware' => ['admin']], function () {
         Route::name('maintenance.')->group(function () {
@@ -46,7 +45,6 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::get('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearsList'])->name('program-years.list');
             Route::post('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
             Route::post('/maintenance/program-years/{programYear}', [App\Http\Controllers\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
-
 
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry/{admin}', [App\Http\Controllers\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');

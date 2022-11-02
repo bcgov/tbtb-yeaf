@@ -15,7 +15,7 @@ class Grant extends Model
      * @var array<int, string>
      */
     protected $fillable = ['student_id', 'grant_id', 'institution_id', 'application_receive_date', 'program_code', 'program_year_id',
-        'study_start_date', 'study_end_date', 'age', 'officer_user_id', 'creator_user_id', 'update_user_id', 'status_code', 'last_evaluation_date'
+        'study_start_date', 'study_end_date', 'age', 'officer_user_id', 'creator_user_id', 'update_user_id', 'status_code', 'last_evaluation_date',
     ];
 
     public function student()

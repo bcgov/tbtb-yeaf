@@ -15,5 +15,4 @@ class Ineligible extends Model
      * @var array<int, string>
      */
     protected $fillable = ['code_id', 'active_flag', 'code_type', 'description', 'paragraph_text'];
-
 }

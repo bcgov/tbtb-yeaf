@@ -43,8 +43,8 @@ class ProgramYearEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'year_start' => 'required|numeric|unique:program_years,year_start,' . $this->id,
-            'year_end' => 'required|numeric|unique:program_years,year_end,' . $this->id,
+            'year_start' => 'required|numeric|unique:program_years,year_start,'.$this->id,
+            'year_end' => 'required|numeric|unique:program_years,year_end,'.$this->id,
             'grant_amount' => 'required|numeric',
             'max_years_allowed' => 'required|numeric',
             'min_age' => 'required|numeric',
@@ -59,7 +59,6 @@ class ProgramYearEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
         if (isset($this->year_start)) {
             $this->merge(['year_start' => preg_replace('/\D/', '', $this->year_start)]);
         }
@@ -76,5 +75,4 @@ class ProgramYearEditRequest extends FormRequest
             $this->merge(['max_age' => preg_replace('/\D/', '', $this->max_age)]);
         }
     }
-
 }
