@@ -46,6 +46,11 @@ Route::middleware(['auth', 'active'])->group(function () {
             Route::post('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
             Route::post('/maintenance/program-years/{programYear}', [App\Http\Controllers\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
 
+
+            Route::get('/maintenance/batches', [App\Http\Controllers\MaintenanceController::class, 'batchesList'])->name('batches.list');
+            Route::post('/maintenance/batches', [App\Http\Controllers\MaintenanceController::class, 'batchStore'])->name('batches.store');
+            Route::post('/maintenance/batches/{batch}', [App\Http\Controllers\MaintenanceController::class, 'batchEdit'])->name('batches.edit');
+
             Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
             Route::post('/maintenance/ministry/{admin}', [App\Http\Controllers\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');
 

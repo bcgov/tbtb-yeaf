@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BatchEditRequest;
+use App\Http\Requests\BatchStoreRequest;
 use App\Http\Requests\IneligibleEditRequest;
 use App\Http\Requests\IneligibleStoreRequest;
 use App\Http\Requests\MinistryEditRequest;
@@ -194,6 +196,57 @@ class MaintenanceController extends Controller
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response::render
+     */
+    public function batchesList(Request $request): \Inertia\Response
+    {
+        $batches = Batch::orderBy('batch_number', 'desc')->get();
+
+        return Inertia::render('Maintenance', ['status' => true, 'results' => $batches, 'page' => 'batches']);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  BatchEditRequest  $request
+     * @param  \App\Models\Batch $batch
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function batchEdit(BatchEditRequest $request, Batch $batch): \Illuminate\Http\RedirectResponse
+    {
+        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+            Batch::where('id', $batch->id)->update($request->validated());
+        }
+
+        return Redirect::route('maintenance.batches.list');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  BatchStoreRequest  $request
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function batchStore(BatchStoreRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        Batch::create($request->validated());
+
+        return Redirect::route('maintenance.batches.list');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Inertia\Response::render
+     */
+
     public function ministryShow(Request $request): \Inertia\Response
     {
         $admin = Admin::first();
