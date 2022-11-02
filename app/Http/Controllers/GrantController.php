@@ -204,7 +204,6 @@ class GrantController extends Controller
                 'D' => 'denial-letter',
                 'P' => 'pending-letter',
             };
-
             return $pdf->download($file_name . '.pdf');
         }
     }
