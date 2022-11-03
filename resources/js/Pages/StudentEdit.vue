@@ -86,9 +86,15 @@
 
                                         <div class="col-md-4">
                                             <BreezeLabel for="newInstitution" class="form-label" value="Institution *" />
-                                            <BreezeSelect class="form-select" id="newInstitution" v-model="newGrantForm.institution_id">
-                                                <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>
-                                            </BreezeSelect>
+<!--                                            <BreezeSelect class="form-select" id="newInstitution" v-model="newGrantForm.institution_id">-->
+<!--                                                <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>-->
+<!--                                            </BreezeSelect>-->
+
+                                            <BreezeInput @focusout="resetFilter" @keyup="filterActiveSchools($event)" type="text" class="form-control" id="newInstitution" v-model="newGrantForm.school.name" />
+                                            <input type="hidden" v-model="newGrantForm.institution_id" />
+                                            <ul class="dropdown-menu" :class="newGrantForm.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start">
+                                                <template v-for="(school,j) in schoolsList"><li @click="assignSchool(school)" :value="school.institution_id" class="dropdown-item">{{ school.name }}</li></template>
+                                            </ul>
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel for="newProgramName" class="form-label" value="Program" />
@@ -215,7 +221,6 @@
 
 </template>
 <script>
-import {computed} from "vue";
 
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
@@ -249,10 +254,10 @@ export default {
         ineligibles: Object,
         active_staff: Object,
         all_staff: Object,
-
-},
+    },
     data() {
         return {
+            schoolsList: [],
             grantTabVisible: true,
             overawardFlagVisible: false,
             editForm: null,
@@ -271,11 +276,43 @@ export default {
                 age: '',
                 application_number: '',
                 application_type: '',
+                school: {name:''},
+                schoolsListHidden: true,
             }),
             newCommentForm: useForm({comment_text: '', student_id: ''}),
         }
     },
     methods: {
+        resetFilter: function (){
+            //if schoolsListHidden is true then the schools list is still shown
+            //and the input field lost focus because the user clicked something
+            //other than the list ot assignSchool
+            let vm = this;
+            setTimeout(function (){
+                if(vm.newGrantForm.schoolsListHidden === false){
+                    vm.newGrantForm.school = {name:''};
+                    vm.newGrantForm.schoolsListHidden = true;
+                    vm.schoolsList = vm.schools;
+                }
+            }, 300);
+        },
+        assignSchool: function (school) {
+            this.newGrantForm.institution_id = school.institution_id;
+            this.newGrantForm.school = school;
+            this.newGrantForm.schoolsListHidden = true;
+            this.schoolsList = this.schools;
+        },
+        filterActiveSchools: function (e) {
+            this.newGrantForm.schoolsListHidden = false;
+            let search = e.target.value.toLowerCase();
+            if(search.length > 2){
+                this.schoolsList = this.schools.filter(obj => {
+                    if(obj.name == null)
+                        return false;
+                    return obj.name.toLowerCase().indexOf(search) >= 0;
+                } );
+            }
+        },
         switchActiveTab: function (tab)
         {
             this.activeTab = tab;
@@ -338,15 +375,12 @@ export default {
             });
         },
     },
-    watch: {
-    },
-    computed: {
-    },
     mounted() {
         this.editForm = this.result;
         this.syncVisible();
         this.newGrantForm.student_id = this.result.student_id;
         this.newCommentForm.student_id = this.result.student_id;
+        this.schoolsList = this.schools;
     }
 }
 </script>

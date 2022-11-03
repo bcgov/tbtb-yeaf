@@ -397,7 +397,6 @@ export default {
             setTimeout(function (){
                 if(vm.grantForms[index].schoolsListHidden === false){
                         vm.grantForms[index].school = JSON.parse(JSON.stringify(vm.result.grants[index].school));
-
                         vm.grantForms[index].schoolsListHidden = true;
                         vm.schoolsList = vm.schools;
                 }
@@ -412,15 +411,14 @@ export default {
         },
         filterActiveSchools: function (index, e) {
             this.grantForms[index].schoolsListHidden = false;
-            let search = e.target.value;
+            let search = e.target.value.toLowerCase();
             if(search.length > 2){
                 this.schoolsList = this.schools.filter(obj => {
                     if(obj.name == null)
                         return false;
-                    return obj.name.indexOf(search) >= 0;
+                    return obj.name.toLowerCase().indexOf(search) >= 0;
                 } );
             }
-            console.log(search);
         },
         exportGrant: function (index)
         {
