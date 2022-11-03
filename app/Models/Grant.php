@@ -38,6 +38,11 @@ class Grant extends Model
         return $this->belongsTo('App\Models\ProgramYear', 'program_year_id', 'program_year_id');
     }
 
+    public function school()
+    {
+        return $this->belongsTo('App\Models\Institution', 'institution_id', 'institution_id');
+    }
+
     public function appeals()
     {
         return $this->hasMany('App\Models\Appeal', 'grant_id', 'grant_id');

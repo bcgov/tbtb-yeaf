@@ -56,7 +56,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        $student = Student::where('id', $student->id)->with('grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'grants.appeals', 'comments')->first();
+        $student = Student::where('id', $student->id)->with('grants.school', 'grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'grants.appeals', 'comments')->first();
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 

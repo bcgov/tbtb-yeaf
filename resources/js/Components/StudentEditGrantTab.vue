@@ -25,9 +25,14 @@ tr {
 
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputInstitution'+i" class="form-label" value="Institution" />
-                                    <BreezeSelect class="form-select" :id="'inputInstitution'+i" v-model="grant.institution_id">
-                                        <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>
-                                    </BreezeSelect>
+<!--                                    <BreezeSelect class="form-select" :id="'inputInstitution'+i" v-model="grant.institution_id">-->
+<!--                                        <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>-->
+<!--                                    </BreezeSelect>-->
+                                    <BreezeInput @focusout="resetFilter(i)" @keyup="filterActiveSchools(i, $event)" type="text" class="form-control" :id="'inputInstitution'+i" v-model="grant.school.name" />
+                                    <input type="hidden" v-model="grant.institution_id" />
+                                    <ul class="dropdown-menu" :class="grant.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start">
+                                        <template v-for="(school,j) in schoolsList"><li @click="assignSchool(school, j, i)" :value="school.institution_id" class="dropdown-item">{{ school.name }}</li></template>
+                                    </ul>
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputProgramName'+i" class="form-label" value="Program" />
@@ -379,10 +384,44 @@ export default {
         return {
             noChanges: true,
             grantForms: [],
+            schoolsList: [],
+
         }
     },
     methods: {
+        resetFilter: function (index){
+            //if schoolsListHidden is true then the schools list is still shown
+            //and the input field lost focus because the user clicked something
+            //other than the list ot assignSchool
+            let vm = this;
+            setTimeout(function (){
+                if(vm.grantForms[index].schoolsListHidden === false){
+                        vm.grantForms[index].school = JSON.parse(JSON.stringify(vm.result.grants[index].school));
 
+                        vm.grantForms[index].schoolsListHidden = true;
+                        vm.schoolsList = vm.schools;
+                }
+            }, 300);
+        },
+        assignSchool: function (school, j, index) {
+            this.grantForms[index].institution_id = school.institution_id;
+            this.grantForms[index].school = school;
+            this.grantForms[index].schoolsListHidden = true;
+            this.schoolsList = this.schools;
+            // document.getElementById('inputInstitution'+i).value = school.name;
+        },
+        filterActiveSchools: function (index, e) {
+            this.grantForms[index].schoolsListHidden = false;
+            let search = e.target.value;
+            if(search.length > 2){
+                this.schoolsList = this.schools.filter(obj => {
+                    if(obj.name == null)
+                        return false;
+                    return obj.name.indexOf(search) >= 0;
+                } );
+            }
+            console.log(search);
+        },
         exportGrant: function (index)
         {
             let vm = this;
@@ -582,6 +621,7 @@ export default {
     },
     mounted() {
         this.grantForms = JSON.parse(JSON.stringify(this.result.grants));
+        this.schoolsList = this.schools;
     }
 }
 

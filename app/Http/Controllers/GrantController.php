@@ -187,7 +187,7 @@ class GrantController extends Controller
         [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true, true, $grant);
         $grant->age = $age;
         $grant->save();
-        $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
+        $return_grant = Grant::where('id', $grant->id)->with('school', 'grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
         if ($msg != '' || $app_ineligible == true) {
             if (! is_null($msg)) {
@@ -234,7 +234,7 @@ class GrantController extends Controller
             }
         }
         $grant = Grant::find($grant->id);
-        $return_grant = Grant::where('id', $grant->id)->with('grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
+        $return_grant = Grant::where('id', $grant->id)->with('school', 'grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
         return Response::json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
             'appeal_status' => $appeal_status, 'grant' => $return_grant, ]);
