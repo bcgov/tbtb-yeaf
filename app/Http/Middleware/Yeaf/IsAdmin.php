@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Yeaf;
 
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
@@ -27,7 +27,11 @@ class IsAdmin
         }
 
         $user = Auth::user();
-        if ( !$user->hasRole(Role::IS_SUPER_ADMIN) ) {
+//        //redirect non admin users to the dashboard page
+//        if ($user->access_type != 'A' && $user->access_type != 'S') {
+//            return redirect(RouteServiceProvider::HOME);
+//        }
+        if (!$user->hasRole(Role::IS_SUPER_ADMIN) && !$user->hasRole(Role::IS_YEAF_ADMIN) ) {
             return redirect(RouteServiceProvider::HOME);
         }
 

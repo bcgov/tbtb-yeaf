@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Yeaf;
 
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class IsActive
 {
     /**
      * Handle an incoming request.
@@ -27,11 +27,16 @@ class IsAdmin
         }
 
         $user = Auth::user();
-        if ( !$user->hasRole(Role::IS_SUPER_ADMIN) ) {
-            return redirect(RouteServiceProvider::HOME);
+        if ($user->disabled || ! is_null($user->end_date)) {
+            Auth::logout();
+
+            return redirect()->route('login');
         }
 
-
+        //active user must have at least a YEAF User role
+        if ( !$user->hasRole(Role::IS_YEAF_USER) ) {
+            return redirect(RouteServiceProvider::HOME);
+        }
         return $next($request);
     }
 }

@@ -48,6 +48,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_user');
+    }
+
+    /**
      * Scope a query to only include admin users.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -68,4 +76,14 @@ class User extends Authenticatable
     {
         return $query->where('disabled', '=', false);
     }
+
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function hasRole($role)
+    {
+        return $this->roles->contains('name', $role);
+    }
+
 }

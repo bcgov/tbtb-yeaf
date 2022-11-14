@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Twp;
 
+use App\Models\Role;
+use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +33,10 @@ class IsActive
             return redirect()->route('login');
         }
 
+        //active user must have at least a TWP User role
+        if ( !$user->hasRole(Role::IS_TWP_USER) ) {
+            return redirect(RouteServiceProvider::HOME);
+        }
         return $next($request);
     }
 }

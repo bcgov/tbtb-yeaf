@@ -21,8 +21,9 @@ Route::get('/', function () {
 });
 Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
 Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
-Route::middleware(['auth', 'active'])->group(function () {
+Route::middleware(['auth', 'yeaf_active'])->group(function () {
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('institutions', App\Http\Controllers\InstitutionController::class);
     Route::resource('grants', App\Http\Controllers\GrantController::class);
@@ -32,7 +33,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/grants/export-letter/{grant}/{docName?}', [App\Http\Controllers\GrantController::class, 'exportLetter'])->name('grants.export-letter');
 
     //authenticated admin routes
-    Route::group(['middleware' => ['admin']], function () {
+    Route::group(['middleware' => ['yeaf_admin']], function () {
         Route::name('maintenance.')->group(function () {
             Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
             Route::get('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffShow'])->name('staff.show');

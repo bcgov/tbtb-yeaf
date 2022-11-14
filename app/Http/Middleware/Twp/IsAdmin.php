@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Twp;
 
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
@@ -27,7 +27,7 @@ class IsAdmin
         }
 
         $user = Auth::user();
-        if ( !$user->hasRole(Role::IS_SUPER_ADMIN) ) {
+        if (!$user->hasRole(Role::IS_SUPER_ADMIN) && !$user->hasRole(Role::IS_TWP_ADMIN) ) {
             return redirect(RouteServiceProvider::HOME);
         }
 
