@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Yeaf;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,7 +15,7 @@ class ReportController extends Controller
     public function index(Request $request, $type = null)
     {
         if (is_null($type)) {
-            return Inertia::render('Maintenance', ['status' => true, 'page' => 'reports']);
+            return Inertia::render('Yeaf/Maintenance', ['status' => true, 'page' => 'reports']);
         }
 
         switch ($type) {

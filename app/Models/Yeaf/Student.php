@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Yeaf;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,16 +20,16 @@ class Student extends Model
 
     public function grants()
     {
-        return $this->hasMany('App\Models\Grant', 'student_id', 'student_id');
+        return $this->hasMany('App\Models\Yeaf\Grant', 'student_id', 'student_id');
     }
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment', 'student_id', 'student_id');
+        return $this->hasMany('App\Models\Yeaf\Comment', 'student_id', 'student_id');
     }
 
     public function appeals()
     {
-        return $this->hasMany('App\Models\Appeal', 'student_id', 'student_id');
+        return $this->hasMany('App\Models\Yeaf\Appeal', 'student_id', 'student_id');
     }
 }

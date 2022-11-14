@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Yeaf;
 
 use App\Http\Requests\GrantEditRequest;
 use App\Http\Requests\GrantStoreRequest;
-use App\Models\Admin;
-use App\Models\Appeal;
-use App\Models\Grant;
-use App\Models\GrantIneligible;
-use App\Models\Student;
+use App\Models\Yeaf\Admin;
+use App\Models\Yeaf\Appeal;
+use App\Models\Yeaf\Grant;
+use App\Models\Yeaf\GrantIneligible;
+use App\Models\Yeaf\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +31,7 @@ class GrantController extends Controller
         $grants = new Grant();
         $grants = $this->paginateGrants($grants);
 
-        return Inertia::render('Grants', ['status' => true, 'results' => $grants]);
+        return Inertia::render('Yeaf/Grants', ['status' => true, 'results' => $grants]);
     }
 
     /**

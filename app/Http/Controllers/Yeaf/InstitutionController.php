@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Yeaf;
 
 use App\Http\Requests\InstitutionStoreRequest;
 use App\Http\Requests\InstitutionUpdateRequest;
-use App\Models\Country;
-use App\Models\Institution;
-use App\Models\Province;
+use App\Models\Yeaf\Country;
+use App\Models\Yeaf\Institution;
+use App\Models\Yeaf\Province;
 use Inertia\Inertia;
 
 class InstitutionController extends Controller
@@ -22,17 +22,7 @@ class InstitutionController extends Controller
         $schools = $this->paginateSchools($schools);
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('Schools', ['status' => true, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('Yeaf/Schools', ['status' => true, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -49,7 +39,7 @@ class InstitutionController extends Controller
 
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('Schools', ['status' => true, 'school' => $institution, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
+        return Inertia::render('Yeaf/Schools', ['status' => true, 'school' => $institution, 'results' => $schools, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -62,18 +52,7 @@ class InstitutionController extends Controller
     {
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Institution  $institution
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Institution $institution)
-    {
-        //
+        return Inertia::render('Yeaf/SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -88,18 +67,7 @@ class InstitutionController extends Controller
         Institution::where('id', $institution->id)->update($request->validated());
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Institution  $institution
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Institution $institution)
-    {
-        //
+        return Inertia::render('Yeaf/SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     private function paginateSchools($schools)

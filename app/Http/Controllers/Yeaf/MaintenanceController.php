@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Yeaf;
 
 use App\Http\Requests\BatchEditRequest;
 use App\Http\Requests\BatchStoreRequest;
@@ -10,11 +10,11 @@ use App\Http\Requests\MinistryEditRequest;
 use App\Http\Requests\ProgramYearEditRequest;
 use App\Http\Requests\ProgramYearStoreRequest;
 use App\Http\Requests\StaffEditRequest;
-use App\Models\Admin;
-use App\Models\Batch;
-use App\Models\Ineligible;
-use App\Models\ProgramYear;
-use App\Models\Province;
+use App\Models\Yeaf\Admin;
+use App\Models\Yeaf\Batch;
+use App\Models\Yeaf\Ineligible;
+use App\Models\Yeaf\ProgramYear;
+use App\Models\Yeaf\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +32,7 @@ class MaintenanceController extends Controller
      */
     public function letters(Request $request): \Inertia\Response
     {
-        return Inertia::render('Maintenance', ['status' => true,
+        return Inertia::render('Yeaf/Maintenance', ['status' => true,
             'program_years' => ProgramYear::orderBy('year_start', 'desc')->get(),
             'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters', ]);
     }
@@ -66,7 +66,7 @@ class MaintenanceController extends Controller
     {
         $staff = User::orderBy('created_at', 'desc')->get();
 
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
     }
 
     /**
@@ -78,7 +78,7 @@ class MaintenanceController extends Controller
      */
     public function staffShow(Request $request, User $user): \Inertia\Response
     {
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $user, 'page' => 'staff-edit']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $user, 'page' => 'staff-edit']);
     }
 
     /**
@@ -110,7 +110,7 @@ class MaintenanceController extends Controller
     {
         $ineligibles = Ineligible::orderBy('code_id', 'asc')->get();
 
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $ineligibles, 'page' => 'ineligibles']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $ineligibles, 'page' => 'ineligibles']);
     }
 
     /**
@@ -157,7 +157,7 @@ class MaintenanceController extends Controller
     {
         $program_years = ProgramYear::orderBy('year_start', 'desc')->get();
 
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $program_years, 'page' => 'program-years']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $program_years, 'page' => 'program-years']);
     }
 
     /**
@@ -207,7 +207,7 @@ class MaintenanceController extends Controller
     {
         $batches = Batch::orderBy('batch_number', 'desc')->get();
 
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $batches, 'page' => 'batches']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $batches, 'page' => 'batches']);
     }
 
     /**
@@ -252,7 +252,7 @@ class MaintenanceController extends Controller
         $admin = Admin::first();
         $provinces = Province::where('country_code', 'CAN')->select('province_code')->get();
 
-        return Inertia::render('Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
+        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
     }
 
     /**
@@ -277,7 +277,7 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Students');
+        return Inertia::render('Yeaf/Students');
     }
 
     /**
@@ -287,6 +287,6 @@ class MaintenanceController extends Controller
      */
     public function goToPage(Request $request, $page = 'area-of-audit')
     {
-        return Inertia::render('Maintenance', ['page' => $page]);
+        return Inertia::render('Yeaf/Maintenance', ['page' => $page]);
     }
 }

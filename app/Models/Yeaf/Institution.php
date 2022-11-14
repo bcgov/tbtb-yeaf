@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Yeaf;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ineligible extends Model
+class Institution extends Model
 {
     use HasFactory;
 
@@ -14,5 +14,5 @@ class Ineligible extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['code_id', 'active_flag', 'code_type', 'description', 'paragraph_text'];
+    protected $fillable = ['institution_id', 'name', 'address', 'city', 'country', 'province', 'postal_code', 'tele', 'fax'];
 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Yeaf;
 
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
-use App\Models\Batch;
-use App\Models\Country;
-use App\Models\Ineligible;
-use App\Models\Institution;
-use App\Models\Program;
-use App\Models\ProgramYear;
-use App\Models\Province;
-use App\Models\Student;
+use App\Models\Yeaf\Batch;
+use App\Models\Yeaf\Country;
+use App\Models\Yeaf\Ineligible;
+use App\Models\Yeaf\Institution;
+use App\Models\Yeaf\Program;
+use App\Models\Yeaf\ProgramYear;
+use App\Models\Yeaf\Province;
+use App\Models\Yeaf\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -29,7 +29,7 @@ class StudentController extends Controller
         $students = $this->paginateGrants($students);
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('Students', ['status' => true, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
+        return Inertia::render('Yeaf/Students', ['status' => true, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -45,13 +45,13 @@ class StudentController extends Controller
         $students = $this->paginateGrants($students);
         [$countries, $provinces] = $this->getCountriesProvinces();
 
-        return Inertia::render('Students', ['status' => true, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
+        return Inertia::render('Yeaf/Students', ['status' => true, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Student  $student
+     * @param  \App\Models\Yeaf\Student  $student
      * @return \Inertia\Response
      */
     public function show(Student $student)
@@ -68,7 +68,7 @@ class StudentController extends Controller
         $all_staff = User::orderBy('user_id', 'asc')->get();
         $ineligibles = Ineligible::orderBy('description')->get();
 
-        return Inertia::render('StudentEdit', ['status' => true,
+        return Inertia::render('Yeaf/StudentEdit', ['status' => true,
             'program_types' => $program_types,
             'program_years' => $program_years,
             'schools' => $schools,
@@ -83,7 +83,7 @@ class StudentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\StudentUpdateRequest  $request
-     * @param  \App\Models\Student  $student
+     * @param  \App\Models\Yeaf\Student  $student
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student)

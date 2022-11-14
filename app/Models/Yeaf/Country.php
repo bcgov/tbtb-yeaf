@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Yeaf;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProgramYear extends Model
+class Country extends Model
 {
     use HasFactory;
 }

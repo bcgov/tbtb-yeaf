@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Yeaf;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,47 +20,47 @@ class Grant extends Model
 
     public function student()
     {
-        return $this->belongsTo('App\Models\Student', 'student_id', 'student_id');
+        return $this->belongsTo('App\Models\Yeaf\Student', 'student_id', 'student_id');
     }
 
     public function batch()
     {
-        return $this->belongsTo('App\Models\Batch', 'cheque_batch_number', 'batch_number');
+        return $this->belongsTo('App\Models\Yeaf\Batch', 'cheque_batch_number', 'batch_number');
     }
 
     public function officer()
     {
-        return $this->belongsTo('App\Models\User', 'officer_user_id', 'user_id');
+        return $this->belongsTo('App\Models\Yeaf\User', 'officer_user_id', 'user_id');
     }
 
     public function py()
     {
-        return $this->belongsTo('App\Models\ProgramYear', 'program_year_id', 'program_year_id');
+        return $this->belongsTo('App\Models\Yeaf\ProgramYear', 'program_year_id', 'program_year_id');
     }
 
     public function school()
     {
-        return $this->belongsTo('App\Models\Institution', 'institution_id', 'institution_id');
+        return $this->belongsTo('App\Models\Yeaf\Institution', 'institution_id', 'institution_id');
     }
 
     public function appeals()
     {
-        return $this->hasMany('App\Models\Appeal', 'grant_id', 'grant_id');
+        return $this->hasMany('App\Models\Yeaf\Appeal', 'grant_id', 'grant_id');
     }
 
     public function grantIneligibles()
     {
-        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id');
+        return $this->hasMany('App\Models\Yeaf\GrantIneligible', 'grant_id', 'grant_id');
     }
 
     public function grantPendingIneligibles()
     {
-        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'P');
+        return $this->hasMany('App\Models\Yeaf\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'P');
     }
 
     public function grantDeniedIneligibles()
     {
-        return $this->hasMany('App\Models\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'D');
+        return $this->hasMany('App\Models\Yeaf\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'D');
     }
 
     public function scopeIsPending($query)

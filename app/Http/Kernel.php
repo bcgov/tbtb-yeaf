@@ -67,8 +67,8 @@ class Kernel extends HttpKernel
 
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'yeaf_admin' => \App\Http\Middleware\Yeaf\IsAdmin::class,
-        'twp_admin' => \App\Http\Middleware\Twp\IsAdmin::class,
         'yeaf_active' => \App\Http\Middleware\Yeaf\IsActive::class,
+        'twp_admin' => \App\Http\Middleware\Twp\IsAdmin::class,
         'twp_active' => \App\Http\Middleware\Twp\IsActive::class,
     ];
 }
