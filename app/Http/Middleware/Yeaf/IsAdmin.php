@@ -31,7 +31,7 @@ class IsAdmin
 //        if ($user->access_type != 'A' && $user->access_type != 'S') {
 //            return redirect(RouteServiceProvider::HOME);
 //        }
-        if (!$user->hasRole(Role::IS_SUPER_ADMIN) && !$user->hasRole(Role::IS_YEAF_ADMIN) ) {
+        if (!$user->hasRole(Role::SUPER_ADMIN) && !$user->hasRole(Role::YEAF_ADMIN) ) {
             return redirect(RouteServiceProvider::HOME);
         }
 

@@ -15,11 +15,11 @@ class Role extends Model
      */
     protected $fillable = ['name'];
 
-    public const IS_SUPER_ADMIN = 1;
-    public const IS_YEAF_USER = 2;
-    public const IS_YEAF_ADMIN = 3;
-    public const IS_TWP_ADMIN = 4;
-    public const IS_TWP_USER = 5;
+    public const SUPER_ADMIN = "Super Admin";
+    public const YEAF_USER = "YEAF User";
+    public const YEAF_ADMIN = "YEAF Admin";
+    public const TWP_ADMIN = "TWP Admin";
+    public const TWP_USER = "TWP User";
 
 
     /**

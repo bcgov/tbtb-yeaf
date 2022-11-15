@@ -48,7 +48,7 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        return $this->roles->contains('id', $role);
+        return $this->roles->contains('name', $role);
     }
 
     /**

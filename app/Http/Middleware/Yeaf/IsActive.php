@@ -34,7 +34,7 @@ class IsActive
         }
 
         //active user must have at least a YEAF User role
-        if ( !$user->hasRole(Role::IS_YEAF_USER) ) {
+        if ( !$user->hasRole(Role::YEAF_USER) ) {
             return redirect(RouteServiceProvider::HOME);
         }
         return $next($request);

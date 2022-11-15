@@ -10,6 +10,7 @@ use App\Http\Requests\MinistryEditRequest;
 use App\Http\Requests\ProgramYearEditRequest;
 use App\Http\Requests\ProgramYearStoreRequest;
 use App\Http\Requests\StaffEditRequest;
+use App\Models\Role;
 use App\Models\Yeaf\Admin;
 use App\Models\Yeaf\Batch;
 use App\Models\Yeaf\Ineligible;
@@ -95,6 +96,20 @@ class MaintenanceController extends Controller
             $user->access_type = $request->access_type;
             $user->disabled = $request->disabled;
             $user->save();
+
+            //reset roles
+            $user->roles()->detach();
+
+            //add user role
+            $role = Role::where('name', Role::YEAF_USER)->first();
+            $user->roles()->attach($role);
+
+            //if admin add admin role
+            if($request->access_type == 'A')
+            {
+                $role = Role::where('name', Role::YEAF_ADMIN)->first();
+                $user->roles()->attach($role);
+            }
         }
 
         return Redirect::route('maintenance.staff.list');

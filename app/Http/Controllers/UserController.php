@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AjaxRequest;
 use App\Models\Grant;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -130,7 +131,7 @@ class UserController extends Controller
      */
     public function dashboard(Request $request)
     {
-        return Inertia::render('Students');
+        return Inertia::render('Yeaf/Students');
     }
 
     /**
@@ -138,7 +139,7 @@ class UserController extends Controller
      */
     public function reports(Request $request)
     {
-        return Inertia::render('Reports', ['results' => null]);
+        return Inertia::render('Yeaf/Reports', ['results' => null]);
     }
 
     /**
@@ -160,7 +161,7 @@ class UserController extends Controller
      * Log the user out of the application.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function logout(Request $request)
     {
@@ -186,5 +187,9 @@ class UserController extends Controller
         $user->idir_user_guid = $idir_user['idir_user_guid'];
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();
+
+        //attach a basic user role
+        $role = Role::where('name', Role::YEAF_USER)->first();
+        $user->roles()->attach($role);
     }
 }
