@@ -34,7 +34,7 @@ class IsActive
         }
 
         //active user must have at least a TWP User role
-        if ( !$user->hasRole(Role::IS_TWP_USER) ) {
+        if ( !$user->hasRole(Role::TWP_USER) ) {
             return redirect(RouteServiceProvider::HOME);
         }
         return $next($request);
