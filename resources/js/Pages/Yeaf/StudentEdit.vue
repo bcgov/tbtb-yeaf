@@ -2,7 +2,7 @@
 <template>
         <Head title="YEAF - Student Edit" />
 
-        <BreezeAuthenticatedLayout>
+        <BreezeAuthenticatedLayout v-bind="$attrs">
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     YEAF - Edit Student
@@ -224,10 +224,10 @@
 
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import StudentSearchBox from '@/Components/StudentSearch.vue';
-import StudentEditStudentTab from "@/Components/StudentEditStudentTab.vue";
-import StudentEditGrantTab from "@/Components/StudentEditGrantTab.vue";
-import StudentEditCommentTab from "@/Components/StudentEditCommentTab.vue";
+import StudentSearchBox from '@/Components/Yeaf/StudentSearch.vue';
+import StudentEditStudentTab from "@/Components/Yeaf/StudentEditStudentTab.vue";
+import StudentEditGrantTab from "@/Components/Yeaf/StudentEditGrantTab.vue";
+import StudentEditCommentTab from "@/Components/Yeaf/StudentEditCommentTab.vue";
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";

@@ -2,7 +2,7 @@
 <template>
         <Head title="YEAF - School Edit" />
 
-        <BreezeAuthenticatedLayout>
+        <BreezeAuthenticatedLayout v-bind="$attrs">
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Edit School
@@ -111,7 +111,7 @@ import {computed} from "vue";
 
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import SchoolSearchBox from '@/Components/SchoolSearch.vue';
+import SchoolSearchBox from '@/Components/Yeaf/SchoolSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";

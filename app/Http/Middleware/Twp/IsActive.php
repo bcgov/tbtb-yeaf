@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class IsActive
 {
@@ -16,7 +17,7 @@ class IsActive
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @param  string|null  ...$roles
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @return \Inertia\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
@@ -35,7 +36,11 @@ class IsActive
 
         //active user must have at least a TWP User role
         if ( !$user->hasRole(Role::TWP_USER) ) {
-            return redirect(RouteServiceProvider::HOME);
+            return Inertia::render('Home', [
+                'loginAttempt' => true,
+                'hasAccess' => false,
+                'status' => 'Please contact TWP Admin to grant you access.',
+            ]);
         }
         return $next($request);
     }

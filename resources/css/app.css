@@ -20,3 +20,6 @@ nav ul.navbar-nav a:hover{
 .btn{
     box-shadow: none !important;
 }
+.font-light {
+    font-weight: 200;
+}

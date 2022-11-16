@@ -1,13 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
-import BreezeNavLink from '@/Components/NavLink.vue';
-import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/inertia-vue3';
-
-const showingNavigationDropdown = ref(false);
-
-</script>
 <style scoped>
 nav.navbar{
     background-color: #003366;
@@ -39,16 +29,11 @@ nav.navbar{
                             Schools
                         </BreezeNavLink>
                     </li>
-                    <li class="nav-item">
+                    <li v-if="isAdmin" class="nav-item">
                         <BreezeNavLink class="nav-link" :href="route('maintenance.ministry.show')" :active="route().current('maintenance.*')">
                             Maintenance
                         </BreezeNavLink>
                     </li>
-<!--                    <li class="nav-item">-->
-<!--                        <BreezeNavLink class="nav-link" :href="route('archive')" :active="route().current('archive')">-->
-<!--                            Archive-->
-<!--                        </BreezeNavLink>-->
-<!--                    </li>-->
                     <li class="nav-item dropdown">
                         <BreezeNavLink class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ $page.props.auth.user.user_id }}
@@ -59,13 +44,13 @@ nav.navbar{
                             </li>
                             <li><hr class="dropdown-divider"></li>
 
-                                <li class="dropdown-item mt-3 space-y-1">
-                                    <div class="d-grid gap-2">
-                                    <BreezeResponsiveNavLink class="text-left" :href="route('logout')" method="post" as="button">
-                                        Log Out
-                                    </BreezeResponsiveNavLink>
-                                    </div>
-                                </li>
+                            <li class="dropdown-item mt-3 space-y-1">
+                                <div class="d-grid gap-2">
+                                <BreezeResponsiveNavLink class="text-left" :href="route('logout')" method="post" as="button">
+                                    Log Out
+                                </BreezeResponsiveNavLink>
+                                </div>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -73,3 +58,43 @@ nav.navbar{
         </div>
     </nav>
 </template>
+<script>
+import { ref } from 'vue';
+import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
+import BreezeNavLink from '@/Components/NavLink.vue';
+import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { Link } from '@inertiajs/inertia-vue3';
+
+
+export default {
+    name: 'NavBar',
+    components: {
+        BreezeApplicationLogo, BreezeResponsiveNavLink, BreezeNavLink, Link
+    },
+    props: [],
+    data() {
+        return {
+            showingNavigationDropdown: ref(false),
+            searchType: '',
+            searchData: '',
+            isAdmin: ref(false),
+        }
+    },
+    methods: {
+    },
+    mounted() {
+        for(let i=0; i<this.$attrs.auth.user.roles.length; i++)
+        {
+            console.log(this.$attrs.auth.user.roles[i].name.indexOf('Admin'));
+            if(this.$attrs.auth.user.roles[i].name.indexOf('Admin') > -1)
+            {
+                this.isAdmin = true;
+                break;
+            }
+        }
+    },
+    watch: {
+
+    },
+}
+</script>

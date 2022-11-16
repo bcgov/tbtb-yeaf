@@ -21,7 +21,8 @@ Route::get('/', function () {
 });
 Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
 Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+
+Route::middleware(['auth'])->get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
 Route::middleware(['auth', 'yeaf_active'])->group(function () {
     Route::resource('students', App\Http\Controllers\Yeaf\StudentController::class);

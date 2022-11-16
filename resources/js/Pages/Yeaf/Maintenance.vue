@@ -6,7 +6,7 @@
 <template>
     <Head title="Maintenance" />
 
-    <BreezeAuthenticatedLayout>
+    <BreezeAuthenticatedLayout v-bind="$attrs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 YEAF - Youth Education Assistance Fund
@@ -45,15 +45,15 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import MaintenanceMenu from "@/Components/MaintenanceMenu";
-import MaintenanceMinistry from "@/Components/MaintenanceMinistry";
-import MaintenanceStaff from "@/Components/MaintenanceStaff";
-import MaintenanceStaffEdit from "@/Components/MaintenanceStaffEdit";
-import MaintenanceReports from "@/Components/MaintenanceReports";
-import MaintenanceLetters from "@/Components/MaintenanceLetters";
-import MaintenanceIneligibles from "@/Components/MaintenanceIneligibles";
-import MaintenanceProgramYears from "@/Components/MaintenanceProgramYears";
-import MaintenanceBatches from "@/Components/MaintenanceBatches";
+import MaintenanceMenu from "@/Components/Yeaf/MaintenanceMenu";
+import MaintenanceMinistry from "@/Components/Yeaf/MaintenanceMinistry";
+import MaintenanceStaff from "@/Components/Yeaf/MaintenanceStaff";
+import MaintenanceStaffEdit from "@/Components/Yeaf/MaintenanceStaffEdit";
+import MaintenanceReports from "@/Components/Yeaf/MaintenanceReports";
+import MaintenanceLetters from "@/Components/Yeaf/MaintenanceLetters";
+import MaintenanceIneligibles from "@/Components/Yeaf/MaintenanceIneligibles";
+import MaintenanceProgramYears from "@/Components/Yeaf/MaintenanceProgramYears";
+import MaintenanceBatches from "@/Components/Yeaf/MaintenanceBatches";
 
 export default {
     name: 'Maintenance',

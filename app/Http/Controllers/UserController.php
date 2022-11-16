@@ -94,7 +94,7 @@ class UserController extends Controller
             //else the user has access
             Auth::login($user);
 
-            return Redirect::route('students.index');
+            return Redirect::route('home');
         }
     }
 

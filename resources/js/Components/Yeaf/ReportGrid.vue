@@ -34,7 +34,7 @@ import {computed} from "vue";
 
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import StudentSearchBox from '@/Components/StudentSearch.vue';
+import StudentSearchBox from '@/Components/Yeaf/StudentSearch.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeSelect from '@/Components/Select.vue';

@@ -1,18 +1,15 @@
 <script setup>
-import { Head } from '@inertiajs/inertia-vue3';
-import {defineComponent} from "vue";
 
 defineProps({
     loginAttempt: Boolean,
     hasAccess: Boolean,
     status: String,
 });
-defineComponent( {
-    Head
-});
+// defineComponent( {
+//     Head
+// });
 </script>
 <style scoped>
-
 .bg-bc-gov{
     background: none;
     background-color: #036;
@@ -23,25 +20,27 @@ defineComponent( {
 <template>
     <div class="min-h-screen text-center flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-bc-gov">
 
+        <Head><title>Select Application</title></Head>
+        <h2 class="text-center text-white">Welcome <span v-if="$attrs['auth']['user']">{{ $attrs['auth']['user']['first_name'] }}</span></h2>
+        <p class="text-center text-white">Please select an application to log into</p>
 
-            <Head><title>Select Application</title></Head>
-        <h2 class="text-center text-white">Welcome {{ $attrs['auth']['user']['first_name'] }}</h2>
-        <p class="text-center text-white">Select an application to log into</p>
+        <div v-if="status" class="alert mb-4 font-medium text-sm alert-danger">
+            {{ status }}
+        </div>
 
-
-            <div class="row col-12 m-3 justify-content-center">
-                <div class="col-md-3">
-                    <a :href="route('students.index')" class="card p-5" style="text-decoration:none;">
-                        <h1>YEAF</h1>
-                        <h4>Youth Educational Assistance Fund</h4>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a :href="route('students.index')" class="card p-5" style="text-decoration:none;">
-                        <h1>TWP</h1>
-                        <h4>Tuition Waiver Program</h4>
-                    </a>
-                </div>
+        <div class="row col-12 m-3 justify-content-center">
+            <div class="col-md-3">
+                <a :href="route('students.index')" class="card p-5 text-dark" style="text-decoration:none;">
+                    <h1 class="display-3 font-sans font-light">YEAF</h1>
+                    <span>Youth Educational Assistance Fund</span>
+                </a>
             </div>
+            <div class="col-md-3">
+                <a :href="route('students.index')" class="card p-5 text-dark" style="text-decoration:none;">
+                    <h1 class="display-3 font-sans font-light">TWP</h1>
+                    <span>Tuition Waiver Program</span>
+                </a>
+            </div>
+        </div>
     </div>
 </template>

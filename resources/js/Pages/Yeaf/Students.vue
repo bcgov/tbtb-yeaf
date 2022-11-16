@@ -6,7 +6,7 @@
 <template>
     <Head title="Students" />
 
-    <BreezeAuthenticatedLayout>
+    <BreezeAuthenticatedLayout v-bind="$attrs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 YEAF - Youth Education Assistance Fund
@@ -181,8 +181,8 @@
 </template>
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-import StudentSearchBox from '@/Components/StudentSearch.vue';
-import StudentsHeader from '@/Components/StudentsHeader.vue';
+import StudentSearchBox from '@/Components/Yeaf/StudentSearch.vue';
+import StudentsHeader from '@/Components/Yeaf/StudentsHeader.vue';
 import {Head, Link, useForm} from '@inertiajs/inertia-vue3';
 import BreezeInput from "@/Components/Input";
 import BreezeSelect from "@/Components/Select";
