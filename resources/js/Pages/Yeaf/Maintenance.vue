@@ -43,7 +43,7 @@
 
 </template>
 <script>
-import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/Yeaf/Authenticated.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import MaintenanceMenu from "@/Components/Yeaf/MaintenanceMenu";
 import MaintenanceMinistry from "@/Components/Yeaf/MaintenanceMinistry";

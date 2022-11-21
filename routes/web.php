@@ -24,6 +24,26 @@ Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'
 
 Route::middleware(['auth'])->get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
+Route::group(
+    [
+        'middleware' => ['auth', 'twp_active'],
+        'prefix' => 'twp',
+        'as' => 'twp.'
+    ], function () {
+    Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
+
+    //authenticated admin routes
+    Route::group(
+        [
+            'prefix' => 'maintenance',
+            'as' => 'maintenance.'
+        ], function () {
+        Route::get('/staff', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffList'])->name('staff.list');
+        Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
+        Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+    });
+});
+
 Route::middleware(['auth', 'yeaf_active'])->group(function () {
     Route::resource('students', App\Http\Controllers\Yeaf\StudentController::class);
     Route::resource('institutions', App\Http\Controllers\Yeaf\InstitutionController::class);
@@ -35,7 +55,7 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
             'prefix' => 'grants',
             'as' => 'grants.'
         ], function () {
-        Route::post('/evaluate/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'evaluateApp'])->name('evaluate');
+        Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
         Route::get('/validate-letter/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'validateLetter'])->name('validate-letter');
         Route::get('/export-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportLetter'])->name('export-letter');
     });
@@ -72,5 +92,4 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
             Route::get('/letters', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'letters'])->name('letters.index');
             Route::get('/download-letters/{type}/{extra}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'downloadLetter'])->name('letters.download');
     });
-//    });
 });

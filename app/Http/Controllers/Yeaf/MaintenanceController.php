@@ -65,7 +65,9 @@ class MaintenanceController extends Controller
      */
     public function staffList(Request $request): \Inertia\Response
     {
-        $staff = User::orderBy('created_at', 'desc')->get();
+        $staff = User::whereHas('roles', function($q)
+        { return $q->whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER]); }
+        )->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
     }

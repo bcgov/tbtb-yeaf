@@ -9,7 +9,7 @@
     <BreezeAuthenticatedLayout v-bind="$attrs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                YEAF - Youth Education Assistance Fund
+                TWP - Tuition Waiver Program
             </h2>
         </template>
 
@@ -19,7 +19,7 @@
                     <div class="col-md-3 mt-3">
                         <div class="card">
                             <div class="card-header">
-                                YEAF Students Search
+                                TWP Students Search
                             </div>
                             <div class="card-body">
                                 <StudentSearchBox />
@@ -29,7 +29,7 @@
                     <div class="col-md-9 mt-3">
                         <div class="card mb-3">
                             <div class="card-header">
-                                YEAF Students
+                                TWP Students
                                 <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newStudentModal">New Student</button>
                             </div>
                             <div class="card-body">
@@ -40,18 +40,11 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
-                                            <td scope="row"><Link :href="route('students.show', [row.id])">{{ row.sin }}</Link></td>
-                                            <td>{{ row.first_name }}</td>
-                                            <td>{{ row.last_name}}</td>
-                                            <td>{{ formatMoney(row.life) }}</td>
-                                            <td>
-                                                <span v-if="(row.overaward_amount - row.overaward_deducted_amount) < 0" class="badge rounded-pill text-bg-danger fs-6">{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
-                                                <span v-else>{{ countOveraward(row.overaward_amount, row.overaward_deducted_amount) }}</span>
-                                            </td>
-                                            <td>
-                                                <span v-if="row.investigate" class="badge rounded-pill text-bg-danger fs-6">Yes</span>
-                                                <span v-else class="badge rounded-pill text-bg-success fs-6">No</span>
-                                            </td>
+                                            <td><Link :href="route('twp.students.show', [row.id])">{{ row.last_name }}</Link></td>
+                                            <td>{{ row.first_name}}</td>
+                                            <td>{{ row.birth_date}}</td>
+                                            <td>{{ row.pen}}</td>
+                                            <td>{{ row.institution_student_number}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -180,9 +173,9 @@
 
 </template>
 <script>
-import BreezeAuthenticatedLayout from '@/Layouts/Yeaf/Authenticated.vue';
-import StudentSearchBox from '@/Components/Yeaf/StudentSearch.vue';
-import StudentsHeader from '@/Components/Yeaf/StudentsHeader.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/Twp/Authenticated.vue';
+import StudentSearchBox from '@/Components/Twp/StudentSearch.vue';
+import StudentsHeader from '@/Components/Twp/StudentsHeader.vue';
 import {Head, Link, useForm} from '@inertiajs/inertia-vue3';
 import BreezeInput from "@/Components/Input";
 import BreezeSelect from "@/Components/Select";

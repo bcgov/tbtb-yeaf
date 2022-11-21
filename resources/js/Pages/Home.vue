@@ -36,7 +36,7 @@ defineProps({
                 </a>
             </div>
             <div class="col-md-3">
-                <a :href="route('students.index')" class="card p-5 text-dark" style="text-decoration:none;">
+                <a :href="route('twp.students.index')" class="card p-5 text-dark" style="text-decoration:none;">
                     <h1 class="display-3 font-sans font-light">TWP</h1>
                     <span>Tuition Waiver Program</span>
                 </a>

@@ -1,11 +1,11 @@
 
 <template>
-        <Head title="YEAF - Student Edit" />
+        <Head title="TWP - Student Edit" />
 
         <BreezeAuthenticatedLayout v-bind="$attrs">
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    YEAF - Edit Student
+                    TWP - Edit Student
                 </h2>
             </template>
 
@@ -15,7 +15,7 @@
                         <div class="col-md-4 mt-3">
                             <div class="card">
                                 <div class="card-header">
-                                    YEAF Student Search
+                                    TWP Student Search
                                 </div>
                                 <div class="card-body">
                                     <StudentSearchBox />
@@ -26,10 +26,7 @@
                             <div class="card">
                                 <div v-if="result != null" class="card-header">
                                     Edit Student
-                                    <button v-if="activeTab==='grants'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantModal">New Grant</button>
-                                    <button v-if="activeTab==='comments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newCommentModal">New Comment</button>
-                                    <span v-if="!grantTabVisible" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">*** STUDENT UNDER INVESTIGATION ***</span>
-                                    <span v-if="overawardFlagVisible == true" class="btn btn-sm rounded-pill text-bg-danger ms-2 disabled">Over Award</span>
+                                    <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                 </div>
                                 <div class="card-body" v-if="result != null">
 
@@ -37,11 +34,14 @@
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='student' ? 'active':''" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
                                         </li>
-                                        <li @click="switchActiveTab('grants')" v-if="grantTabVisible" class="nav-item" role="presentation">
-                                            <button class="nav-link" :class="activeTab==='grants' ? 'active':''" id="grants-tab" data-bs-toggle="tab" data-bs-target="#grants-tab-pane" type="button" role="tab" aria-controls="grants-tab-pane" aria-selected="false">Grants</button>
+                                        <li @click="switchActiveTab('application')" v-if="grantTabVisible" class="nav-item" role="presentation">
+                                            <button class="nav-link" :class="activeTab==='application' ? 'active':''" id="application-tab" data-bs-toggle="tab" data-bs-target="#application-tab-pane" type="button" role="tab" aria-controls="application-tab-pane" aria-selected="false">Application</button>
                                         </li>
-                                        <li @click="switchActiveTab('comments')" class="nav-item" role="presentation">
-                                            <button class="nav-link" :class="activeTab==='comments' ? 'active':''" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments-tab-pane" type="button" role="tab" aria-controls="comments-tab-pane" aria-selected="false">Comments</button>
+                                        <li @click="switchActiveTab('program')" class="nav-item" role="presentation">
+                                            <button class="nav-link" :class="activeTab==='program' ? 'active':''" id="program-tab" data-bs-toggle="tab" data-bs-target="#program-tab-pane" type="button" role="tab" aria-controls="program-tab-pane" aria-selected="false">Program</button>
+                                        </li>
+                                        <li @click="switchActiveTab('payments')" class="nav-item" role="presentation">
+                                            <button class="nav-link" :class="activeTab==='payments' ? 'active':''" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-tab-pane" type="button" role="tab" aria-controls="payments-tab-pane" aria-selected="false">Payments</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
@@ -50,15 +50,19 @@
                                                                    @override="updateOverride" :result="result"
                                                                    :countries="countries" :provinces="provinces"></StudentEditStudentTab>
                                         </div>
-                                        <div class="tab-pane fade" :class="activeTab==='grants' ? 'active show':''" id="grants-tab-pane" role="tabpanel" aria-labelledby="grants-tab" tabindex="1">
-                                            <StudentEditGrantTab v-if="activeTab==='grants'" :result="result" :schools="schools"
+                                        <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :result="result" :schools="schools"
                                                                  :batches="batches" :program_types="program_types"
                                                                  :program_years="program_years" :all_staff="all_staff"
-                                                                 :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditGrantTab>
+                                                                 :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditProgramTab>
                                         </div>
-                                        <div class="tab-pane fade" :class="activeTab==='comments' ? 'active show':''" id="comments-tab-pane" role="tabpanel" aria-labelledby="comments-tab" tabindex="2">
-                                            <StudentEditCommentTab v-if="activeTab==='comments'" :result="result"
-                                                                   :all_staff="all_staff"></StudentEditCommentTab>
+                                        <div class="tab-pane fade" :class="activeTab==='application' ? 'active show':''" id="application-tab-pane" role="tabpanel" aria-labelledby="application-tab" tabindex="2">
+                                            <StudentEditApplicationTab v-if="activeTab==='application'" :result="result"
+                                                                       :all_staff="all_staff"></StudentEditApplicationTab>
+                                        </div>
+                                        <div class="tab-pane fade" :class="activeTab==='comments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
+                                            <StudentEditPaymentTab v-if="activeTab==='comments'" :result="result"
+                                                                       :all_staff="all_staff"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
@@ -222,12 +226,13 @@
 </template>
 <script>
 
-import BreezeAuthenticatedLayout from '@/Layouts/Yeaf/Authenticated.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/Twp/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import StudentSearchBox from '@/Components/Yeaf/StudentSearch.vue';
-import StudentEditStudentTab from "@/Components/Yeaf/StudentEditStudentTab.vue";
-import StudentEditGrantTab from "@/Components/Yeaf/StudentEditGrantTab.vue";
-import StudentEditCommentTab from "@/Components/Yeaf/StudentEditCommentTab.vue";
+import StudentSearchBox from '@/Components/Twp/StudentSearch.vue';
+import StudentEditStudentTab from "@/Components/Twp/StudentEditStudentTab.vue";
+import StudentEditProgramTab from "@/Components/Twp/StudentEditProgramTab.vue";
+import StudentEditApplicationTab from "@/Components/Twp/StudentEditApplicationTab.vue";
+import StudentEditPaymentTab from "@/Components/Twp/StudentEditPaymentTab.vue";
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
@@ -237,8 +242,9 @@ export default {
     name: 'StudentEdit',
     components: {
         StudentEditStudentTab,
-        StudentEditGrantTab,
-        StudentEditCommentTab,
+        StudentEditApplicationTab,
+        StudentEditProgramTab,
+        StudentEditPaymentTab,
         BreezeAuthenticatedLayout, StudentSearchBox, Head, BreezeInput, BreezeLabel, Link, BreezeSelect, useForm, FormSubmitAlert
     },
     props: {

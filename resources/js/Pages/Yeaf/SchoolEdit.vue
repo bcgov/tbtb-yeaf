@@ -109,7 +109,7 @@
 <script>
 import {computed} from "vue";
 
-import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/Yeaf/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import SchoolSearchBox from '@/Components/Yeaf/SchoolSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
