@@ -93,14 +93,17 @@ class MaintenanceController extends Controller
      */
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::YEAF_ADMIN) && Auth::user()->disabled === false) {
             $user->tele = $request->tele;
             $user->access_type = $request->access_type;
             $user->disabled = $request->disabled;
             $user->save();
 
             //reset roles
-            $user->roles()->detach();
+            $roles = Role::whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER])->get();
+            foreach ($roles as $role){
+                $user->roles()->detach($role);
+            }
 
             //add user role
             $role = Role::where('name', Role::YEAF_USER)->first();
@@ -139,7 +142,7 @@ class MaintenanceController extends Controller
      */
     public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::YEAF_ADMIN) && Auth::user()->disabled === false) {
             $ineligible->code_id = $request->code_id;
             $ineligible->description = $request->description;
             $ineligible->active_flag = $request->active_flag;
@@ -186,7 +189,7 @@ class MaintenanceController extends Controller
      */
     public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::YEAF_ADMIN) && Auth::user()->disabled === false) {
             ProgramYear::where('id', $programYear->id)->update($request->validated());
         }
 
@@ -236,7 +239,7 @@ class MaintenanceController extends Controller
      */
     public function batchEdit(BatchEditRequest $request, Batch $batch): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::YEAF_ADMIN) && Auth::user()->disabled === false) {
             Batch::where('id', $batch->id)->update($request->validated());
         }
 
@@ -281,7 +284,7 @@ class MaintenanceController extends Controller
      */
     public function ministryUpdate(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::YEAF_ADMIN) && Auth::user()->disabled === false) {
         }
 
         return Redirect::route('maintenance.ministry.show');

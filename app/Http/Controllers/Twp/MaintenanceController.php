@@ -50,7 +50,7 @@ class MaintenanceController extends Controller
      */
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
-        if (Auth::user()->access_type === 'A' && Auth::user()->disabled === false) {
+        if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
             $user->tele = $request->tele;
             $user->access_type = $request->access_type;
             $user->disabled = $request->disabled;
@@ -58,7 +58,9 @@ class MaintenanceController extends Controller
 
             //reset roles
             $roles = Role::whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER])->get();
-            $user->roles()->detach();
+            foreach ($roles as $role){
+                $user->roles()->detach($role);
+            }
 
             //add user role
             $role = Role::where('name', Role::TWP_USER)->first();
