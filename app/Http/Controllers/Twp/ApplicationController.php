@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Twp;
 
+use App\Http\Requests\Twp\ApplicationEditRequest;
 use App\Models\Twp\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ApplicationController extends Controller
 {
@@ -41,10 +43,10 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Application  $applicationTwp
+     * @param  \App\Models\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function show(Application $applicationTwp)
+    public function show(Application $application)
     {
         //
     }
@@ -52,10 +54,10 @@ class ApplicationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Application  $applicationTwp
+     * @param  \App\Models\Twp\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function edit(Application $applicationTwp)
+    public function edit(Application $application)
     {
         //
     }
@@ -63,22 +65,25 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Application  $applicationTwp
-     * @return \Illuminate\Http\Response
+     * @param  ApplicationEditRequest  $request
+     * @param  \App\Models\Twp\Application  $application
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Application $applicationTwp)
+    public function update(ApplicationEditRequest $request, Application $application)
     {
-        //
+        Application::where('id', $application->id)->update($request->validated());
+        $application = Application::find($application->id);
+
+        return Redirect::route('twp.students.show', [$application->twp_student_id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Application  $applicationTwp
+     * @param  \App\Models\Application  $application
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Application $applicationTwp)
+    public function destroy(Application $application)
     {
         //
     }

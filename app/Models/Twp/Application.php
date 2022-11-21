@@ -9,4 +9,12 @@ class Application extends Model
 {
     use HasFactory;
     public $table = 'application_twps';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['twp_student_id', 'received_date', 'application_status', 'twp_status', 'denial_reason', 'exception_comments'];
+
 }

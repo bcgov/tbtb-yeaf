@@ -46,23 +46,16 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='student' ? 'active show':''" id="student-tab-pane" role="tabpanel" aria-labelledby="student-tab" tabindex="0">
-                                            <StudentEditStudentTab v-if="activeTab==='student'" @investigate="updateTabs"
-                                                                   @override="updateOverride" :result="result"
-                                                                   :countries="countries" :provinces="provinces"></StudentEditStudentTab>
+                                            <StudentEditStudentTab v-if="activeTab==='student'" :result="result"></StudentEditStudentTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :result="result" :schools="schools"
-                                                                 :batches="batches" :program_types="program_types"
-                                                                 :program_years="program_years" :all_staff="all_staff"
-                                                                 :active_staff="active_staff" :ineligibles="ineligibles"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :result="result.program"></StudentEditProgramTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='application' ? 'active show':''" id="application-tab-pane" role="tabpanel" aria-labelledby="application-tab" tabindex="2">
-                                            <StudentEditApplicationTab v-if="activeTab==='application'" :result="result"
-                                                                       :all_staff="all_staff"></StudentEditApplicationTab>
+                                            <StudentEditApplicationTab v-if="activeTab==='application'" :result="result.application"></StudentEditApplicationTab>
                                         </div>
-                                        <div class="tab-pane fade" :class="activeTab==='comments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
-                                            <StudentEditPaymentTab v-if="activeTab==='comments'" :result="result"
-                                                                       :all_staff="all_staff"></StudentEditPaymentTab>
+                                        <div class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :result="result.payments"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 

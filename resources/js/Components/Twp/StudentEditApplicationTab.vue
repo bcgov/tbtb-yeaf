@@ -10,40 +10,36 @@ tr {
 <template>
     <form v-if="editForm != null" @submit.prevent="updateStudent">
         <div class="row g-3">
-
             <div class="col-md-4">
-                <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
-                <BreezeInput type="text" class="form-control" id="inputLastName" v-model="editForm.last_name" />
+                <BreezeLabel for="inputReceivedDate" class="form-label" value="Received Date" />
+                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputReceivedDate" v-model="editForm.received_date" />
             </div>
             <div class="col-md-4">
-                <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
-                <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="editForm.first_name" />
+                <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
+                <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="editForm.application_status">
+                    <option value="APPROVED">Approved</option>
+                    <option value="DENIED">Denied</option>
+                    <option value="IN PROGRESS">In Progress</option>
+                    <option value="APPROVED ON APPEAL">Approved on Appeal</option>
+                    <option value="WITHDRAWN">Withdrawn</option>
+                </BreezeSelect>
             </div>
-
-            <div class="col-md-3">
-                <BreezeLabel for="inputEmail" class="form-label" value="Email" />
-                <BreezeInput type="email" class="form-control" id="inputEmail" v-model="editForm.email" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="editForm.birth_date" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputGender" class="form-label" value="Gender" />
-                <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
-                    <option></option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
+            <div class="col-md-4">
+                <BreezeLabel for="inputTwpStatus" class="form-label" value="TWP Status" />
+                <BreezeSelect class="form-select" id="inputTwpStatus" v-model="editForm.twp_status">
+                    <option value="Inactive">Inactive</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Credential Completed">Credential Completed</option>
                 </BreezeSelect>
             </div>
 
-            <div class="col-md-6">
-                <BreezeLabel for="inputInstStudentNumber" class="form-label" value="Institution Student #" />
-                <BreezeInput type="text" class="form-control" id="inputInstStudentNumber" v-model="editForm.institution_student_number" />
+            <div class="col-md-12">
+                <BreezeLabel for="inputDenialReason" class="form-label" value="Denial Reason" />
+                <BreezeInput type="text" class="form-control" id="inputDenialReason" v-model="editForm.denial_reason" />
             </div>
-            <div class="col-md-6">
-                <BreezeLabel for="inputPend" class="form-label" value="PEN" />
-                <BreezeInput type="text" class="form-control" id="inputPend" v-model="editForm.pen" />
+            <div class="col-md-12">
+                <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comments" />
+                <BreezeInput type="text" class="form-control" id="inputExceptionComments" v-model="editForm.exception_comments" />
             </div>
 
             <div v-if="editForm.errors != undefined" class="row">
@@ -59,12 +55,12 @@ tr {
 
         </div>
         <div class="card-footer mt-3">
-            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Student</button>
+            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
             <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
         </div>
 
         <FormSubmitAlert :form-state="editForm.formState"
-                         :success-msg="'Student record was updated successfully.'"></FormSubmitAlert>
+                         :success-msg="'Application record was updated successfully.'"></FormSubmitAlert>
 
     </form>
 
@@ -99,18 +95,16 @@ export default {
             this.editForm = useForm({
 
                 id: this.editForm.id,
-                last_name: this.editForm.last_name,
-                first_name: this.editForm.first_name,
-                birth_date: this.editForm.birth_date,
-                email: this.editForm.email,
-                gender: this.editForm.gender,
-                pen: this.editForm.pen,
-                pd: this.editForm.pd,
-                institution_student_number: this.editForm.institution_student_number,
+                twp_student_id: this.editForm.twp_student_id,
+                received_date: this.editForm.received_date,
+                application_status: this.editForm.application_status,
+                twp_status: this.editForm.twp_status,
+                denial_reason: this.editForm.denial_reason,
+                exception_comments: this.exception_comments,
             });
 
             this.editForm.formState = '';
-            this.editForm.put(route('twp.students.update', this.result.id), {
+            this.editForm.put(route('twp.applications.update', this.result.id), {
                 onSuccess: () => {
                     this.editForm.formState = true;
                     this.noChanges = true;

@@ -191,5 +191,7 @@ class UserController extends Controller
         //attach a basic user role
         $role = Role::where('name', Role::YEAF_USER)->first();
         $user->roles()->attach($role);
+        $role = Role::where('name', Role::TWP_USER)->first();
+        $user->roles()->attach($role);
     }
 }
