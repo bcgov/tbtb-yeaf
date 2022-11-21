@@ -22,42 +22,74 @@ Route::get('/', function () {
 Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
 Route::get('/app-login', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
 
-Route::middleware(['auth', 'active'])->group(function () {
-    Route::resource('students', App\Http\Controllers\StudentController::class);
-    Route::resource('institutions', App\Http\Controllers\InstitutionController::class);
-    Route::resource('grants', App\Http\Controllers\GrantController::class);
-    Route::resource('comments', App\Http\Controllers\CommentController::class);
-    Route::post('/grants/evaluate/{grant}', [App\Http\Controllers\GrantController::class, 'evaluateApp'])->name('grants.evaluate');
-    Route::get('/grants/validate-letter/{grant}', [App\Http\Controllers\GrantController::class, 'validateLetter'])->name('grants.validate-letter');
-    Route::get('/grants/export-letter/{grant}/{docName?}', [App\Http\Controllers\GrantController::class, 'exportLetter'])->name('grants.export-letter');
+Route::middleware(['auth'])->get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+
+Route::group(
+    [
+        'middleware' => ['auth', 'twp_active'],
+        'prefix' => 'twp',
+        'as' => 'twp.'
+    ], function () {
+    Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
 
     //authenticated admin routes
-    Route::group(['middleware' => ['admin']], function () {
-        Route::name('maintenance.')->group(function () {
-            Route::get('/maintenance/staff', [App\Http\Controllers\MaintenanceController::class, 'staffList'])->name('staff.list');
-            Route::get('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffShow'])->name('staff.show');
-            Route::post('/maintenance/staff/{user}', [App\Http\Controllers\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+    Route::group(
+        [
+            'prefix' => 'maintenance',
+            'as' => 'maintenance.'
+        ], function () {
+        Route::get('/staff', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffList'])->name('staff.list');
+        Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
+        Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+    });
+});
 
-            Route::get('/maintenance/ineligibles', [App\Http\Controllers\MaintenanceController::class, 'ineligiblesList'])->name('ineligibles.list');
-            Route::post('/maintenance/ineligibles', [App\Http\Controllers\MaintenanceController::class, 'ineligibleStore'])->name('ineligible.store');
-            Route::post('/maintenance/ineligibles/{ineligible}', [App\Http\Controllers\MaintenanceController::class, 'ineligibleEdit'])->name('ineligible.edit');
+Route::middleware(['auth', 'yeaf_active'])->group(function () {
+    Route::resource('students', App\Http\Controllers\Yeaf\StudentController::class);
+    Route::resource('institutions', App\Http\Controllers\Yeaf\InstitutionController::class);
+    Route::resource('comments', App\Http\Controllers\Yeaf\CommentController::class);
 
-            Route::get('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearsList'])->name('program-years.list');
-            Route::post('/maintenance/program-years', [App\Http\Controllers\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
-            Route::post('/maintenance/program-years/{programYear}', [App\Http\Controllers\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
+    Route::resource('grants', App\Http\Controllers\Yeaf\GrantController::class);
+    Route::group(
+        [
+            'prefix' => 'grants',
+            'as' => 'grants.'
+        ], function () {
+        Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
+        Route::get('/validate-letter/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'validateLetter'])->name('validate-letter');
+        Route::get('/export-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportLetter'])->name('export-letter');
+    });
+
+    //authenticated admin routes
+    Route::group(
+        [
+            'prefix' => 'maintenance',
+            'middleware' => 'yeaf_admin',
+            'as' => 'maintenance.'
+        ], function () {
+            Route::get('/staff', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'staffList'])->name('staff.list');
+            Route::get('/staff/{user}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'staffShow'])->name('staff.show');
+            Route::post('/staff/{user}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+
+            Route::get('/ineligibles', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'ineligiblesList'])->name('ineligibles.list');
+            Route::post('/ineligibles', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'ineligibleStore'])->name('ineligible.store');
+            Route::post('/ineligibles/{ineligible}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'ineligibleEdit'])->name('ineligible.edit');
+
+            Route::get('/program-years', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'programYearsList'])->name('program-years.list');
+            Route::post('/program-years', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
+            Route::post('/program-years/{programYear}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
 
 
-            Route::get('/maintenance/batches', [App\Http\Controllers\MaintenanceController::class, 'batchesList'])->name('batches.list');
-            Route::post('/maintenance/batches', [App\Http\Controllers\MaintenanceController::class, 'batchStore'])->name('batches.store');
-            Route::post('/maintenance/batches/{batch}', [App\Http\Controllers\MaintenanceController::class, 'batchEdit'])->name('batches.edit');
+            Route::get('/batches', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchesList'])->name('batches.list');
+            Route::post('/batches', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchStore'])->name('batches.store');
+            Route::post('/batches/{batch}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchEdit'])->name('batches.edit');
 
-            Route::get('/maintenance/ministry', [App\Http\Controllers\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
-            Route::post('/maintenance/ministry/{admin}', [App\Http\Controllers\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');
+            Route::get('/ministry', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'ministryShow'])->name('ministry.show');
+            Route::post('/ministry/{admin}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'ministryUpdate'])->name('ministry.update');
 
-            Route::get('/maintenance/reports/{type?}', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+            Route::get('/reports/{type?}', [App\Http\Controllers\Yeaf\ReportController::class, 'index'])->name('reports.index');
 
-            Route::get('/maintenance/letters', [App\Http\Controllers\MaintenanceController::class, 'letters'])->name('letters.index');
-            Route::get('/maintenance/download-letters/{type}/{extra}', [App\Http\Controllers\MaintenanceController::class, 'downloadLetter'])->name('letters.download');
-        });
+            Route::get('/letters', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'letters'])->name('letters.index');
+            Route::get('/download-letters/{type}/{extra}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'downloadLetter'])->name('letters.download');
     });
 });

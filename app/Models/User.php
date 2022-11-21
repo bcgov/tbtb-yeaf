@@ -17,26 +17,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'user_id',
-        'first_name',
-        'last_name',
-        'tele',
-        'disabled',
-        'access_type',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['user_id', 'first_name', 'last_name', 'tele', 'disabled', 'access_type', 'email', 'password'];
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * The attributes that should be cast.
@@ -46,6 +34,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_user');
+    }
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function hasRole($role)
+    {
+        return $this->roles->contains('name', $role);
+    }
 
     /**
      * Scope a query to only include admin users.
@@ -68,4 +72,5 @@ class User extends Authenticatable
     {
         return $query->where('disabled', '=', false);
     }
+
 }
