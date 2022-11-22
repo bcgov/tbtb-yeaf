@@ -9,6 +9,13 @@ class Student extends Model
 {
     use HasFactory;
     public $table = 'student_twps';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'last_name', 'first_name', 'birth_date', 'email', 'gender', 'pen', 'institution_student_number', ];
 
 
     public function application()

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Twp;
 
+use App\Http\Requests\Twp\StudentStoreRequest;
+use App\Http\Requests\Twp\StudentUpdateRequest;
 use App\Models\Twp\Student;
 use App\Models\User;
 use App\Models\Yeaf\Country;
 use App\Models\Yeaf\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class StudentController extends Controller
@@ -38,12 +41,17 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  StudentStoreRequest  $request
+     * @return \Inertia\Response
      */
-    public function store(Request $request)
+    public function store(StudentStoreRequest $request)
     {
-        //
+        $student = Student::create($request->validated());
+        $students = new Student();
+        $students = $this->paginateGrants($students);
+        [$countries, $provinces] = $this->getCountriesProvinces();
+
+        return Inertia::render('Twp/Students', ['status' => true, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
     /**
@@ -79,12 +87,15 @@ class StudentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Student  $studentTwp
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Twp\Student  $student
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Student $studentTwp)
+    public function update(StudentUpdateRequest $request, Student $student)
     {
-        //
+        Student::where('id', $student->id)->update($request->validated());
+        $student = Student::find($student->id);
+
+        return Redirect::route('twp.students.show', [$student->id]);
     }
 
     /**

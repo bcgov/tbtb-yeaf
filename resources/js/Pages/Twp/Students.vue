@@ -66,17 +66,12 @@
                         <h5 class="modal-title" id="newStudentModalLabel">Add New Student</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form data-test="true" v-if="newStudentForm != null" @submit.prevent="newStudent">
+                    <form data-test="true" v-if="newStudentForm != null" @submit.prevent="newStudent" autocomplete="off">
                         <div class="modal-body">
                             <div class="card-body">
 
-
                                 <div class="row g-3">
 
-                                    <div class="col-md-4">
-                                        <BreezeLabel for="inputSin" class="form-label" value="SIN" />
-                                        <BreezeInput type="text" class="form-control" id="inputSin" v-model="newStudentForm.sin" />
-                                    </div>
                                     <div class="col-md-4">
                                         <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
                                         <BreezeInput type="text" class="form-control" id="inputLastName" v-model="newStudentForm.last_name" />
@@ -85,41 +80,11 @@
                                         <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                                         <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="newStudentForm.first_name" />
                                     </div>
-
-                                    <div class="col-md-8">
-                                        <BreezeLabel for="inputAddress" class="form-label" value="Address" />
-                                        <BreezeInput type="text" class="form-control" id="inputAddress" v-model="newStudentForm.address" />
-                                    </div>
                                     <div class="col-md-4">
-                                        <BreezeLabel for="inputCity" class="form-label" value="City" />
-                                        <BreezeInput type="text" class="form-control" id="inputCity" v-model="newStudentForm.city" />
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <BreezeLabel for="inputProvince" class="form-label" value="Prov/State" />
-                                        <BreezeSelect class="form-select" id="inputProvince" v-model="newStudentForm.province">
-                                            <option v-for="(province,j) in provinces" :value="province.province_code">{{ province.province_name }}</option>
-                                        </BreezeSelect>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <BreezeLabel for="inputPostal" class="form-label" value="Postal/Zip" />
-                                        <BreezeInput type="text" class="form-control" id="inputPostal" maxlength="7" v-model="newStudentForm.postal_code" />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <BreezeLabel for="inputCountry" class="form-label" value="Country" />
-                                        <BreezeSelect class="form-select" id="inputCountry" v-model="newStudentForm.country">
-                                            <option v-for="(country,j) in countries" :value="country.country_code">{{ country.country_name }}</option>
-                                        </BreezeSelect>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <BreezeLabel for="inputTele" class="form-label" value="Telephone" />
-                                        <BreezeInput @keyup="formatPhoneNumber" type="text" class="form-control" id="inputTele" maxlength="13" v-model="newStudentForm.tele" />
-                                    </div>
-                                    <div class="col-md-3">
                                         <BreezeLabel for="inputEmail" class="form-label" value="Email" />
                                         <BreezeInput type="email" class="form-control" id="inputEmail" v-model="newStudentForm.email" />
                                     </div>
+
                                     <div class="col-md-3">
                                         <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
                                         <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="newStudentForm.birth_date" />
@@ -127,21 +92,19 @@
                                     <div class="col-md-3">
                                         <BreezeLabel for="inputGender" class="form-label" value="Gender" />
                                         <BreezeSelect class="form-select" id="inputGender" v-model="newStudentForm.gender">
-                                            <option></option>
                                             <option value="M">Male</option>
                                             <option value="F">Female</option>
+                                            <option value="O">Other</option>
                                         </BreezeSelect>
                                     </div>
-
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <BreezeLabel for="inputInstStudentNumber" class="form-label" value="Institution Student #" />
                                         <BreezeInput type="text" class="form-control" id="inputInstStudentNumber" v-model="newStudentForm.institution_student_number" />
                                     </div>
-                                    <div class="col-md-6">
-                                        <BreezeLabel for="inputPend" class="form-label" value="PEN" />
-                                        <BreezeInput type="text" class="form-control" id="inputPend" v-model="newStudentForm.pen" />
+                                    <div class="col-md-3">
+                                        <BreezeLabel for="inputPen" class="form-label" value="PEN" />
+                                        <BreezeInput type="text" class="form-control" id="inputPen" v-model="newStudentForm.pen" />
                                     </div>
-
 
                                     <div v-if="newStudentForm.errors != undefined" class="row">
                                         <div class="col-12">
@@ -152,12 +115,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
-
-
-
 
                             </div>
                         </div>
@@ -201,44 +159,21 @@ export default {
                 formState: true,
                 formSuccessMsg: 'Form was submitted successfully.',
                 formFailMsg: 'There was an error submitting this form.',
-
                 last_name: '',
                 first_name: '',
-                sin: '',
                 birth_date: '',
-                address: '',
-                city: '',
-                province: '',
-                postal_code: '',
-                country: '',
-                tele: '',
                 email: '',
                 gender: '',
                 pen: '',
                 institution_student_number: '',
             },
-
         }
     },
     methods: {
-        countOveraward: function(a, b){
-            let c = a - b;
-            return this.formatMoney(c);
-        },
-        formatMoney: function (a){
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(a);
-        },
-        formatPhoneNumber: function() {
-            let cleaned = ('' + this.newStudentForm.tele).replace(/\D/g, '');
-            let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-            if (match) {
-                this.newStudentForm.tele = '(' + match[1] + ') ' + match[2] + '-' + match[3];
-            }
-        },
         newStudent: function ()
         {
             this.newStudentForm.formState = '';
-            this.newStudentForm.post(route('students.store'), {
+            this.newStudentForm.post(route('twp.students.store'), {
                 onSuccess: (response) => {
                     $("#newStudentModal").modal('hide');
                     this.newStudentForm.reset(this.newStudentFormData);
@@ -253,10 +188,6 @@ export default {
                 preserveScroll: true,
             });
         },
-    },
-    watch: {
-    },
-    computed: {
     },
     mounted() {
         this.newStudentForm = useForm(this.newStudentFormData);

@@ -31,9 +31,9 @@ tr {
             <div class="col-md-3">
                 <BreezeLabel for="inputGender" class="form-label" value="Gender" />
                 <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
-                    <option></option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
+                    <option value="O">Other</option>
                 </BreezeSelect>
             </div>
 
