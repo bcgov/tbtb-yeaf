@@ -48,14 +48,14 @@
                                         <div class="tab-pane fade" :class="activeTab==='student' ? 'active show':''" id="student-tab-pane" role="tabpanel" aria-labelledby="student-tab" tabindex="0">
                                             <StudentEditStudentTab v-if="activeTab==='student'" :result="result"></StudentEditStudentTab>
                                         </div>
-                                        <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :result="result.program"></StudentEditProgramTab>
-                                        </div>
                                         <div class="tab-pane fade" :class="activeTab==='application' ? 'active show':''" id="application-tab-pane" role="tabpanel" aria-labelledby="application-tab" tabindex="2">
-                                            <StudentEditApplicationTab v-if="activeTab==='application'" :result="result.application"></StudentEditApplicationTab>
+                                            <StudentEditApplicationTab v-if="activeTab==='application'" :twp_student_id="result.id" :result="result.application"></StudentEditApplicationTab>
+                                        </div>
+                                        <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :twp_student_id="result.id" :result="result.program"></StudentEditProgramTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :result="result.payments"></StudentEditPaymentTab>
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :twp_student_id="result.id" :result="result.payments"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 

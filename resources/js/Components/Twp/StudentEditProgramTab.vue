@@ -12,9 +12,14 @@ tr {
         <div class="row g-3">
 
             <div class="col-md-4">
-                <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
-                <BreezeInput type="text" class="form-control" id="inputLastName" v-model="editForm.last_name" />
+                <BreezeLabel for="inputInstitutionName" class="form-label" value="Institution Name" />
+                <BreezeInput type="text" class="form-control" id="inputInstitutionName" v-model="editForm.institution_name" />
             </div>
+            <div class="col-md-3">
+                <BreezeLabel for="inputSsd" class="form-label" value="Study Period Start Date" />
+                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputSsd" v-model="editForm.study_period_start_date" />
+            </div>
+
             <div class="col-md-4">
                 <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                 <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="editForm.first_name" />
@@ -25,15 +30,12 @@ tr {
                 <BreezeInput type="email" class="form-control" id="inputEmail" v-model="editForm.email" />
             </div>
             <div class="col-md-3">
-                <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="editForm.birth_date" />
-            </div>
-            <div class="col-md-3">
                 <BreezeLabel for="inputGender" class="form-label" value="Gender" />
                 <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
                     <option></option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
+                    <option value="O">Other</option>
                 </BreezeSelect>
             </div>
 
@@ -83,14 +85,23 @@ export default {
     },
     props: {
         result: Object,
-        now: String,
-        countries: Object,
-        provinces: Object,
+        twp_student_id: String|Number,
     },
     data() {
         return {
             noChanges: true,
-            editForm: null,
+            editForm: useForm({
+                formState: true,
+                formSuccessMsg: 'Form was submitted successfully.',
+                formFailMsg: 'There was an error submitting this form.',
+                id: null,
+                twp_student_id: this.twp_student_id,
+                received_date: '',
+                application_status: '',
+                twp_status: '',
+                denial_reason: '',
+                exception_comments: '',
+            }),
         }
     },
     methods: {

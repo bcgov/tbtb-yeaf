@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\Twp\ApplicationEditRequest;
+use App\Http\Requests\Twp\ApplicationStoreRequest;
 use App\Models\Twp\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -32,12 +33,15 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  ApplicationEditRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ApplicationStoreRequest $request)
     {
-        //
+        $application = Application::create($request->validated());
+//        $application = Application::find($application->id);
+
+        return Redirect::route('twp.students.show', [$application->twp_student_id]);
     }
 
     /**

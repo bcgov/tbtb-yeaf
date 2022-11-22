@@ -55,12 +55,13 @@ tr {
 
         </div>
         <div class="card-footer mt-3">
-            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
+            <button v-if="result==null" type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Create Application</button>
+            <button v-else type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
             <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
         </div>
 
         <FormSubmitAlert :form-state="editForm.formState"
-                         :success-msg="'Application record was updated successfully.'"></FormSubmitAlert>
+                         :success-msg="'Application record was submitted successfully.'"></FormSubmitAlert>
 
     </form>
 
@@ -79,32 +80,29 @@ export default {
     },
     props: {
         result: Object,
-        now: String,
-        countries: Object,
-        provinces: Object,
+        twp_student_id: String|Number,
     },
     data() {
         return {
             noChanges: true,
-            editForm: null,
+            editForm: useForm({
+                formState: true,
+                formSuccessMsg: 'Form was submitted successfully.',
+                formFailMsg: 'There was an error submitting this form.',
+                id: null,
+                twp_student_id: this.twp_student_id,
+                received_date: '',
+                application_status: '',
+                twp_status: '',
+                denial_reason: '',
+                exception_comments: '',
+            }),
         }
     },
     methods: {
         updateStudent: function ()
         {
-            this.editForm = useForm({
-
-                id: this.editForm.id,
-                twp_student_id: this.editForm.twp_student_id,
-                received_date: this.editForm.received_date,
-                application_status: this.editForm.application_status,
-                twp_status: this.editForm.twp_status,
-                denial_reason: this.editForm.denial_reason,
-                exception_comments: this.exception_comments,
-            });
-
-            this.editForm.formState = '';
-            this.editForm.put(route('twp.applications.update', this.result.id), {
+            let options = {
                 onSuccess: () => {
                     this.editForm.formState = true;
                     this.noChanges = true;
@@ -116,7 +114,16 @@ export default {
                 },
                 preserveState: true,
 
-            });
+            };
+            this.editForm.formState = '';
+
+            if(this.result == null){
+                this.editForm.post(route('twp.applications.store'), options);
+            }else{
+                this.editForm.id = this.result.id;
+                this.editForm.put(route('twp.applications.update', this.result.id), options);
+            }
+
         },
 
         back: function()
@@ -125,7 +132,9 @@ export default {
         },
     },
     mounted() {
-        this.editForm = this.result;
+        if(this.result != null){
+            this.editForm = this.result;
+        }
     }
 }
 
