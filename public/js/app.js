@@ -19994,7 +19994,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       noChanges: true,
-      // editForm: null,
       editForm: (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
         formState: true,
         formSuccessMsg: 'Form was submitted successfully.',
@@ -20030,6 +20029,7 @@ __webpack_require__.r(__webpack_exports__);
         this.editForm.post(route('twp.applications.store'), options);
       } else {
         this.editForm.id = this.result.id;
+        this.editForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)(this.editForm);
         this.editForm.put(route('twp.applications.update', this.result.id), options);
       }
     },
@@ -20159,33 +20159,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     result: Object,
-    now: String,
-    countries: Object,
-    provinces: Object
+    twp_student_id: String | Number
   },
   data: function data() {
     return {
       noChanges: true,
-      editForm: null
+      editForm: (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
+        formState: true,
+        formSuccessMsg: 'Form was submitted successfully.',
+        formFailMsg: 'There was an error submitting this form.',
+        id: null,
+        twp_student_id: this.twp_student_id,
+        institution_name: '',
+        study_period_start_date: '',
+        credential: '',
+        program_length: '',
+        program_length_type: '',
+        total_estimated_cost: '',
+        student_status: '',
+        comments: ''
+      })
     };
   },
   methods: {
     updateStudent: function updateStudent() {
       var _this = this;
 
-      this.editForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
-        id: this.editForm.id,
-        last_name: this.editForm.last_name,
-        first_name: this.editForm.first_name,
-        birth_date: this.editForm.birth_date,
-        email: this.editForm.email,
-        gender: this.editForm.gender,
-        pen: this.editForm.pen,
-        pd: this.editForm.pd,
-        institution_student_number: this.editForm.institution_student_number
-      });
-      this.editForm.formState = '';
-      this.editForm.put(route('twp.students.update', this.result.id), {
+      var options = {
         onSuccess: function onSuccess() {
           _this.editForm.formState = true;
           _this.noChanges = true;
@@ -20195,14 +20195,25 @@ __webpack_require__.r(__webpack_exports__);
           _this.editForm.formState = false;
         },
         preserveState: true
-      });
+      };
+      this.editForm.formState = '';
+
+      if (this.result == null) {
+        this.editForm.post(route('twp.programs.store'), options);
+      } else {
+        this.editForm.id = this.result.id;
+        this.editForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)(this.editForm);
+        this.editForm.put(route('twp.programs.update', this.result.id), options);
+      }
     },
     back: function back() {
       window.history.back();
     }
   },
   mounted: function mounted() {
-    this.editForm = this.result;
+    if (this.result != null) {
+      this.editForm = this.result;
+    }
   }
 });
 
@@ -24643,66 +24654,125 @@ var _hoisted_1 = {
   "class": "row g-3"
 };
 var _hoisted_2 = {
-  "class": "col-md-4"
+  "class": "col-md-5"
 };
 var _hoisted_3 = {
-  "class": "col-md-4"
+  "class": "col-md-5"
 };
 var _hoisted_4 = {
-  "class": "col-md-3"
-};
-var _hoisted_5 = {
-  "class": "col-md-3"
-};
-var _hoisted_6 = {
-  "class": "col-md-3"
+  "class": "col-md-2"
 };
 
+var _hoisted_5 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "Attending"
+  }, "Attending", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_6 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "Completed"
+  }, "Completed", -1
+  /* HOISTED */
+  );
+});
+
 var _hoisted_7 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", null, null, -1
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "Hiatus"
+  }, "Hiatus", -1
   /* HOISTED */
   );
 });
 
 var _hoisted_8 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-    value: "M"
-  }, "Male", -1
+    value: "Never Attended"
+  }, "Never Attended", -1
   /* HOISTED */
   );
 });
 
-var _hoisted_9 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
-    value: "F"
-  }, "Female", -1
-  /* HOISTED */
-  );
-});
-
+var _hoisted_9 = {
+  "class": "col-md-3"
+};
 var _hoisted_10 = {
-  "class": "col-md-6"
+  "class": "col-md-3"
 };
 var _hoisted_11 = {
-  "class": "col-md-6"
+  "class": "col-md-3"
 };
-var _hoisted_12 = {
+
+var _hoisted_12 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "day"
+  }, "Day", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "week"
+  }, "Week", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "month"
+  }, "Month", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_15 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "year"
+  }, "Year", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_16 = {
+  "class": "col-md-3"
+};
+var _hoisted_17 = {
+  "class": "input-group"
+};
+
+var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "input-group-text"
+  }, "$", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_19 = {
+  "class": "col-md-12"
+};
+var _hoisted_20 = {
   key: 0,
   "class": "row"
 };
-var _hoisted_13 = {
+var _hoisted_21 = {
   "class": "col-12"
 };
-var _hoisted_14 = {
+var _hoisted_22 = {
   key: 0,
   "class": "alert alert-danger mt-3"
 };
-var _hoisted_15 = {
+var _hoisted_23 = {
   "class": "card-footer mt-3"
 };
-var _hoisted_16 = ["disabled"];
+var _hoisted_24 = ["disabled"];
+var _hoisted_25 = ["disabled"];
 
-var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Back");
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Back");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_BreezeLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("BreezeLabel");
@@ -24717,133 +24787,160 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return $data.editForm != null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
     key: 0,
-    onSubmit: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+    onSubmit: _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.updateStudent && $options.updateStudent.apply($options, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputLastName",
+    "for": "inputInstitutionName",
     "class": "form-label",
-    value: "Last Name"
+    value: "Institution Name"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
     type: "text",
     "class": "form-control",
-    id: "inputLastName",
-    modelValue: $data.editForm.last_name,
+    id: "inputInstitutionName",
+    modelValue: $data.editForm.institution_name,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.editForm.last_name = $event;
+      return $data.editForm.institution_name = $event;
     })
   }, null, 8
   /* PROPS */
   , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputFirstName",
+    "for": "inputCredential",
     "class": "form-label",
-    value: "First Name"
+    value: "Credential"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
     type: "text",
     "class": "form-control",
-    id: "inputFirstName",
-    modelValue: $data.editForm.first_name,
+    id: "inputCredential",
+    modelValue: $data.editForm.credential,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.editForm.first_name = $event;
+      return $data.editForm.credential = $event;
     })
   }, null, 8
   /* PROPS */
   , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputEmail",
+    "for": "inputStudentStatus",
     "class": "form-label",
-    value: "Email"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    type: "email",
-    "class": "form-control",
-    id: "inputEmail",
-    modelValue: $data.editForm.email,
-    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.editForm.email = $event;
-    })
-  }, null, 8
-  /* PROPS */
-  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputBirth",
-    "class": "form-label",
-    value: "Birth Date"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    type: "date",
-    placeholder: "YYYY-MM-DD",
-    "class": "form-control",
-    id: "inputBirth",
-    modelValue: $data.editForm.birth_date,
-    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-      return $data.editForm.birth_date = $event;
-    })
-  }, null, 8
-  /* PROPS */
-  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputGender",
-    "class": "form-label",
-    value: "Gender"
+    value: "Student Status"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeSelect, {
     "class": "form-select",
-    id: "inputGender",
-    modelValue: $data.editForm.gender,
-    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-      return $data.editForm.gender = $event;
+    id: "inputStudentStatus",
+    modelValue: $data.editForm.student_status,
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $data.editForm.student_status = $event;
     })
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_7, _hoisted_8, _hoisted_9];
+      return [_hoisted_5, _hoisted_6, _hoisted_7, _hoisted_8];
     }),
     _: 1
     /* STABLE */
 
   }, 8
   /* PROPS */
-  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputInstStudentNumber",
+  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
+    "for": "inputStudyStartDate",
     "class": "form-label",
-    value: "Institution Student #"
+    value: "Study Start Date"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    type: "text",
+    type: "date",
+    placeholder: "YYYY-MM-DD",
     "class": "form-control",
-    id: "inputInstStudentNumber",
-    modelValue: $data.editForm.institution_student_number,
-    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-      return $data.editForm.institution_student_number = $event;
+    id: "inputStudyStartDate",
+    modelValue: $data.editForm.study_period_start_date,
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.editForm.study_period_start_date = $event;
+    })
+  }, null, 8
+  /* PROPS */
+  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
+    "for": "inputProgramLength",
+    "class": "form-label",
+    value: "Program Length"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
+    type: "number",
+    "class": "form-control",
+    id: "inputCredential",
+    modelValue: $data.editForm.program_length,
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+      return $data.editForm.program_length = $event;
     })
   }, null, 8
   /* PROPS */
   , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "inputPend",
+    "for": "inputLengthType",
     "class": "form-label",
-    value: "PEN"
+    value: "Program Length Type"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeSelect, {
+    "class": "form-select",
+    id: "inputLengthType",
+    modelValue: $data.editForm.program_length_type,
+    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+      return $data.editForm.program_length_type = $event;
+    })
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_12, _hoisted_13, _hoisted_14, _hoisted_15];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["modelValue"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
+    "for": "inputEstimatedCost",
+    "class": "form-label",
+    value: "Estimated Cost"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "number",
+    "class": "form-control",
+    id: "inputEstimatedCost",
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+      return $data.editForm.total_estimated_cost = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editForm.total_estimated_cost]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
+    "for": "inputProgramComments",
+    "class": "form-label",
+    value: "Comments"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
     type: "text",
     "class": "form-control",
-    id: "inputPend",
-    modelValue: $data.editForm.pen,
-    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
-      return $data.editForm.pen = $event;
+    id: "inputProgramComments",
+    modelValue: $data.editForm.comments,
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+      return $data.editForm.comments = $event;
     })
   }, null, 8
   /* PROPS */
-  , ["modelValue"])]), $data.editForm.errors != undefined ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [$data.editForm.hasErrors == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.editForm.errors, function (err) {
+  , ["modelValue"])]), $data.editForm.errors != undefined ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [$data.editForm.hasErrors == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.editForm.errors, function (err) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(err), 1
     /* TEXT */
     );
   }), 256
   /* UNKEYED_FRAGMENT */
-  ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [$props.result == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    key: 0,
     type: "submit",
     "class": "btn mr-2 btn-outline-success",
     disabled: $data.editForm.processing
-  }, "Update Student", 8
+  }, "Create Program", 8
   /* PROPS */
-  , _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+  , _hoisted_24)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    key: 1,
+    type: "submit",
+    "class": "btn mr-2 btn-outline-success",
+    disabled: $data.editForm.processing
+  }, "Update Program", 8
+  /* PROPS */
+  , _hoisted_25)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
     onClick: $options.back,
     "class": "btn btn-outline-primary float-right",
     href: "#"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_17];
+      return [_hoisted_26];
     }),
     _: 1
     /* STABLE */
@@ -24852,7 +24949,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["onClick"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormSubmitAlert, {
     "form-state": $data.editForm.formState,
-    "success-msg": 'Student record was updated successfully.'
+    "success-msg": 'Program record was submitted successfully.'
   }, null, 8
   /* PROPS */
   , ["form-state", "success-msg"])], 32
@@ -35740,7 +35837,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ntr[data-v-2ed299ce] {\r\n    padding-bottom: 7px;\r\n    display: block;\n}\n[type='checkbox'][data-v-2ed299ce]:checked, [type='radio'][data-v-2ed299ce]:checked {\r\n    background-size: initial;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ntr[data-v-2ed299ce] {\n    padding-bottom: 7px;\n    display: block;\n}\n[type='checkbox'][data-v-2ed299ce]:checked, [type='radio'][data-v-2ed299ce]:checked {\n    background-size: initial;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

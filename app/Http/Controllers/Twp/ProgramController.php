@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Twp;
 
+use App\Http\Requests\Twp\ProgramEditRequest;
+use App\Http\Requests\Twp\ProgramStoreRequest;
 use App\Models\Twp\Program;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProgramController extends Controller
 {
@@ -30,12 +33,14 @@ class ProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  ProgramStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProgramStoreRequest $request)
     {
-        //
+        $application = Program::create($request->validated());
+
+        return Redirect::route('twp.students.show', [$application->twp_student_id]);
     }
 
     /**
@@ -63,13 +68,16 @@ class ProgramController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Program  $programTwp
-     * @return \Illuminate\Http\Response
+     * @param  ProgramEditRequest  $request
+     * @param  \App\Models\Twp\Program  $program
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Program $programTwp)
+    public function update(ProgramEditRequest $request, Program $program)
     {
-        //
+        Program::where('id', $program->id)->update($request->validated());
+        $program = Program::find($program->id);
+
+        return Redirect::route('twp.students.show', [$program->twp_student_id]);
     }
 
     /**

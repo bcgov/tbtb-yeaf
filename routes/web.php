@@ -32,6 +32,7 @@ Route::group(
     ], function () {
     Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
     Route::resource('applications', App\Http\Controllers\Twp\ApplicationController::class);
+    Route::resource('programs', App\Http\Controllers\Twp\ProgramController::class);
 
     //authenticated admin routes
     Route::group(

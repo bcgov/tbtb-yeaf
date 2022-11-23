@@ -39,7 +39,6 @@ class ApplicationController extends Controller
     public function store(ApplicationStoreRequest $request)
     {
         $application = Application::create($request->validated());
-//        $application = Application::find($application->id);
 
         return Redirect::route('twp.students.show', [$application->twp_student_id]);
     }

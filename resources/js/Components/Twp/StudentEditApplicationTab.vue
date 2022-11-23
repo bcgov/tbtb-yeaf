@@ -121,6 +121,7 @@ export default {
                 this.editForm.post(route('twp.applications.store'), options);
             }else{
                 this.editForm.id = this.result.id;
+                this.editForm = useForm(this.editForm);
                 this.editForm.put(route('twp.applications.update', this.result.id), options);
             }
 
