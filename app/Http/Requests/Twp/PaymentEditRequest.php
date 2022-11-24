@@ -4,7 +4,7 @@ namespace App\Http\Requests\Twp;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApplicationEditRequest extends FormRequest
+class PaymentEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class ApplicationEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.*' => 'Application ID field is not valid.',
-            'received_date.*' => 'Application Received Date field is not valid.',
-            'application_status.*' => 'Application Status field is not valid.',
-            'twp_status.*' => 'TWP Status field is not valid.',
+            'id.*' => 'Payment ID field is not valid.',
+            'twp_student_id.*' => 'Student ID field is not valid.',
+            'twp_program_id.*' => 'Program ID field is not valid.',
+            'payment_date.*' => 'Payment Date field is not valid.',
+            'payment_amount.*' => 'Payment Amount field is not valid.',
         ];
     }
 
@@ -41,11 +42,9 @@ class ApplicationEditRequest extends FormRequest
         return [
             'id' => 'required',
             'twp_student_id' => 'required',
-            'received_date' => 'present|date_format:Y-m-d|nullable',
-            'application_status' => 'present|in:APPROVED,DENIED,IN PROGRESS,APPROVED ON APPEAL,WITHDRAWN|nullable',
-            'twp_status' => 'present|in:Inactive,In Progress,Credential Completed|nullable',
-            'denial_reason' => 'nullable',
-            'exception_comments' => 'nullable',
+            'twp_program_id' => 'nullable',
+            'payment_date' => 'present|date_format:Y-m-d|nullable',
+            'payment_amount' => 'present|numeric|nullable',
         ];
     }
 

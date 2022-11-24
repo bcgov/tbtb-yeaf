@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Twp;
 use App\Http\Requests\Twp\ApplicationEditRequest;
 use App\Http\Requests\Twp\ApplicationStoreRequest;
 use App\Models\Twp\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class ApplicationController extends Controller

@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Yeaf;
 use App\Http\Requests\CommentStoreRequest;
 use App\Models\Yeaf\Comment;
 use App\Models\Yeaf\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class CommentController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      *
@@ -24,5 +22,4 @@ class CommentController extends Controller
 
         return Redirect::route('students.show', [$student->id]);
     }
-
 }

@@ -54,6 +54,5 @@ class BatchEditRequest extends FormRequest
         if (isset($this->batch_number)) {
             $this->merge(['batch_number' => preg_replace('/\D/', '', $this->batch_number)]);
         }
-
     }
 }

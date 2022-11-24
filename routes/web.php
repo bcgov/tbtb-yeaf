@@ -28,23 +28,24 @@ Route::group(
     [
         'middleware' => ['auth', 'twp_active'],
         'prefix' => 'twp',
-        'as' => 'twp.'
+        'as' => 'twp.',
     ], function () {
-    Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
-    Route::resource('applications', App\Http\Controllers\Twp\ApplicationController::class);
-    Route::resource('programs', App\Http\Controllers\Twp\ProgramController::class);
+        Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
+        Route::resource('applications', App\Http\Controllers\Twp\ApplicationController::class);
+        Route::resource('programs', App\Http\Controllers\Twp\ProgramController::class);
+        Route::resource('payments', App\Http\Controllers\Twp\PaymentController::class);
 
-    //authenticated admin routes
-    Route::group(
-        [
-            'prefix' => 'maintenance',
-            'as' => 'maintenance.'
-        ], function () {
-        Route::get('/staff', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffList'])->name('staff.list');
-        Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
-        Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+        //authenticated admin routes
+        Route::group(
+            [
+                'prefix' => 'maintenance',
+                'as' => 'maintenance.',
+            ], function () {
+                Route::get('/staff', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffList'])->name('staff.list');
+                Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
+                Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
+            });
     });
-});
 
 Route::middleware(['auth', 'yeaf_active'])->group(function () {
     Route::resource('students', App\Http\Controllers\Yeaf\StudentController::class);
@@ -55,19 +56,19 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
     Route::group(
         [
             'prefix' => 'grants',
-            'as' => 'grants.'
+            'as' => 'grants.',
         ], function () {
-        Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
-        Route::get('/validate-letter/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'validateLetter'])->name('validate-letter');
-        Route::get('/export-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportLetter'])->name('export-letter');
-    });
+            Route::resource('students', App\Http\Controllers\Twp\StudentController::class);
+            Route::get('/validate-letter/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'validateLetter'])->name('validate-letter');
+            Route::get('/export-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportLetter'])->name('export-letter');
+        });
 
     //authenticated admin routes
     Route::group(
         [
             'prefix' => 'maintenance',
             'middleware' => 'yeaf_admin',
-            'as' => 'maintenance.'
+            'as' => 'maintenance.',
         ], function () {
             Route::get('/staff', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'staffList'])->name('staff.list');
             Route::get('/staff/{user}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'staffShow'])->name('staff.show');
@@ -81,7 +82,6 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
             Route::post('/program-years', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'programYearStore'])->name('program-year.store');
             Route::post('/program-years/{programYear}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'programYearEdit'])->name('program-year.edit');
 
-
             Route::get('/batches', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchesList'])->name('batches.list');
             Route::post('/batches', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchStore'])->name('batches.store');
             Route::post('/batches/{batch}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'batchEdit'])->name('batches.edit');
@@ -93,5 +93,5 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
 
             Route::get('/letters', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'letters'])->name('letters.index');
             Route::get('/download-letters/{type}/{extra}', [App\Http\Controllers\Yeaf\MaintenanceController::class, 'downloadLetter'])->name('letters.download');
-    });
+        });
 });

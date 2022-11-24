@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Yeaf;
 
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
+use App\Models\User;
 use App\Models\Yeaf\Batch;
 use App\Models\Yeaf\Country;
 use App\Models\Yeaf\Ineligible;
@@ -12,7 +13,6 @@ use App\Models\Yeaf\Program;
 use App\Models\Yeaf\ProgramYear;
 use App\Models\Yeaf\Province;
 use App\Models\Yeaf\Student;
-use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 

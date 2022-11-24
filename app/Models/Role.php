@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -15,12 +16,15 @@ class Role extends Model
      */
     protected $fillable = ['name'];
 
-    public const SUPER_ADMIN = "Super Admin";
-    public const YEAF_USER = "YEAF User";
-    public const YEAF_ADMIN = "YEAF Admin";
-    public const TWP_ADMIN = "TWP Admin";
-    public const TWP_USER = "TWP User";
+    public const SUPER_ADMIN = 'Super Admin';
 
+    public const YEAF_USER = 'YEAF User';
+
+    public const YEAF_ADMIN = 'YEAF Admin';
+
+    public const TWP_ADMIN = 'TWP Admin';
+
+    public const TWP_USER = 'TWP User';
 
     /**
      * The roles that belong to the user.

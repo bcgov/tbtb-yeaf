@@ -34,13 +34,13 @@
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='student' ? 'active':''" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button" role="tab" aria-controls="student-tab-pane" aria-selected="true">Student</button>
                                         </li>
-                                        <li @click="switchActiveTab('application')" v-if="grantTabVisible" class="nav-item" role="presentation">
+                                        <li @click="switchActiveTab('application')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='application' ? 'active':''" id="application-tab" data-bs-toggle="tab" data-bs-target="#application-tab-pane" type="button" role="tab" aria-controls="application-tab-pane" aria-selected="false">Application</button>
                                         </li>
                                         <li @click="switchActiveTab('program')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='program' ? 'active':''" id="program-tab" data-bs-toggle="tab" data-bs-target="#program-tab-pane" type="button" role="tab" aria-controls="program-tab-pane" aria-selected="false">Program</button>
                                         </li>
-                                        <li @click="switchActiveTab('payments')" class="nav-item" role="presentation">
+                                        <li v-if="result.program != null" @click="switchActiveTab('payments')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='payments' ? 'active':''" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-tab-pane" type="button" role="tab" aria-controls="payments-tab-pane" aria-selected="false">Payments</button>
                                         </li>
                                     </ul>
@@ -54,7 +54,7 @@
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
                                             <StudentEditProgramTab v-if="activeTab==='program'" :twp_student_id="result.id" :result="result.program"></StudentEditProgramTab>
                                         </div>
-                                        <div class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
+                                        <div v-if="result.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
                                             <StudentEditPaymentTab v-if="activeTab==='payments'" :twp_student_id="result.id" :result="result.payments"></StudentEditPaymentTab>
                                         </div>
                                     </div>
@@ -69,93 +69,37 @@
 
 
 
-            <div class="modal modal-lg fade" id="newGrantModal" tabindex="-1" aria-labelledby="newGrantModalLabel" aria-hidden="true">
+            <div class="modal modal-lg fade" id="newPaymentModal" tabindex="-1" aria-labelledby="newPaymentModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="newGrantModalLabel">Add New Grant</h5>
+                            <h5 class="modal-title" id="newPaymentModalLabel">Add New Payment</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form @submit.prevent="newGrant">
+                        <form @submit.prevent="newPayment">
                             <div class="modal-body">
                                 <div class="card-body">
                                     <div class="row g-3">
 
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newInstitution" class="form-label" value="Institution *" />
-<!--                                            <BreezeSelect class="form-select" id="newInstitution" v-model="newGrantForm.institution_id">-->
-<!--                                                <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>-->
-<!--                                            </BreezeSelect>-->
-
-                                            <BreezeInput @focusout="resetFilter" @keyup="filterActiveSchools($event)" type="text" class="form-control" id="newInstitution" v-model="newGrantForm.school.name" />
-                                            <input type="hidden" v-model="newGrantForm.institution_id" />
-                                            <ul class="dropdown-menu" :class="newGrantForm.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start">
-                                                <template v-for="(school,j) in schoolsList"><li @click="assignSchool(school)" :value="school.institution_id" class="dropdown-item">{{ school.name }}</li></template>
-                                            </ul>
+                                        <div class="col-md-6">
+                                            <BreezeLabel for="newPaymentDate" class="form-label" value="Payment Amount" />
+                                            <BreezeInput type="date" class="form-control" id="newPaymentDate" v-model="newPaymentForm.payment_date" />
                                         </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newProgramName" class="form-label" value="Program" />
-                                            <BreezeInput type="text" class="form-control" id="newProgramName" v-model="newGrantForm.program_name" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newDateReceived" class="form-label" value="Date Received *" />
-                                            <BreezeInput type="date" class="form-control" id="newDateReceived" v-model="newGrantForm.application_receive_date" />
+                                        <div class="col-md-6">
+                                            <BreezeLabel for="newPaymentAmount" class="form-label" value="Payment Amount" />
+                                            <div class="input-group">
+                                                <div class="input-group-text">$</div>
+                                                <input type="text" class="form-control" id="newPaymentAmount" v-model="newPaymentForm.payment_amount">
+                                            </div>
                                         </div>
 
-                                        <div :class="newGrantForm.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
-                                            <BreezeLabel for="newProgramType" class="form-label" value="Program Type *" />
-                                            <BreezeSelect class="form-select" id="newProgramType" v-model="newGrantForm.program_code">
-                                                <option v-for="(pt,j) in program_types" :value="pt.program_code">{{ pt.program_description }}</option>
-                                            </BreezeSelect>
-                                        </div>
-                                        <div v-if="newGrantForm.program_code === 'I'" class="col-md-3">
-                                            <BreezeLabel for="newProgramOtherDescription" class="form-label" value="Program Other Desc" />
-                                            <BreezeInput type="text" class="form-control" id="newProgramOtherDescription" v-model="newGrantForm.program_other_description" />
-                                        </div>
-                                        <div :class="newGrantForm.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
-                                            <BreezeLabel for="newProgramYear" class="form-label" value="Program Year *" />
-                                            <BreezeSelect class="form-select" id="newProgramYear" v-model="newGrantForm.program_year_id">
-                                                <option value=""></option>
-                                                <option v-for="(py,j) in program_years" :value="py.program_year_id">{{ py.year_start }}/{{ py.year_end }}</option>
-                                            </BreezeSelect>
-                                        </div>
-                                        <div :class="newGrantForm.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
-                                            <BreezeLabel for="newProgramOfficer" class="form-label" value="Program Officer" />
-                                            <BreezeSelect class="form-select" id="newProgramOfficer" v-model="newGrantForm.officer_user_id">
-                                                <option v-for="(officer,j) in all_staff" :value="officer.user_id">{{ officer.first_name }} {{ officer.last_name }}</option>
-                                            </BreezeSelect>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newStartDate" class="form-label" value="Study Start Date *" />
-                                            <BreezeInput type="date" class="form-control" id="newStartDate" v-model="newGrantForm.study_start_date" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newEndDate" class="form-label" value="Study End Date *" />
-                                            <BreezeInput type="date" class="form-control" id="newEndDate" v-model="newGrantForm.study_end_date" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newAge" class="form-label" value="Age" />
-                                            <BreezeInput type="text" class="form-control" id="newAge" v-model="newGrantForm.age" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newApplicationNumber" class="form-label" value="Application #" />
-                                            <BreezeInput type="text" class="form-control" id="newApplicationNumber" v-model="newGrantForm.application_number" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <BreezeLabel for="newApplicationType" class="form-label" value="Application Type" />
-                                            <BreezeSelect class="form-select" id="newApplicationType" v-model="newGrantForm.application_type">
-                                                <option value=""></option>
-                                                <option value="SFAS Extract">SFAS Extract</option>
-                                                <option value="Paper Application">Paper Application</option>
-                                            </BreezeSelect>
-                                        </div>
                                     </div>
 
-                                    <div v-if="newGrantForm.errors != undefined" class="row">
+                                    <div v-if="newPaymentForm.errors != undefined" class="row">
                                         <div class="col-12">
-                                            <div v-if="newGrantForm.hasErrors == true" class="alert alert-danger mt-3">
+                                            <div v-if="newPaymentForm.hasErrors == true" class="alert alert-danger mt-3">
                                                 <ul>
-                                                    <li v-for="err in newGrantForm.errors"><small>{{ err }}</small></li>
+                                                    <li v-for="err in newPaymentForm.errors"><small>{{ err }}</small></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -163,56 +107,12 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn mr-2 btn-outline-success" :disabled="newGrantForm.processing">Submit</button>
+                                <button type="submit" class="btn mr-2 btn-outline-success" :disabled="newPaymentForm.processing">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-
-            <div class="modal modal-lg fade" id="newCommentModal" tabindex="-1" aria-labelledby="newCommentModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="newCommentModalLabel">Add New Comment</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form @submit.prevent="newComment">
-                            <div class="modal-body">
-                                <div class="card-body">
-                                    <div class="row g-3">
-
-                                        <div class="col-12">
-                                            <BreezeLabel for="newComment" class="form-label" value="Comment" />
-                                            <textarea class="form-control" id="newComment" v-model="newCommentForm.comment_text" />
-                                        </div>
-
-                                    </div>
-
-                                    <div v-if="newCommentForm.errors != undefined" class="row">
-                                        <div class="col-12">
-                                            <div v-if="newCommentForm.hasErrors == true" class="alert alert-danger mt-3">
-                                                <ul>
-                                                    <li v-for="err in newCommentForm.errors"><small>{{ err }}</small></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn mr-2 btn-outline-success" :disabled="newCommentForm.processing">Submit</button>
-                            </div>
-
-                            <FormSubmitAlert :form-state="newCommentForm.formState || newGrantForm.formState"
-                                             :success-msg="'Form was submitted successfully.'"
-                                             :fail-msg="'There was an error submitting this form.'"></FormSubmitAlert>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-
 
         </BreezeAuthenticatedLayout>
 
@@ -246,8 +146,6 @@ export default {
         countries: Object,
         provinces: Object,
 
-        program_types: Object,
-        program_years: Object,
         schools: Object,
         batches: Object,
         ineligibles: Object,
@@ -256,95 +154,34 @@ export default {
     },
     data() {
         return {
-            schoolsList: [],
-            grantTabVisible: true,
-            overawardFlagVisible: false,
             editForm: null,
             activeTab: 'student',
-            newGrantForm: useForm({
-                student_id: '',
-                institution_id: '',
-                program_name: '',
-                application_receive_date: '',
-                program_code: '',
-                program_other_description: '',
-                program_year_id: '',
-                officer_user_id: '',
-                study_start_date: '',
-                study_end_date: '',
-                age: '',
-                application_number: '',
-                application_type: '',
-                school: {name:''},
-                schoolsListHidden: true,
+            newPaymentForm: useForm({
+                twp_student_id: '',
+                twp_program_id: null,
+                payment_date: '',
+                payment_amount: '',
             }),
-            newCommentForm: useForm({comment_text: '', student_id: ''}),
         }
     },
     methods: {
-        resetFilter: function (){
-            //if schoolsListHidden is true then the schools list is still shown
-            //and the input field lost focus because the user clicked something
-            //other than the list ot assignSchool
-            let vm = this;
-            setTimeout(function (){
-                if(vm.newGrantForm.schoolsListHidden === false){
-                    vm.newGrantForm.school = {name:''};
-                    vm.newGrantForm.schoolsListHidden = true;
-                    vm.schoolsList = vm.schools;
-                }
-            }, 300);
-        },
-        assignSchool: function (school) {
-            this.newGrantForm.institution_id = school.institution_id;
-            this.newGrantForm.school = school;
-            this.newGrantForm.schoolsListHidden = true;
-            this.schoolsList = this.schools;
-        },
-        filterActiveSchools: function (e) {
-            this.newGrantForm.schoolsListHidden = false;
-            let search = e.target.value.toLowerCase();
-            if(search.length > 2){
-                this.schoolsList = this.schools.filter(obj => {
-                    if(obj.name == null)
-                        return false;
-                    return obj.name.toLowerCase().indexOf(search) >= 0;
-                } );
-            }
-        },
+
+
+
         switchActiveTab: function (tab)
         {
             this.activeTab = tab;
         },
-        updateTabs: function(){
-            this.grantTabVisible = !this.grantTabVisible;
-        },
-        syncVisible: function(){
-            if(this.editForm != null && this.editForm.investigate === true){
-                this.grantTabVisible = false;
-            }
 
-            //hide overawrd flag label if override is set. Only show it if override is false and amount and deducted are not the same
-            if(this.editForm.overaward_flag == true){
-                this.overawardFlagVisible = false;
-            }else if(this.editForm.overaward_amount != this.editForm.overaward_deducted_amount){
-                this.overawardFlagVisible = true;
-            }
-        },
-        updateOverride: function(){
-            this.editForm.overaward_flag = !this.editForm.overaward_flag;
-            this.syncVisible();
-        },
-        newGrant: function ()
+        newPayment: function ()
         {
-            this.newGrantForm.formState = '';
-            this.newGrantForm.post(route('grants.store'), {
+            this.newPaymentForm.formState = '';
+            this.newPaymentForm.post(route('twp.payments.store'), {
                 onSuccess: () => {
-                    $("#newGrantModal").modal('hide');
-                    this.newGrantForm.reset();
-                    this.newGrantForm.student_id = this.result.student_id;
-                    this.activeTab = 'student';
-                    this.newGrantForm.formState = true;
+                    $("#newPaymentModal").modal('hide');
+                    this.newPaymentForm.reset();
+                    this.activeTab = 'payments';
+                    this.newPaymentForm.formState = true;
                 },
                 onFailure: () => {
                 },
@@ -374,12 +211,23 @@ export default {
             });
         },
     },
+    watch: {
+        result: {
+            handler(newValue, oldValue) {
+                if(this.result.program != null){
+                    this.newPaymentForm.twp_program_id = this.result.program.id;
+                }
+            },
+            deep: true
+        }
+
+    },
     mounted() {
         this.editForm = this.result;
-        this.syncVisible();
-        this.newGrantForm.student_id = this.result.student_id;
-        this.newCommentForm.student_id = this.result.student_id;
-        this.schoolsList = this.schools;
+        this.newPaymentForm.twp_student_id = this.result.id;
+        if(this.result.program != null){
+            this.newPaymentForm.twp_program_id = this.result.program.id;
+        }
     }
 }
 </script>

@@ -72,5 +72,4 @@ class User extends Authenticatable
     {
         return $query->where('disabled', '=', false);
     }
-
 }

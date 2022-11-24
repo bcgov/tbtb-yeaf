@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Twp;
 use App\Http\Requests\Twp\ProgramEditRequest;
 use App\Http\Requests\Twp\ProgramStoreRequest;
 use App\Models\Twp\Program;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class ProgramController extends Controller
@@ -34,35 +33,13 @@ class ProgramController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  ProgramStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(ProgramStoreRequest $request)
     {
         $application = Program::create($request->validated());
 
         return Redirect::route('twp.students.show', [$application->twp_student_id]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Program  $programTwp
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Program $programTwp)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Program  $programTwp
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Program $programTwp)
-    {
-        //
     }
 
     /**

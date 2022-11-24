@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use PDF;
 
 class MaintenanceController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +20,9 @@ class MaintenanceController extends Controller
      */
     public function staffList(Request $request): \Inertia\Response
     {
-        $staff = User::whereHas('roles', function($q)
-        { return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER]); }
+        $staff = User::whereHas('roles', function ($q) {
+        return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER]);
+        }
         )->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
@@ -58,7 +57,7 @@ class MaintenanceController extends Controller
 
             //reset roles
             $roles = Role::whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER])->get();
-            foreach ($roles as $role){
+            foreach ($roles as $role) {
                 $user->roles()->detach($role);
             }
 
@@ -67,8 +66,7 @@ class MaintenanceController extends Controller
             $user->roles()->attach($role);
 
             //if admin add admin role
-            if($request->access_type == 'A')
-            {
+            if ($request->access_type == 'A') {
                 $role = Role::where('name', Role::TWP_ADMIN)->first();
                 $user->roles()->attach($role);
             }
@@ -76,7 +74,6 @@ class MaintenanceController extends Controller
 
         return Redirect::route('twp.maintenance.staff.list');
     }
-
 
     /**
      * Display a listing of the resource.

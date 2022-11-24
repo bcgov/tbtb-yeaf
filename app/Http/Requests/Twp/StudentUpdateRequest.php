@@ -65,6 +65,5 @@ class StudentUpdateRequest extends FormRequest
         if (isset($this->last_name)) {
             $this->merge(['last_name' => Str::title($this->last_name)]);
         }
-
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Twp;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class ProgramEditRequest extends FormRequest
 {
@@ -59,6 +58,5 @@ class ProgramEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-
     }
 }

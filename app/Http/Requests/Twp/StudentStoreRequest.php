@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Twp;
 
-use App\Models\Twp\Student;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -72,6 +71,5 @@ class StudentStoreRequest extends FormRequest
         if (isset($this->last_name)) {
             $this->merge(['last_name' => Str::title($this->last_name)]);
         }
-
     }
 }

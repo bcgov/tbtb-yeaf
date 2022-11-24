@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
     use HasFactory;
+
     public $table = 'application_twps';
 
     /**
@@ -16,5 +17,4 @@ class Application extends Model
      * @var array<int, string>
      */
     protected $fillable = ['twp_student_id', 'received_date', 'application_status', 'twp_status', 'denial_reason', 'exception_comments'];
-
 }

@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Twp;
 use App\Http\Requests\Twp\StudentStoreRequest;
 use App\Http\Requests\Twp\StudentUpdateRequest;
 use App\Models\Twp\Student;
-use App\Models\User;
 use App\Models\Yeaf\Country;
 use App\Models\Yeaf\Province;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -66,11 +64,9 @@ class StudentController extends Controller
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
-
         return Inertia::render('Twp/StudentEdit', ['status' => true,
             'result' => $student, 'countries' => $countries, 'provinces' => $provinces, ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -108,7 +104,6 @@ class StudentController extends Controller
     {
         //
     }
-
 
     private function paginateGrants($grants)
     {

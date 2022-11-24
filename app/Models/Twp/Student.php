@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
+
     public $table = 'student_twps';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,11 +19,11 @@ class Student extends Model
     protected $fillable = [
         'last_name', 'first_name', 'birth_date', 'email', 'gender', 'pen', 'institution_student_number', ];
 
-
     public function application()
     {
         return $this->hasOne('App\Models\Twp\Application', 'twp_student_id', 'id');
     }
+
     public function program()
     {
         return $this->hasOne('App\Models\Twp\Program', 'twp_student_id', 'id');
@@ -31,5 +33,4 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Twp\Payment', 'twp_student_id', 'id');
     }
-
 }

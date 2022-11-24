@@ -3,7 +3,6 @@
 namespace App\Http\Middleware\Yeaf;
 
 use App\Models\Role;
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,13 +34,14 @@ class IsActive
         }
 
         //active user must have at least a YEAF User role
-        if ( !$user->hasRole(Role::YEAF_USER) ) {
+        if (! $user->hasRole(Role::YEAF_USER)) {
             return Inertia::render('Home', [
                 'loginAttempt' => true,
                 'hasAccess' => false,
                 'status' => 'Please contact YEAF Admin to grant you access.',
             ]);
         }
+
         return $next($request);
     }
 }

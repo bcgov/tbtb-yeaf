@@ -27,10 +27,9 @@ class IsAdmin
         }
 
         $user = Auth::user();
-        if (!$user->hasRole(Role::SUPER_ADMIN) && !$user->hasRole(Role::TWP_ADMIN) ) {
+        if (! $user->hasRole(Role::SUPER_ADMIN) && ! $user->hasRole(Role::TWP_ADMIN)) {
             return redirect(RouteServiceProvider::HOME);
         }
-
 
         return $next($request);
     }

@@ -8,65 +8,61 @@ tr {
 }
 </style>
 <template>
-    <form v-if="editForm != null" @submit.prevent="updateStudent">
-        <div class="row g-3">
+    <p v-if="paymentForms.length === 0" class="text-center leading-5">No Payments.</p>
+    <div v-else>
+        <div class="accordion" id="accordionGrant">
+            <div v-for="(payment,i) in paymentForms" class="accordion-item">
+                <h2 class="accordion-header" :id="'heading'+i">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+i" :aria-expanded="i===0" :aria-controls="'collapse'+i">
+                        Payment #{{ i+1 }}
+                    </button>
+                </h2>
+                <div :id="'collapse'+i" class="accordion-collapse collapse" :class="i===0?'show':''" :aria-labelledby="'heading'+i" data-bs-parent="#accordionGrant">
+                    <div class="accordion-body">
+                        <form @submit.prevent="updatePayment(i)">
+                            <div class="row g-3">
 
-            <div class="col-md-4">
-                <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
-                <BreezeInput type="text" class="form-control" id="inputLastName" v-model="editForm.last_name" />
-            </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
-                <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="editForm.first_name" />
-            </div>
+                                <div class="col-md-6">
+                                    <BreezeLabel :for="'inputPaymentDate'+i" class="form-label" value="Payment Date" />
+                                    <BreezeInput type="date" class="form-control" :id="'inputPaymentDate'+i" v-model="payment.payment_date" />
+                                </div>
+                                <div class="col-md-6">
+                                    <BreezeLabel :for="'inputPaymentAmount'+i" class="form-label" value="Payment Amount" />
+                                    <div class="input-group">
+                                        <div class="input-group-text">$</div>
+                                        <input type="text" class="form-control" id="'inputPaymentAmount'+i" v-model="payment.payment_amount">
+                                    </div>
+                                </div>
 
-            <div class="col-md-3">
-                <BreezeLabel for="inputEmail" class="form-label" value="Email" />
-                <BreezeInput type="email" class="form-control" id="inputEmail" v-model="editForm.email" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="editForm.birth_date" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputGender" class="form-label" value="Gender" />
-                <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
-                    <option></option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                </BreezeSelect>
-            </div>
+                            </div>
 
-            <div class="col-md-6">
-                <BreezeLabel for="inputInstStudentNumber" class="form-label" value="Institution Student #" />
-                <BreezeInput type="text" class="form-control" id="inputInstStudentNumber" v-model="editForm.institution_student_number" />
-            </div>
-            <div class="col-md-6">
-                <BreezeLabel for="inputPend" class="form-label" value="PEN" />
-                <BreezeInput type="text" class="form-control" id="inputPend" v-model="editForm.pen" />
-            </div>
+                            <div v-if="payment.msg != undefined" class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-danger mt-3">
+                                        <ul>
+                                            <li v-if="typeof (payment.msg) === 'string'" v-html="msg"></li>
+                                            <template v-else>
+                                                <li v-for="msg in payment.msg" v-html="msg"></li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer mt-3">
+                                <button type="submit" class="btn mr-2 btn-outline-success">Save Payment</button>
+                            </div>
 
-            <div v-if="editForm.errors != undefined" class="row">
-                <div class="col-12">
-                    <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
-                        <ul>
-                            <li v-for="err in editForm.errors">{{ err }}</li>
-                        </ul>
+                            <FormSubmitAlert :form-state="payment.formState"
+                                             :success-msg="'Payment record was updated successfully.'"></FormSubmitAlert>
+                        </form>
+
                     </div>
                 </div>
             </div>
 
-
-        </div>
-        <div class="card-footer mt-3">
-            <button type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Student</button>
-            <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
         </div>
 
-        <FormSubmitAlert :form-state="editForm.formState"
-                         :success-msg="'Student record was updated successfully.'"></FormSubmitAlert>
-
-    </form>
+    </div>
 
 </template>
 <script>
@@ -83,55 +79,45 @@ export default {
     },
     props: {
         result: Object,
-        now: String,
-        countries: Object,
-        provinces: Object,
     },
     data() {
         return {
             noChanges: true,
-            editForm: null,
+            paymentForms: [],
         }
     },
     methods: {
-        updateStudent: function ()
+
+
+        updatePayment: function (index)
         {
-            this.editForm = useForm({
-
-                id: this.editForm.id,
-                last_name: this.editForm.last_name,
-                first_name: this.editForm.first_name,
-                birth_date: this.editForm.birth_date,
-                email: this.editForm.email,
-                gender: this.editForm.gender,
-                pen: this.editForm.pen,
-                pd: this.editForm.pd,
-                institution_student_number: this.editForm.institution_student_number,
-            });
-
-            this.editForm.formState = '';
-            this.editForm.put(route('twp.students.update', this.result.id), {
+            this.paymentForms[index].formState = '';
+            this.paymentForms[index].put(route('twp.payments.update', this.paymentForms[index].id), {
                 onSuccess: () => {
-                    this.editForm.formState = true;
+                    this.paymentForms[index].formState = true;
                     this.noChanges = true;
                 },
                 onFailure: () => {
                 },
                 onError: () => {
-                    this.editForm.formState = false;
+                    this.paymentForms[index].formState = false;
                 },
-                preserveState: true,
+                preserveState: false,
 
             });
         },
-
         back: function()
         {
             window.history.back();
         },
+
+
     },
     mounted() {
-        this.editForm = this.result;
+        // this.paymentForms = this.result;
+        for(let i=0; i<this.result.length; i++){
+            this.paymentForms.push(useForm(this.result[i]));
+        }
     }
 }
 

@@ -49,7 +49,7 @@ tr {
                 <BreezeLabel for="inputEstimatedCost" class="form-label" value="Estimated Cost" />
                 <div class="input-group">
                     <div class="input-group-text">$</div>
-                    <input type="number" class="form-control" id="inputEstimatedCost" v-model="editForm.total_estimated_cost">
+                    <input type="text" class="form-control" id="inputEstimatedCost" v-model="editForm.total_estimated_cost">
                 </div>
             </div>
 

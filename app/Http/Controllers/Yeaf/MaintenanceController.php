@@ -11,12 +11,12 @@ use App\Http\Requests\ProgramYearEditRequest;
 use App\Http\Requests\ProgramYearStoreRequest;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Yeaf\Admin;
 use App\Models\Yeaf\Batch;
 use App\Models\Yeaf\Ineligible;
 use App\Models\Yeaf\ProgramYear;
 use App\Models\Yeaf\Province;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -65,8 +65,9 @@ class MaintenanceController extends Controller
      */
     public function staffList(Request $request): \Inertia\Response
     {
-        $staff = User::whereHas('roles', function($q)
-        { return $q->whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER]); }
+        $staff = User::whereHas('roles', function ($q) {
+        return $q->whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER]);
+        }
         )->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
@@ -101,7 +102,7 @@ class MaintenanceController extends Controller
 
             //reset roles
             $roles = Role::whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER])->get();
-            foreach ($roles as $role){
+            foreach ($roles as $role) {
                 $user->roles()->detach($role);
             }
 
@@ -110,8 +111,7 @@ class MaintenanceController extends Controller
             $user->roles()->attach($role);
 
             //if admin add admin role
-            if($request->access_type == 'A')
-            {
+            if ($request->access_type == 'A') {
                 $role = Role::where('name', Role::YEAF_ADMIN)->first();
                 $user->roles()->attach($role);
             }
@@ -234,7 +234,7 @@ class MaintenanceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  BatchEditRequest  $request
-     * @param  \App\Models\Batch $batch
+     * @param  \App\Models\Batch  $batch
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function batchEdit(BatchEditRequest $request, Batch $batch): \Illuminate\Http\RedirectResponse
@@ -266,7 +266,6 @@ class MaintenanceController extends Controller
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
-
     public function ministryShow(Request $request): \Inertia\Response
     {
         $admin = Admin::first();
