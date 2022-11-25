@@ -20,7 +20,8 @@ tr {
             <div class="col-md-6">
                 <div class="card p-5">
                     <h1 class="display-6 font-sans font-light">VARIANCE</h1>
-                    <span v-if="variance < 0" class="text-danger">${{variance}}</span>
+                    <span v-if="this.program.total_estimated_cost == null" class="text-danger">NO PROGRAM ESTIMATED COST SET!</span>
+                    <span v-else-if="variance < 0" class="text-danger">${{variance}}</span>
                     <span v-else class="text-success">${{variance}}</span>
                 </div>
             </div>
