@@ -10,6 +10,21 @@ tr {
 <template>
     <p v-if="paymentForms.length === 0" class="text-center leading-5">No Payments.</p>
     <div v-else>
+        <div class="row mb-3 text-center">
+            <div class="col-md-6">
+                <div class="card p-5">
+                    <h1 class="display-6 font-sans font-light">TOTAL PAYMENT</h1>
+                    <span>${{totalPayment}}</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-5">
+                    <h1 class="display-6 font-sans font-light">VARIANCE</h1>
+                    <span v-if="variance < 0" class="text-danger">${{variance}}</span>
+                    <span v-else class="text-success">${{variance}}</span>
+                </div>
+            </div>
+        </div>
         <div class="accordion" id="accordionGrant">
             <div v-for="(payment,i) in paymentForms" class="accordion-item">
                 <h2 class="accordion-header" :id="'heading'+i">
@@ -79,6 +94,8 @@ export default {
     },
     props: {
         result: Object,
+        twpStudentId: String|null,
+        program: Object,
     },
     data() {
         return {
@@ -117,6 +134,20 @@ export default {
         // this.paymentForms = this.result;
         for(let i=0; i<this.result.length; i++){
             this.paymentForms.push(useForm(this.result[i]));
+        }
+    },
+    computed: {
+        totalPayment: function ()
+        {
+            let total = 0;
+            for(let i=0; i<this.result.length; i++){
+                total += parseFloat(this.result[i].payment_amount);
+            }
+            return total.toFixed(2);
+        },
+        variance: function ()
+        {
+            return (parseFloat(this.program.total_estimated_cost) - this.totalPayment).toFixed(2);
         }
     }
 }

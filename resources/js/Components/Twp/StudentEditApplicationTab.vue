@@ -85,7 +85,7 @@ export default {
     },
     props: {
         result: Object,
-        twp_student_id: String|Number,
+        twpStudentId: String|Number|null,
         reasons: Object,
     },
     data() {
@@ -96,7 +96,7 @@ export default {
                 formSuccessMsg: 'Form was submitted successfully.',
                 formFailMsg: 'There was an error submitting this form.',
                 id: null,
-                twp_student_id: this.twp_student_id,
+                twp_student_id: this.twpStudentId,
                 received_date: '',
                 application_status: '',
                 twp_status: '',
