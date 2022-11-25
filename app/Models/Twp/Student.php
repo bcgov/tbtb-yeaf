@@ -4,11 +4,13 @@ namespace App\Models\Twp;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Student extends Model
 {
     use HasFactory;
 
+    protected $appends = ['age'];
     public $table = 'student_twps';
 
     /**
@@ -33,4 +35,11 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Twp\Payment', 'twp_student_id', 'id');
     }
+
+    public function getAgeAttribute()
+    {
+        if(is_null($this->birth_date)) return null;
+        return (new Carbon($this->birth_date))->age;
+    }
+
 }
