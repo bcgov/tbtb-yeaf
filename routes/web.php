@@ -44,7 +44,13 @@ Route::group(
                 Route::get('/staff', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffList'])->name('staff.list');
                 Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
                 Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
-            });
+
+
+                Route::get('/application-reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonList'])->name('application-reasons.list');
+                Route::post('/application-reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonStore'])->name('application-reason.store');
+                Route::post('/application-reasons/{applicationReason}', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonEdit'])->name('application-reason.edit');
+
+        });
     });
 
 Route::middleware(['auth', 'yeaf_active'])->group(function () {

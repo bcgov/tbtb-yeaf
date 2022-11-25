@@ -49,7 +49,7 @@
                                             <StudentEditStudentTab v-if="activeTab==='student'" :result="result"></StudentEditStudentTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='application' ? 'active show':''" id="application-tab-pane" role="tabpanel" aria-labelledby="application-tab" tabindex="2">
-                                            <StudentEditApplicationTab v-if="activeTab==='application'" :twp_student_id="result.id" :result="result.application"></StudentEditApplicationTab>
+                                            <StudentEditApplicationTab v-if="activeTab==='application'" :reasons="reasons" :twp_student_id="result.id" :result="result.application"></StudentEditApplicationTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
                                             <StudentEditProgramTab v-if="activeTab==='program'" :twp_student_id="result.id" :result="result.program"></StudentEditProgramTab>
@@ -143,7 +143,7 @@ export default {
     props: {
         result: Object,
         now: String,
-        countries: Object,
+        reasons: Object,
         provinces: Object,
 
         schools: Object,

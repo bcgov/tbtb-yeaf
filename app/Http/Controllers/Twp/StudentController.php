@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\Twp\StudentStoreRequest;
 use App\Http\Requests\Twp\StudentUpdateRequest;
+use App\Models\Twp\ApplicationReason;
 use App\Models\Twp\Student;
 use App\Models\Yeaf\Country;
 use App\Models\Yeaf\Province;
@@ -61,11 +62,11 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student = Student::where('id', $student->id)->with('application', 'program', 'payments')->first();
-        $countries = Country::orderBy('country_code', 'asc')->get();
+        $applicationReasons = ApplicationReason::orderBy('reason_status', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
         return Inertia::render('Twp/StudentEdit', ['status' => true,
-            'result' => $student, 'countries' => $countries, 'provinces' => $provinces, ]);
+            'result' => $student, 'reasons' => $applicationReasons, 'provinces' => $provinces, ]);
     }
 
     /**

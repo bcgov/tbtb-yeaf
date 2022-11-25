@@ -33,9 +33,14 @@ tr {
                 </BreezeSelect>
             </div>
 
-            <div class="col-md-12">
+            <div v-if="editForm.application_status === 'DENIED'" class="col-md-12">
                 <BreezeLabel for="inputDenialReason" class="form-label" value="Denial Reason" />
-                <BreezeInput type="text" class="form-control" id="inputDenialReason" v-model="editForm.denial_reason" />
+                <BreezeSelect class="form-select" id="inputDenialReason" v-model="editForm.denial_reason">
+                    <template v-for="reason in reasons">
+                        <option :value="reason.title">{{ reason.title }}</option>
+                    </template>
+                </BreezeSelect>
+
             </div>
             <div class="col-md-12">
                 <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comments" />
@@ -81,6 +86,7 @@ export default {
     props: {
         result: Object,
         twp_student_id: String|Number,
+        reasons: Object,
     },
     data() {
         return {

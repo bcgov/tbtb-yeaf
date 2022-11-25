@@ -56,5 +56,9 @@ class ApplicationEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        if (isset($this->application_status) && $this->application_status != 'DENIED') {
+            $this->merge(['denial_reason' => null]);
+        }
+
     }
 }

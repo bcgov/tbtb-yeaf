@@ -116,30 +116,30 @@
                                 <div class="row g-3">
 
                                     <div class="col-md-2">
-                                        <BreezeLabel for="newCodeId" class="form-label" value="Code ID *" />
-                                        <BreezeInput type="text" class="form-control" maxlength="2" id="newCodeId" v-model="editIneligibleForm.code_id" />
+                                        <BreezeLabel for="editCodeId" class="form-label" value="Code ID *" />
+                                        <BreezeInput type="text" class="form-control" maxlength="2" id="editCodeId" v-model="editIneligibleForm.code_id" />
                                     </div>
                                     <div class="col-md-6">
-                                        <BreezeLabel for="newDescription" class="form-label" value="Description *" />
-                                        <BreezeInput type="text" class="form-control" id="newDescription" v-model="editIneligibleForm.description" />
+                                        <BreezeLabel for="editDescription" class="form-label" value="Description *" />
+                                        <BreezeInput type="text" class="form-control" id="editDescription" v-model="editIneligibleForm.description" />
                                     </div>
                                     <div class="col-md-2">
-                                        <BreezeLabel for="newCodeType" class="form-label" value="Type *" />
-                                        <BreezeSelect class="form-select" id="newCodeType" v-model="editIneligibleForm.code_type">
+                                        <BreezeLabel for="editCodeType" class="form-label" value="Type *" />
+                                        <BreezeSelect class="form-select" id="editCodeType" v-model="editIneligibleForm.code_type">
                                             <option value="D">Denied</option>
                                             <option value="P">Pending</option>
                                         </BreezeSelect>
                                     </div>
                                     <div class="col-md-2">
-                                        <BreezeLabel for="newActiveFlag" class="form-label" value="Active *" />
-                                        <BreezeSelect class="form-select" id="newActiveFlag" v-model="editIneligibleForm.active_flag">
+                                        <BreezeLabel for="editActiveFlag" class="form-label" value="Active *" />
+                                        <BreezeSelect class="form-select" id="editActiveFlag" v-model="editIneligibleForm.active_flag">
                                             <option value="false">False</option>
                                             <option value="true">True</option>
                                         </BreezeSelect>
                                     </div>
                                     <div class="col-12">
-                                        <BreezeLabel for="newParagraphText" class="form-label" value="Letter Text" />
-                                        <textarea class="form-control" id="newParagraphText" v-model="editIneligibleForm.paragraph_text" />
+                                        <BreezeLabel for="editParagraphText" class="form-label" value="Letter Text" />
+                                        <textarea class="form-control" id="editParagraphText" v-model="editIneligibleForm.paragraph_text" />
                                     </div>
 
                                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
+use App\Models\Twp\ApplicationReason;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +74,52 @@ class MaintenanceController extends Controller
         }
 
         return Redirect::route('twp.maintenance.staff.list');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response::render
+     */
+    public function applicationReasonList(Request $request): \Inertia\Response
+    {
+        $application_reasons = ApplicationReason::get();
+
+        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $application_reasons, 'page' => 'application-reasons']);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\IneligibleEditRequest  $request
+     * @param  ApplicationReason $applicationReason
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function applicationReasonEdit(Request $request, ApplicationReason $applicationReason): \Illuminate\Http\RedirectResponse
+    {
+        if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
+            $applicationReason->reason_status = $request->reason_status;
+            $applicationReason->title = $request->title;
+            $applicationReason->letter_body = $request->letter_body;
+            $applicationReason->active_flag = $request->active_flag;
+            $applicationReason->save();
+        }
+
+        return Redirect::route('twp.maintenance.application-reasons.list');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  IneligibleStoreRequest  $request
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function applicationReasonStore(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        ApplicationReason::create($request->all());
+
+        return Redirect::route('twp.maintenance.application-reasons.list');
     }
 
     /**
