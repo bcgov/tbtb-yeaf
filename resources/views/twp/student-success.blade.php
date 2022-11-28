@@ -59,67 +59,27 @@
     <p>Via email to: {{ $student->email }}</p><br/>
     <p><strong>Re: Provincial Tuition Waiver Program (PTWP) Application</strong></p><br/>
     <div>
-        <p>This letter is to inform you that ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
-        <p>To be eligible ...</p>
+        <p>I am pleased to advise that we have approved your application to the Provincial Tuition Waiver Program (PTWP) dated
+            {{ date('m/d/Y', strtotime($student->application->received_date)) }}.</p>
+        <p>As a recipient of the Provincial Tuition Waiver Program, you are eligible to have your tuition and mandatory
+            fees waived at an estimated total cost of ${{number_format($student->program->total_estimated_cost, 2, '.', ',')}} as you work to complete
+            your {{$student->program->credential}} at {{$student->program->institution_name}}. This means StudentAid BC will pay your tuition and mandatory fees for
+            this program according to information submitted by institution name. </p>
+        <p><strong>If you change your program of study, institution, or timeframe for completion, please notify us at
+                <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a> so we can ensure your continued eligibility, and payment to the institution.</strong></p>
+        <p>To facilitate timely communication, and to ensure your information is kept secure, we invite you to create a
+            StudentAid BC dashboard account at <a href="http://www.studentaidbc.ca/dashboard">www.StudentAidBC.ca/dashboard</a>. </p>
+        <p>Please be advised that tuition waivers are a source of taxable income, and you will receive a T4A through your
+            institution to include with your income tax return. For more information on how taxable income is treated,
+            or the issuance of a T4A, please visit the <a href="https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax.html">Canada Revenue Agency website</a>.</p>
+        <p>If you have any questions, please do not hesitate to contact us at <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>. We wish you
+            success in your educational pursuits.</p>
+        <p>Sincerely,</p>
+        <p>PTWP System Navigator<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
+        <p>cc: {{$student->program->institution_name}}, </p>
     </div>
 
 
-<div>&nbsp;</div>
     <script type="text/php">
     if (isset($pdf)) {
         $text = "{PAGE_NUM} | {PAGE_COUNT}";

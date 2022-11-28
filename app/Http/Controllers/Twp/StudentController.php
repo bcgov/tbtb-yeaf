@@ -21,12 +21,19 @@ class StudentController extends Controller
     {
         $admin = Admin::first();
         $now_d = date('F d, Y');
-        $now_t = date('H:m:i');
-//        $student = Student::find($extra);
         $student = Student::where('id', $extra)->with('application', 'program', 'payments')->first();
 
-        $pdf = PDF::loadView('twp.letter-pdf', compact('admin', 'student', 'now_d', 'now_t'));
+        $reasons = ApplicationReason::all();
+        $letter_file = match ($type) {
+            'student_success_under_age' => 'twp.student-success-under-age',
+            'student_denied' => 'twp.student-denied',
+            'school_denied' => 'twp.school-denied',
+            default => 'twp.student-success',
+        };
+        $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'student', 'now_d'));
         $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->set_paper("Letter", "portrait");
+
         $file_name = $student->birth_date;
 
 
