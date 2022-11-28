@@ -6,13 +6,33 @@ use App\Http\Requests\Twp\StudentStoreRequest;
 use App\Http\Requests\Twp\StudentUpdateRequest;
 use App\Models\Twp\ApplicationReason;
 use App\Models\Twp\Student;
+use App\Models\Yeaf\Admin;
 use App\Models\Yeaf\Country;
 use App\Models\Yeaf\Province;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use PDF;
 
 class StudentController extends Controller
 {
+
+    public function downloadLetter(Request $request, $type, $extra)
+    {
+        $admin = Admin::first();
+        $now_d = date('F d, Y');
+        $now_t = date('H:m:i');
+//        $student = Student::find($extra);
+        $student = Student::where('id', $extra)->with('application', 'program', 'payments')->first();
+
+        $pdf = PDF::loadView('twp.letter-pdf', compact('admin', 'student', 'now_d', 'now_t'));
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $file_name = $student->birth_date;
+
+
+        return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
+    }
+
     /**
      * Display a listing of the resource.
      *

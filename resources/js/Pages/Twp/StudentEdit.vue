@@ -24,11 +24,23 @@
                         </div>
                         <div class="col-md-8 mt-3 mb-5">
                             <div class="card">
-                                <div v-if="result != null" class="card-header">
+                                <div v-if="editForm != null" class="card-header">
                                     Edit Student
+                                    <div v-if="activeTab==='application' && lettersEnabled !== false" class="btn-group float-end ms-1">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Letters
+                                        </button>
+                                        <ul class="dropdown-menu" style="">
+                                            <li v-if="lettersEnabled==='denied'"><a class="dropdown-item" :href="route('twp.students.letters.download', ['student_denied', editForm.id])" target="_blank">Student Denied</a></li>
+                                            <li v-if="lettersEnabled==='denied'"><a class="dropdown-item" :href="route('twp.students.letters.download', ['school_denied', editForm.id])" target="_blank">School Denied</a></li>
+                                            <li v-if="lettersEnabled==='success'"><a class="dropdown-item" :href="route('twp.students.letters.download', ['student_success', editForm.id])" target="_blank">Student Successful</a></li>
+                                            <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.students.letters.download', ['student_success_under_age', editForm.id])" target="_blank">Under Age Student Successful</a></li>
+                                        </ul>
+                                    </div>
+                                    <button v-if="activeTab==='application' && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                 </div>
-                                <div class="card-body" v-if="result != null">
+                                <div class="card-body" v-if="editForm != null">
 
                                     <ul class="nav nav-tabs mb-3" id="myStudentTab" role="tablist">
                                         <li @click="switchActiveTab('student')" class="nav-item" role="presentation">
@@ -40,7 +52,7 @@
                                         <li @click="switchActiveTab('program')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='program' ? 'active':''" id="program-tab" data-bs-toggle="tab" data-bs-target="#program-tab-pane" type="button" role="tab" aria-controls="program-tab-pane" aria-selected="false">Program</button>
                                         </li>
-                                        <li v-if="result.program != null" @click="switchActiveTab('payments')" class="nav-item" role="presentation">
+                                        <li v-if="editForm.program != null" @click="switchActiveTab('payments')" class="nav-item" role="presentation">
                                             <button class="nav-link" :class="activeTab==='payments' ? 'active':''" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments-tab-pane" type="button" role="tab" aria-controls="payments-tab-pane" aria-selected="false">Payments</button>
                                         </li>
                                     </ul>
@@ -49,13 +61,13 @@
                                             <StudentEditStudentTab v-if="activeTab==='student'" :result="result"></StudentEditStudentTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='application' ? 'active show':''" id="application-tab-pane" role="tabpanel" aria-labelledby="application-tab" tabindex="2">
-                                            <StudentEditApplicationTab v-if="activeTab==='application'" :reasons="reasons" :twpStudentId="result.id" :result="result.application"></StudentEditApplicationTab>
+                                            <StudentEditApplicationTab v-if="activeTab==='application'" :reasons="reasons" :twpStudentId="editForm.id" :result="result.application"></StudentEditApplicationTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="result.id" :result="result.program"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="editForm.id" :result="result.program"></StudentEditProgramTab>
                                         </div>
-                                        <div v-if="result.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :twpStudentId="result.id" :result="result.payments" :program="result.program"></StudentEditPaymentTab>
+                                        <div v-if="editForm.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :twpStudentId="editForm.id" :result="result.payments" :program="result.program"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
@@ -162,6 +174,7 @@ export default {
                 payment_date: '',
                 payment_amount: '',
             }),
+            lettersEnabled: false,
         }
     },
     methods: {
@@ -217,17 +230,44 @@ export default {
                 if(this.result.program != null){
                     this.newPaymentForm.twp_program_id = this.result.program.id;
                 }
+                this.editForm = JSON.parse(JSON.stringify(newValue));
+
+                this.lettersEnabled = false;
+                if(this.editForm.application.application_status === 'APPROVED'){
+                    this.lettersEnabled = 'success';
+                    if(this.editForm.age < 19){
+                        this.lettersEnabled = 'success_under_age';
+                    }
+                }
+                if(this.editForm.application.application_status === 'DENIED'){
+                    this.lettersEnabled = 'denied';
+                }
             },
             deep: true
         }
 
     },
     mounted() {
-        this.editForm = this.result;
+        this.editForm = JSON.parse(JSON.stringify(this.result));
+
+        // this.editForm = this.result;
         this.newPaymentForm.twp_student_id = this.result.id;
         if(this.result.program != null){
             this.newPaymentForm.twp_program_id = this.result.program.id;
         }
+
+
+        //if(this.activeTab === 'application'){
+            if(this.editForm.application.application_status === 'APPROVED'){
+                this.lettersEnabled = 'success';
+                if(this.editForm.age < 19){
+                    this.lettersEnabled = 'success_under_age';
+                }
+            }
+            if(this.editForm.application.application_status === 'DENIED'){
+                this.lettersEnabled = 'denied';
+            }
+        //}
     }
 }
 </script>

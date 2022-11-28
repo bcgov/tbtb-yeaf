@@ -140,7 +140,8 @@ export default {
     },
     mounted() {
         if(this.result != null){
-            this.editForm = this.result;
+            // this.editForm = this.result;
+            this.editForm = JSON.parse(JSON.stringify(this.result));
         }
     }
 }

@@ -34,6 +34,7 @@ Route::group(
         Route::resource('applications', App\Http\Controllers\Twp\ApplicationController::class);
         Route::resource('programs', App\Http\Controllers\Twp\ProgramController::class);
         Route::resource('payments', App\Http\Controllers\Twp\PaymentController::class);
+        Route::get('/students-letters/{type}/{extra}', [App\Http\Controllers\Twp\StudentController::class, 'downloadLetter'])->name('students.letters.download');
 
         //authenticated admin routes
         Route::group(
