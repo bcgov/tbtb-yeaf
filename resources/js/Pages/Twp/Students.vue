@@ -45,6 +45,16 @@
                                             <td>{{ row.birth_date}}</td>
                                             <td>{{ row.pen}}</td>
                                             <td>{{ row.institution_student_number}}</td>
+                                            <td>
+                                                <template v-if="row.application != null">
+                                                    <BreezeSelect @change="updateStatus(row.application, $event)" class="form-select" :id="'inputStudentAppStatus'+i" v-model="row.application.application_status">
+                                                        <option value="APPROVED">Approved</option>
+                                                        <option value="IN PROGRESS">In Progress</option>
+                                                        <option value="APPROVED ON APPEAL">Approved on Appeal</option>
+                                                        <option value="WITHDRAWN">Withdrawn</option>
+                                                    </BreezeSelect>
+                                                </template>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -170,6 +180,16 @@ export default {
         }
     },
     methods: {
+        updateStatus: function (application, e) {
+            let new_status = e.target.value;
+            let editForm = useForm({
+                status: new_status,
+            });
+            editForm.put(route('twp.application-status.update', application.id), {
+                onSuccess: () => {},
+            });
+
+        },
         newStudent: function ()
         {
             this.newStudentForm.formState = '';

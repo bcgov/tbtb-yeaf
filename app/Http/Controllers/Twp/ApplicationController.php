@@ -7,6 +7,7 @@ use App\Http\Requests\Twp\ApplicationStoreRequest;
 use App\Models\Twp\Application;
 use App\Models\Twp\Reason;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
 {
@@ -43,27 +44,6 @@ class ApplicationController extends Controller
         return Redirect::route('twp.students.show', [$application->twp_student_id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Application  $application
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Application $application)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Twp\Application  $application
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Application $application)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -87,6 +67,26 @@ class ApplicationController extends Controller
         }
 
         return Redirect::route('twp.students.show', [$application->twp_student_id]);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  Request  $request
+     * @param  \App\Models\Twp\Application  $application
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function applicationStatus(Request $request, Application $application)
+    {
+        $application = Application::find($application->id);
+
+        if($request->status != 'DENIED'){
+            $application->application_status = $request->status;
+            $application->save();
+        }
+
+        return Redirect::route('twp.students.index');
     }
 
 }

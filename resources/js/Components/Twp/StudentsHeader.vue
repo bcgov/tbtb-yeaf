@@ -36,8 +36,9 @@
                 <em v-else class="bi bi-sort-numeric-down"></em>
             </a>
         </th>
-
-        <th scope="col"></th>
+        <th scope="col" style="min-width: 130px;">
+            <span>Application Status</span>
+        </th>
     </tr>
 </template>
 <script>
