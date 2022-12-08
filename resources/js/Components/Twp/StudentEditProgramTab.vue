@@ -53,6 +53,16 @@ tr {
                 </div>
             </div>
 
+
+            <div class="col-md-6">
+                <BreezeLabel for="inputContactName" class="form-label" value="Contact Name" />
+                <BreezeInput type="text" class="form-control" id="inputContactName" v-model="editForm.contact_name" />
+            </div>
+            <div class="col-md-6">
+                <BreezeLabel for="inputContactEmail" class="form-label" value="Contact Email" />
+                <BreezeInput type="email" class="form-control" id="inputContactEmail" v-model="editForm.contact_email" />
+            </div>
+
             <div class="col-md-12">
                 <BreezeLabel for="inputProgramComments" class="form-label" value="Comments" />
                 <BreezeInput type="text" class="form-control" id="inputProgramComments" v-model="editForm.comments" />
@@ -115,6 +125,8 @@ export default {
                 total_estimated_cost: '',
                 student_status: '',
                 comments: '',
+                contact_name: '',
+                contact_email: '',
             }),
         }
     },

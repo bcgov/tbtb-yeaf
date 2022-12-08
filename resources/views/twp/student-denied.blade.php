@@ -64,7 +64,7 @@
 
     <p>To be eligible for the Provincial Tuition Waiver Program, applicants must be: </p>
     <ul>
-        @foreach($reasons as $reason)
+        @foreach($student->application->reasons as $reason)
             <li>{{$reason->letter_body}}</li>
         @endforeach
     </ul>

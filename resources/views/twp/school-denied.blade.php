@@ -56,8 +56,9 @@
 </header>
 <p>Date: {{ $now_d }}</p><br/>
 <p>{{ $student->program->institution_name }}</p>
+<p>{{ $student->program->contact_name }}</p>
 <p>Financial Awards</p>
-<p>Via email to: </p><br/>
+<p>Via email to: {{ $student->program->contact_email }}</p><br/>
 <p><strong>Re: Provincial Tuition Waiver Program (PTWP) Application</strong></p><br/>
 <div>
     <p>This letter is to inform you that, regrettably, we have been unable to approve the application made

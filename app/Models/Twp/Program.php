@@ -17,5 +17,6 @@ class Program extends Model
      * @var array<int, string>
      */
     protected $fillable = ['twp_student_id', 'study_period_start_date', 'institution_name', 'credential',
-        'program_length', 'program_length_type', 'total_estimated_cost', 'student_status', 'comments', ];
+        'program_length', 'program_length_type', 'total_estimated_cost', 'student_status', 'comments',
+        'contact_name', 'contact_email',];
 }
