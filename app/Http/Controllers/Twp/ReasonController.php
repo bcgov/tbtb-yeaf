@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Twp;
 
-use App\Models\Twp\ApplicationReason;
+use App\Models\Twp\Reason;
 use Illuminate\Http\Request;
 
-class ApplicationReasonController extends Controller
+class ReasonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ApplicationReasonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ApplicationReason  $applicationReason
+     * @param  \App\Models\Reason  $reason
      * @return \Illuminate\Http\Response
      */
-    public function show(ApplicationReason $applicationReason)
+    public function show(Reason $reason)
     {
         //
     }
@@ -52,10 +52,10 @@ class ApplicationReasonController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ApplicationReason  $applicationReason
+     * @param  \App\Models\Reason  $reason
      * @return \Illuminate\Http\Response
      */
-    public function edit(ApplicationReason $applicationReason)
+    public function edit(Reason $reason)
     {
         //
     }
@@ -64,10 +64,10 @@ class ApplicationReasonController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ApplicationReason  $applicationReason
+     * @param  \App\Models\Reason  $reason
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ApplicationReason $applicationReason)
+    public function update(Request $request, Reason $reason)
     {
         //
     }
@@ -75,10 +75,10 @@ class ApplicationReasonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ApplicationReason  $applicationReason
+     * @param  \App\Models\Reason  $reason
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ApplicationReason $applicationReason)
+    public function destroy(Reason $reason)
     {
         //
     }

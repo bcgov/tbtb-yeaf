@@ -76,10 +76,6 @@ export default {
             window.open('/maintenance/download-letters/batch/' + this.selectedBatch,'_blank');
         },
     },
-    watch: {
-    },
-    computed: {
-    }
 }
 
 </script>

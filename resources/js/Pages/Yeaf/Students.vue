@@ -261,10 +261,6 @@ export default {
             });
         },
     },
-    watch: {
-    },
-    computed: {
-    },
     mounted() {
         this.newStudentForm = useForm(this.newStudentFormData);
         let vm = this;

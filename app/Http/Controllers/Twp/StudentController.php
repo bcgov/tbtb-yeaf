@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\Twp\StudentStoreRequest;
 use App\Http\Requests\Twp\StudentUpdateRequest;
-use App\Models\Twp\ApplicationReason;
+use App\Models\Twp\Reason;
 use App\Models\Twp\Student;
 use App\Models\Yeaf\Admin;
 use App\Models\Yeaf\Country;
@@ -23,7 +23,7 @@ class StudentController extends Controller
         $now_d = date('F d, Y');
         $student = Student::where('id', $extra)->with('application', 'program', 'payments')->first();
 
-        $reasons = ApplicationReason::all();
+        $reasons = Reason::all();
         $letter_file = match ($type) {
             'student_success_under_age' => 'twp.student-success-under-age',
             'student_denied' => 'twp.student-denied',
@@ -88,12 +88,12 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        $student = Student::where('id', $student->id)->with('application', 'program', 'payments')->first();
-        $applicationReasons = ApplicationReason::orderBy('reason_status', 'asc')->get();
+        $student = Student::where('id', $student->id)->with('application.reasons', 'program', 'payments')->first();
+        $reasons = Reason::orderBy('reason_status', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
         return Inertia::render('Twp/StudentEdit', ['status' => true,
-            'result' => $student, 'reasons' => $applicationReasons, 'provinces' => $provinces, ]);
+            'result' => $student, 'reasons' => $reasons, 'provinces' => $provinces, ]);
     }
 
     /**

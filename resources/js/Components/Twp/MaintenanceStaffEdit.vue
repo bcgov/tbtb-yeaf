@@ -123,8 +123,6 @@ export default {
         },
 
     },
-    watch: {
-    },
     mounted() {
         let tmpObj = this.results;
         this.form = useForm(tmpObj);

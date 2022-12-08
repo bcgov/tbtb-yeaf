@@ -356,8 +356,6 @@ export default {
         },
 
     },
-    watch: {},
-    computed: {},
     mounted() {
         this.editForm = useForm(this.results);
     }

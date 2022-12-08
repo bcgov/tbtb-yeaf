@@ -26,8 +26,6 @@ export default {
         this.successMessage = this.successMsg == null ? 'Form was submitted successfully.' : this.successMsg;
         this.failMessage = this.failMsg == null ? 'There was an error submitting this form.' : this.failMsg;
     },
-    methods: {
-    },
     watch: {
         formState: function (newVal, oldVal) {
             let vm = this;

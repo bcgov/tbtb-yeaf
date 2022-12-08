@@ -34,14 +34,12 @@ tr {
             </div>
 
             <div v-if="editForm.application_status === 'DENIED'" class="col-md-12">
-                <BreezeLabel for="inputDenialReason" class="form-label" value="Denial Reason" />
-                <BreezeSelect class="form-select" id="inputDenialReason" v-model="editForm.denial_reason">
-                    <template v-for="reason in reasons">
-                        <option :value="reason.title">{{ reason.title }}</option>
-                    </template>
-                </BreezeSelect>
-
+                <div v-for="(reason, i) in denial_reasons" class="form-check form-check-inline">
+                    <input @click="updateReason(reason)" class="form-check-input" type="checkbox" :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">
+                    <label @click="updateReason(reason)" class="form-check-label" :for="'inlineCheckbox'+i">{{ reason.title }}</label>
+                </div>
             </div>
+
             <div class="col-md-12">
                 <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comments" />
                 <BreezeInput type="text" class="form-control" id="inputExceptionComments" v-model="editForm.exception_comments" />
@@ -91,6 +89,7 @@ export default {
     data() {
         return {
             noChanges: true,
+            denial_reasons: null,
             editForm: useForm({
                 formState: true,
                 formSuccessMsg: 'Form was submitted successfully.',
@@ -102,12 +101,44 @@ export default {
                 twp_status: '',
                 denial_reason: '',
                 exception_comments: '',
+                denial_list: [],
             }),
         }
     },
     methods: {
+        checkReason: function (reason)
+        {
+            // if(reason.selected == null)
+            //     return false;
+
+            let is_checked = false;
+            for(let i=0; i<this.editForm.reasons.length; i++){
+                if(this.editForm.reasons[i].id === reason.id)
+                {
+                    is_checked = true;
+                    break;
+                }
+            }
+            return is_checked;
+        },
+        updateReason: function (reason)
+        {
+            if(reason.selected != null)
+            {
+                reason.selected = !reason.selected;
+            }else{
+                reason.selected = false;
+            }
+        },
         updateStudent: function ()
         {
+            let tmpArray = [];
+            for(let i=0; i<this.denial_reasons.length; i++){
+                if(this.denial_reasons[i].selected !== undefined && this.denial_reasons[i].selected === true){
+                    tmpArray.push(this.denial_reasons[i].id);
+                }
+            }
+            this.editForm.reasons = tmpArray;
             let options = {
                 onSuccess: () => {
                     this.editForm.formState = true;
@@ -137,12 +168,34 @@ export default {
         {
             window.history.back();
         },
+        updateData: function ()
+        {
+            if(this.result != null){
+                // this.editForm = this.result;
+                this.editForm = JSON.parse(JSON.stringify(this.result));
+                this.denial_reasons = JSON.parse(JSON.stringify(this.reasons));
+
+                for(let j=0; j<this.editForm.reasons.length; j++){
+                    for(let i=0; i<this.denial_reasons.length; i++){
+                        if(this.denial_reasons[i].id === this.editForm.reasons[j].id){
+                            this.denial_reasons[i].selected = true;
+                        }
+                    }
+                }
+            }
+        }
+    },
+    watch: {
+        result: {
+            handler(newValue, oldValue) {
+                this.updateData();
+            },
+            deep: true
+        }
+
     },
     mounted() {
-        if(this.result != null){
-            // this.editForm = this.result;
-            this.editForm = JSON.parse(JSON.stringify(this.result));
-        }
+        this.updateData();
     }
 }
 

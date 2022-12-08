@@ -226,10 +226,6 @@ export default {
             });
         },
     },
-    watch: {
-    },
-    computed: {
-    },
     mounted() {
         this.newProgramYearForm = useForm(this.newProgramYearFormData);
     }

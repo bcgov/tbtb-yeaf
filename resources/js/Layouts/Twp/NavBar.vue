@@ -92,8 +92,5 @@ export default {
             }
         }
     },
-    watch: {
-
-    },
 }
 </script>

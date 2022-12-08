@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
-use App\Models\Twp\ApplicationReason;
+use App\Models\Twp\Reason;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -84,26 +84,27 @@ class MaintenanceController extends Controller
      */
     public function applicationReasonList(Request $request): \Inertia\Response
     {
-        $application_reasons = ApplicationReason::get();
+        $reasons = Reason::get();
 
-        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $application_reasons, 'page' => 'application-reasons']);
+        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $reasons, 'page' => 'application-reasons']);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\IneligibleEditRequest  $request
-     * @param  ApplicationReason $applicationReason
+     * @param  \App\Http\Requests\Request  $request
+     * @param  Reason $reason
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function applicationReasonEdit(Request $request, ApplicationReason $applicationReason): \Illuminate\Http\RedirectResponse
+    public function applicationReasonEdit(Request $request, Reason $reason): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
-            $applicationReason->reason_status = $request->reason_status;
-            $applicationReason->title = $request->title;
-            $applicationReason->letter_body = $request->letter_body;
-            $applicationReason->active_flag = $request->active_flag;
-            $applicationReason->save();
+            $reason->reason_status = "DENIED";
+//            $reason->reason_status = $request->reason_status;
+            $reason->title = $request->title;
+            $reason->letter_body = $request->letter_body;
+            $reason->active_flag = $request->active_flag;
+            $reason->save();
         }
 
         return Redirect::route('twp.maintenance.application-reasons.list');
@@ -112,12 +113,12 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  IneligibleStoreRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function applicationReasonStore(Request $request): \Illuminate\Http\RedirectResponse
     {
-        ApplicationReason::create($request->all());
+        Reason::create($request->all());
 
         return Redirect::route('twp.maintenance.application-reasons.list');
     }

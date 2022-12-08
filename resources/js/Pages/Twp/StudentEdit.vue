@@ -250,24 +250,21 @@ export default {
     mounted() {
         this.editForm = JSON.parse(JSON.stringify(this.result));
 
-        // this.editForm = this.result;
         this.newPaymentForm.twp_student_id = this.result.id;
         if(this.result.program != null){
             this.newPaymentForm.twp_program_id = this.result.program.id;
         }
 
 
-        //if(this.activeTab === 'application'){
-            if(this.editForm.application.application_status === 'APPROVED'){
-                this.lettersEnabled = 'success';
-                if(this.editForm.age < 19){
-                    this.lettersEnabled = 'success_under_age';
-                }
+        if(this.editForm.application.application_status === 'APPROVED'){
+            this.lettersEnabled = 'success';
+            if(this.editForm.age < 19){
+                this.lettersEnabled = 'success_under_age';
             }
-            if(this.editForm.application.application_status === 'DENIED'){
-                this.lettersEnabled = 'denied';
-            }
-        //}
+        }
+        if(this.editForm.application.application_status === 'DENIED'){
+            this.lettersEnabled = 'denied';
+        }
     }
 }
 </script>

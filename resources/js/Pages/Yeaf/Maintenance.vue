@@ -77,13 +77,5 @@ export default {
         return {
         }
     },
-    methods: {
-    },
-    watch: {
-    },
-    computed: {
-    },
-    mounted() {
-    }
 }
 </script>

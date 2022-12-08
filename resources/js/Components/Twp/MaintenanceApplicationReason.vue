@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <div>Application Reasons Maintenance
-                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newApplicationModal">New Application Reason</button>
+                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newApplicationModal">New Denial Reason</button>
             </div>
         </div>
 
@@ -12,9 +12,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Title</th>
-                            <th scope="col">Application Status</th>
                             <th scope="col">Active</th>
-                            <th scope="col" class="col-6">Letter Text</th>
+                            <th scope="col" class="col-8">Letter Text</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -22,7 +21,6 @@
                             <td>
                                 <button @click="editApplication(i)" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#editApplicationModal">{{ row.title }}</button>
                             </td>
-                            <td>{{ row.reason_status }}</td>
                             <td>
                                 <span v-if="row.active_flag" class="badge rounded-pill text-bg-success">True</span>
                                 <span v-else class="badge rounded-pill text-bg-danger">False</span>
@@ -40,7 +38,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newApplicationModalLabel">Add New Application Reason</h5>
+                        <h5 class="modal-title" id="newApplicationModalLabel">Add New Denial Reason</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form v-if="newApplicationForm != null" @submit.prevent="newApplication">
@@ -48,20 +46,11 @@
                             <div class="card-body">
                                 <div class="row g-3">
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-9">
                                         <BreezeLabel for="newApplicationTitle" class="form-label" value="Title *" />
                                         <BreezeInput type="text" class="form-control" id="newApplicationTitle" v-model="newApplicationForm.title" />
                                     </div>
-                                    <div class="col-md-3">
-                                        <BreezeLabel for="newApplicationStatus" class="form-label" value="Application Status *" />
-                                        <BreezeSelect class="form-select" id="newApplicationStatus" v-model="newApplicationForm.reason_status">
-                                            <option value="APPROVED">Approved</option>
-                                            <option value="DENIED">Denied</option>
-                                            <option value="IN PROGRESS">In Progress</option>
-                                            <option value="APPROVED ON APPEAL">Approved on Appeal</option>
-                                            <option value="WITHDRAWN">Withdrawn</option>
-                                        </BreezeSelect>
-                                    </div>
+
                                     <div class="col-md-3">
                                         <BreezeLabel for="newApplicationActiveFlag" class="form-label" value="Active *" />
                                         <BreezeSelect class="form-select" id="newApplicationActiveFlag" v-model="newApplicationForm.active_flag">
@@ -108,19 +97,9 @@
                             <div class="card-body">
                                 <div class="row g-3">
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-9">
                                         <BreezeLabel for="editApplicationTitle" class="form-label" value="Title *" />
                                         <BreezeInput type="text" class="form-control" id="editApplicationTitle" v-model="editApplicationForm.title" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <BreezeLabel for="editApplicationStatus" class="form-label" value="Application Status *" />
-                                        <BreezeSelect class="form-select" id="editApplicationStatus" v-model="editApplicationForm.reason_status">
-                                            <option value="APPROVED">Approved</option>
-                                            <option value="DENIED">Denied</option>
-                                            <option value="IN PROGRESS">In Progress</option>
-                                            <option value="APPROVED ON APPEAL">Approved on Appeal</option>
-                                            <option value="WITHDRAWN">Withdrawn</option>
-                                        </BreezeSelect>
                                     </div>
                                     <div class="col-md-3">
                                         <BreezeLabel for="editApplicationActiveFlag" class="form-label" value="Active *" />
@@ -179,7 +158,7 @@ export default {
             newApplicationForm: null,
             newApplicationFormData: {
                 formState: true,
-                title: '', reason_status: '', active_flag: false, letter_body: '',
+                title: '', reason_status: 'DENIED', active_flag: false, letter_body: '',
             },
             editApplicationForm: null,
 
@@ -224,10 +203,6 @@ export default {
                 preserveScroll: true,
             });
         },
-    },
-    watch: {
-    },
-    computed: {
     },
     mounted() {
         this.newApplicationForm = useForm(this.newApplicationFormData);

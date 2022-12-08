@@ -233,10 +233,6 @@ export default {
             });
         },
     },
-    watch: {
-    },
-    computed: {
-    },
     mounted() {
         this.newIneligibleForm = useForm(this.newIneligibleFormData);
     }

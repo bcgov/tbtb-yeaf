@@ -54,15 +54,6 @@ export default {
         return {
         }
     },
-    methods: {
-
-
-    },
-    watch: {
-
-    },
-    computed: {
-    },
     mounted() {
         this.grantForms = JSON.parse(JSON.stringify(this.result.grants));
     }

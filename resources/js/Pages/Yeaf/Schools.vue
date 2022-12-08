@@ -184,10 +184,6 @@ export default {
         },
 
     },
-    watch: {
-    },
-    computed: {
-    },
     mounted() {
         this.newSchoolForm = useForm(this.newSchoolFormData);
     }

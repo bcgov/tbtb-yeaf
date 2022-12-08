@@ -14,13 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('application_reason_twps', function (Blueprint $table) {
-            $table->id();
-            $table->string('reason_status')->nullable()->comment('Approved, Denied, In Progress, Approval on Appeal, Withdrawn');
-            $table->string('title')->nullable();
-            $table->longText('letter_body')->nullable();
-            $table->boolean('active_flag')->default(true);
-
-            $table->timestamps();
+            $table->bigInteger('application_id');
+            $table->foreign('application_id')->references('id')->on('application_twps');
+            $table->bigInteger('reason_id');
+            $table->foreign('reason_id')->references('id')->on('reason_twps');
         });
     }
 

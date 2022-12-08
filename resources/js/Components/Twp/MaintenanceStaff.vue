@@ -54,12 +54,6 @@ export default {
         return {
         }
     },
-    methods: {
-    },
-    watch: {
-    },
-    computed: {
-    }
 }
 
 </script>
