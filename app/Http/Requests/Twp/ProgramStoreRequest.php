@@ -47,7 +47,7 @@ class ProgramStoreRequest extends FormRequest
             'program_length' => 'present|numeric|nullable',
             'program_length_type' => 'present|in:day,week,month,year|nullable',
             'total_estimated_cost' => 'present|numeric|nullable',
-            'student_status' => 'present|in:APPROVED,DENIED,IN PROGRESS,APPROVED ON APPEAL,WITHDRAWN|nullable',
+            'student_status' => 'present|in:Attending,Completed,Hiatus,Never Attended|nullable',
             'comments' => 'nullable',
         ];
     }
