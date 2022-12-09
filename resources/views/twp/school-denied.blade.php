@@ -55,10 +55,10 @@
     </table>
 </header>
 <p>Date: {{ $now_d }}</p><br/>
-<p>{{ $student->program->institution_name }}</p>
-<p>{{ $student->program->contact_name }}</p>
+<p>{{ $student->program->institution->name }}</p>
+<p>{{ $student->program->institution->contact_name }}</p>
 <p>Financial Awards</p>
-<p>Via email to: {{ $student->program->contact_email }}</p><br/>
+<p>Via email to: {{ $student->program->institution->contact_email }}</p><br/>
 <p><strong>Re: Provincial Tuition Waiver Program (PTWP) Application</strong></p><br/>
 <div>
     <p>This letter is to inform you that, regrettably, we have been unable to approve the application made
@@ -75,20 +75,9 @@
     <p>If you have any questions about this decision, please do not hesitate to contact us at <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.</p>
     <p>Sincerely,</p>
     <p>PTWP System Navigator<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
-    <p>cc: {{$student->program->institution_name}}, {{ $student->program->contact_name }}, {{ $student->program->contact_email }}</p>
+    <p>cc: {{$student->program->institution->name}}, {{ $student->program->institution->contact_name }}, {{ $student->program->institution->contact_email }}</p>
 </div>
 
 
-{{--<script type="text/php">--}}
-{{--    if (isset($pdf)) {--}}
-{{--        $text = "{PAGE_NUM} | {PAGE_COUNT}";--}}
-{{--        $size = 9;--}}
-{{--        $font = $fontMetrics->getFont("Arial,sans-serif");--}}
-{{--        $width = $fontMetrics->get_text_width($text, $font, $size) / 2;--}}
-{{--        $x = ($pdf->get_width() - $width) / 2;--}}
-{{--        $y = $pdf->get_height() - 25;--}}
-{{--        $pdf->page_text($x, $y, $text, $font, $size);--}}
-{{--    }--}}
-{{--</script>--}}
 </body>
 </html>

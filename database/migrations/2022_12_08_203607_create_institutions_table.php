@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('program_twps', function (Blueprint $table) {
+        Schema::create('institution_twps', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name');
             $table->string('contact_name')->nullable();
             $table->string('contact_email')->nullable();
+            $table->boolean('active_flag')->default(false);
+
+            $table->timestamps();
         });
     }
 
@@ -26,9 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('program_twps', function (Blueprint $table) {
-            $table->dropColumn('contact_email');
-            $table->dropColumn('contact_name');
-        });
+        Schema::dropIfExists('institution_twps');
     }
 };

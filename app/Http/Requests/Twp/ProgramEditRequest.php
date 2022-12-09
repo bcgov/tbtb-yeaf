@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Twp;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class ProgramEditRequest extends FormRequest
 {
@@ -42,15 +41,15 @@ class ProgramEditRequest extends FormRequest
             'id' => 'required',
             'twp_student_id' => 'required',
             'institution_name' => 'required',
+            'institution_twp_id' => 'nullable',
             'credential' => 'nullable',
+            'credential_type' => 'nullable',
             'study_period_start_date' => 'present|date_format:Y-m-d|nullable',
             'program_length' => 'present|numeric|nullable',
             'program_length_type' => 'present|in:day,week,month,year|nullable',
             'total_estimated_cost' => 'present|numeric|nullable',
             'student_status' => 'present|in:APPROVED,DENIED,IN PROGRESS,APPROVED ON APPEAL,WITHDRAWN|nullable',
             'comments' => 'nullable',
-            'contact_name' => 'nullable',
-            'contact_email' => 'nullable',
         ];
     }
 
@@ -61,11 +60,5 @@ class ProgramEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if (isset($this->contact_name)) {
-            $this->merge(['contact_name' => Str::title($this->contact_name)]);
-        }
-        if (isset($this->contact_email)) {
-            $this->merge(['contact_email' => Str::lower($this->contact_email)]);
-        }
     }
 }

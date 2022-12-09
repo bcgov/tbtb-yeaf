@@ -34,10 +34,12 @@ tr {
             </div>
 
             <div v-if="editForm.application_status === 'DENIED'" class="col-md-12">
-                <div v-for="(reason, i) in denial_reasons" class="form-check form-check-inline">
-                    <input @click="updateReason(reason)" class="form-check-input" type="checkbox" :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">
-                    <label @click="updateReason(reason)" class="form-check-label" :for="'inlineCheckbox'+i">{{ reason.title }}</label>
-                </div>
+                <template v-for="(reason, i) in denial_reasons">
+                    <div v-if="reason.active_flag === true" class="form-check form-check-inline">
+                        <input @click="updateReason(reason)" class="form-check-input" type="checkbox" :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">
+                        <label @click="updateReason(reason)" class="form-check-label" :for="'inlineCheckbox'+i">{{ reason.title }}</label>
+                    </div>
+                </template>
             </div>
 
             <div class="col-md-12">

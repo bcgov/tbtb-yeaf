@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reason extends Model
 {
     use HasFactory;
+
     public $table = 'reason_twps';
 
     /**

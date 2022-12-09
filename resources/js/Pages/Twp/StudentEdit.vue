@@ -37,7 +37,7 @@
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.students.letters.download', ['student_success_under_age', editForm.id])" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
-                                    <button v-if="activeTab==='application' && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
+                                    <button v-if="activeTab==='application' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                 </div>
                                 <div class="card-body" v-if="editForm != null">
@@ -64,7 +64,7 @@
                                             <StudentEditApplicationTab v-if="activeTab==='application'" :reasons="reasons" :twpStudentId="editForm.id" :result="result.application"></StudentEditApplicationTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="1">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="editForm.id" :result="result.program"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="editForm.id" :result="result.program" :schools="schools"></StudentEditProgramTab>
                                         </div>
                                         <div v-if="editForm.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="3">
                                             <StudentEditPaymentTab v-if="activeTab==='payments'" :twpStudentId="editForm.id" :result="result.payments" :program="result.program"></StudentEditPaymentTab>
@@ -233,14 +233,16 @@ export default {
                 this.editForm = JSON.parse(JSON.stringify(newValue));
 
                 this.lettersEnabled = false;
-                if(this.editForm.application.application_status === 'APPROVED'){
-                    this.lettersEnabled = 'success';
-                    if(this.editForm.age < 19){
-                        this.lettersEnabled = 'success_under_age';
+                if(this.editForm.application != null){
+                    if(this.editForm.application.application_status === 'APPROVED'){
+                        this.lettersEnabled = 'success';
+                        if(this.editForm.age < 19){
+                            this.lettersEnabled = 'success_under_age';
+                        }
                     }
-                }
-                if(this.editForm.application.application_status === 'DENIED'){
-                    this.lettersEnabled = 'denied';
+                    if(this.editForm.application.application_status === 'DENIED'){
+                        this.lettersEnabled = 'denied';
+                    }
                 }
             },
             deep: true
@@ -255,16 +257,18 @@ export default {
             this.newPaymentForm.twp_program_id = this.result.program.id;
         }
 
-
-        if(this.editForm.application.application_status === 'APPROVED'){
-            this.lettersEnabled = 'success';
-            if(this.editForm.age < 19){
-                this.lettersEnabled = 'success_under_age';
+        if(this.editForm.application != null) {
+            if(this.editForm.application.application_status === 'APPROVED'){
+                this.lettersEnabled = 'success';
+                if(this.editForm.age < 19){
+                    this.lettersEnabled = 'success_under_age';
+                }
+            }
+            if(this.editForm.application.application_status === 'DENIED'){
+                this.lettersEnabled = 'denied';
             }
         }
-        if(this.editForm.application.application_status === 'DENIED'){
-            this.lettersEnabled = 'denied';
-        }
+
     }
 }
 </script>

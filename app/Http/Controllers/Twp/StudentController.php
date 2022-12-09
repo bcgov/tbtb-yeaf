@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\Twp\StudentStoreRequest;
 use App\Http\Requests\Twp\StudentUpdateRequest;
+use App\Models\Twp\Institution;
 use App\Models\Twp\Reason;
 use App\Models\Twp\Student;
 use App\Models\Yeaf\Admin;
@@ -16,7 +17,6 @@ use PDF;
 
 class StudentController extends Controller
 {
-
     public function downloadLetter(Request $request, $type, $extra)
     {
         $admin = Admin::first();
@@ -31,8 +31,8 @@ class StudentController extends Controller
             default => 'twp.student-success',
         };
         $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'student', 'now_d'));
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->set_paper("Letter", "portrait");
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        $pdf->set_paper('Letter', 'portrait');
         $file_name = $student->birth_date;
 
         return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
@@ -78,9 +78,10 @@ class StudentController extends Controller
     {
         $student = Student::where('id', $student->id)->with('application.reasons', 'program', 'payments')->first();
         $reasons = Reason::orderBy('reason_status', 'asc')->get();
+        $schools = Institution::orderBy('name', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
 
-        return Inertia::render('Twp/StudentEdit', ['status' => true,
+        return Inertia::render('Twp/StudentEdit', ['status' => true, 'schools' => $schools,
             'result' => $student, 'reasons' => $reasons, 'provinces' => $provinces, ]);
     }
 

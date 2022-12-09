@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Twp;
 
 use App\Http\Requests\StaffEditRequest;
+use App\Http\Requests\Twp\InstitutionEditRequest;
+use App\Http\Requests\Twp\InstitutionStoreRequest;
 use App\Models\Role;
+use App\Models\Twp\Institution;
 use App\Models\Twp\Reason;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,10 +22,57 @@ class MaintenanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
+    public function institutionList(Request $request): \Inertia\Response
+    {
+        $schools = Institution::orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $schools, 'page' => 'institutions']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  InstitutionStoreRequest  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function institutionStore(InstitutionStoreRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        Institution::create($request->all());
+
+        return Redirect::route('twp.maintenance.institutions.list');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Http\Requests\StaffEditRequest  $request
+     * @param  Institution  $institution
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function institutionUpdate(InstitutionEditRequest $request, Institution $institution): \Illuminate\Http\RedirectResponse
+    {
+        if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
+            $institution->name = $request->name;
+            $institution->contact_name = $request->contact_name;
+            $institution->contact_email = $request->contact_email;
+            $institution->active_flag = $request->active_flag;
+            $institution->save();
+        }
+
+        return Redirect::route('twp.maintenance.institutions.list');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response::render
+     */
     public function staffList(Request $request): \Inertia\Response
     {
         $staff = User::whereHas('roles', function ($q) {
-        return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER]);
+            return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER]);
         }
         )->orderBy('created_at', 'desc')->get();
 
@@ -82,32 +132,32 @@ class MaintenanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
-    public function applicationReasonList(Request $request): \Inertia\Response
+    public function reasonList(Request $request): \Inertia\Response
     {
         $reasons = Reason::get();
 
-        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $reasons, 'page' => 'application-reasons']);
+        return Inertia::render('Twp/Maintenance', ['status' => true, 'results' => $reasons, 'page' => 'reasons']);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Request  $request
-     * @param  Reason $reason
+     * @param  Reason  $reason
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function applicationReasonEdit(Request $request, Reason $reason): \Illuminate\Http\RedirectResponse
+    public function reasonUpdate(Request $request, Reason $reason): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
-            $reason->reason_status = "DENIED";
-//            $reason->reason_status = $request->reason_status;
+//            $reason->reason_status = "DENIED";
+            $reason->reason_status = $request->reason_status;
             $reason->title = $request->title;
             $reason->letter_body = $request->letter_body;
             $reason->active_flag = $request->active_flag;
             $reason->save();
         }
 
-        return Redirect::route('twp.maintenance.application-reasons.list');
+        return Redirect::route('twp.maintenance.reasons.list');
     }
 
     /**
@@ -116,11 +166,11 @@ class MaintenanceController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function applicationReasonStore(Request $request): \Illuminate\Http\RedirectResponse
+    public function reasonStore(Request $request): \Illuminate\Http\RedirectResponse
     {
         Reason::create($request->all());
 
-        return Redirect::route('twp.maintenance.application-reasons.list');
+        return Redirect::route('twp.maintenance.reasons.list');
     }
 
     /**

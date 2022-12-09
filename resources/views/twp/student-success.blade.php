@@ -76,7 +76,7 @@
             success in your educational pursuits.</p>
         <p>Sincerely,</p>
         <p>PTWP System Navigator<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
-        <p>cc: {{$student->program->institution_name}}, {{ $student->program->contact_name }}, {{ $student->program->contact_email }}</p>
+        <p>cc: {{$student->program->institution->name}}, {{ $student->program->institution->contact_name }}, {{ $student->program->institution->contact_email }}</p>
     </div>
 
 

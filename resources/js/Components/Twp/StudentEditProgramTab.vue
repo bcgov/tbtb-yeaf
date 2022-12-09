@@ -10,13 +10,26 @@ tr {
 <template>
     <form v-if="editForm != null" @submit.prevent="updateStudent">
         <div class="row g-3">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <BreezeLabel for="inputInstitutionName" class="form-label" value="Institution Name" />
-                <BreezeInput type="text" class="form-control" id="inputInstitutionName" v-model="editForm.institution_name" />
+                <BreezeSelect @change="assignInstitution($event)" class="form-select" id="inputInstitutionName" v-model="editForm.institution_name">
+                    <template v-for="school in schools">
+                        <option v-if="school.active_flag === true" :value="school.name">{{ school.name }}</option>
+                    </template>
+                </BreezeSelect>
+
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <BreezeLabel for="inputCredential" class="form-label" value="Credential" />
                 <BreezeInput type="text" class="form-control" id="inputCredential" v-model="editForm.credential" />
+            </div>
+            <div class="col-md-2">
+                <BreezeLabel for="inputCredentialType" class="form-label" value="Credential Type" />
+                <BreezeSelect class="form-select" id="inputCredentialType" v-model="editForm.credential_type">
+                    <option value="Bachelor">Bachelor</option>
+                    <option value="Certificate">Certificate</option>
+                    <option value="Diploma">Diploma</option>
+                </BreezeSelect>
             </div>
             <div class="col-md-2">
                 <BreezeLabel for="inputStudentStatus" class="form-label" value="Student Status" />
@@ -51,16 +64,6 @@ tr {
                     <div class="input-group-text">$</div>
                     <input type="text" class="form-control" id="inputEstimatedCost" v-model="editForm.total_estimated_cost">
                 </div>
-            </div>
-
-
-            <div class="col-md-6">
-                <BreezeLabel for="inputContactName" class="form-label" value="Contact Name" />
-                <BreezeInput type="text" class="form-control" id="inputContactName" v-model="editForm.contact_name" />
-            </div>
-            <div class="col-md-6">
-                <BreezeLabel for="inputContactEmail" class="form-label" value="Contact Email" />
-                <BreezeInput type="email" class="form-control" id="inputContactEmail" v-model="editForm.contact_email" />
             </div>
 
             <div class="col-md-12">
@@ -106,6 +109,7 @@ export default {
     },
     props: {
         result: Object,
+        schools: Object,
         twpStudentId: String|Number|null,
     },
     data() {
@@ -118,19 +122,27 @@ export default {
                 id: null,
                 twp_student_id: this.twpStudentId,
                 institution_name: '',
+                institution_twp_id: null,
                 study_period_start_date: '',
                 credential: '',
+                credential_type: '',
                 program_length: '',
                 program_length_type: '',
                 total_estimated_cost: '',
                 student_status: '',
                 comments: '',
-                contact_name: '',
-                contact_email: '',
             }),
         }
     },
     methods: {
+        assignInstitution: function (e) {
+            for(let i=0; i<this.schools.length; i++){
+                if(this.schools[i].name === e.target.value){
+                    this.editForm.institution_twp_id = this.schools[i].id;
+                    break;
+                }
+            }
+        },
         updateStudent: function ()
         {
             let options = {

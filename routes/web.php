@@ -47,12 +47,14 @@ Route::group(
                 Route::get('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffShow'])->name('staff.show');
                 Route::post('/staff/{user}', [App\Http\Controllers\Twp\MaintenanceController::class, 'staffEdit'])->name('staff.edit');
 
+                Route::get('/institutions', [App\Http\Controllers\Twp\MaintenanceController::class, 'institutionList'])->name('institutions.list');
+                Route::post('/institutions', [App\Http\Controllers\Twp\MaintenanceController::class, 'institutionStore'])->name('institutions.store');
+                Route::put('/institutions/{institution}', [App\Http\Controllers\Twp\MaintenanceController::class, 'institutionUpdate'])->name('institutions.update');
 
-                Route::get('/application-reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonList'])->name('application-reasons.list');
-                Route::post('/application-reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonStore'])->name('application-reason.store');
-                Route::post('/application-reasons/{applicationReason}', [App\Http\Controllers\Twp\MaintenanceController::class, 'applicationReasonEdit'])->name('application-reason.edit');
-
-        });
+                Route::get('/reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'reasonList'])->name('reasons.list');
+                Route::post('/reasons', [App\Http\Controllers\Twp\MaintenanceController::class, 'reasonStore'])->name('reasons.store');
+                Route::put('/reasons/{reason}', [App\Http\Controllers\Twp\MaintenanceController::class, 'reasonUpdate'])->name('reasons.update');
+            });
     });
 
 Route::middleware(['auth', 'yeaf_active'])->group(function () {

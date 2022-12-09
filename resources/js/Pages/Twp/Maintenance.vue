@@ -29,7 +29,8 @@
                     <div class="col-md-9 mt-3">
                         <MaintenanceStaff v-if="page === 'staff'" :results="results"></MaintenanceStaff>
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
-                        <MaintenanceApplicationReason v-if="page === 'application-reasons'" :results="results"></MaintenanceApplicationReason>
+                        <MaintenanceReason v-if="page === 'reasons'" :results="results"></MaintenanceReason>
+                        <MaintenanceInstitution v-if="page === 'institutions'" :results="results"></MaintenanceInstitution>
                     </div>
                 </div>
             </div>
@@ -43,12 +44,14 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import MaintenanceMenu from "@/Components/Twp/MaintenanceMenu";
 import MaintenanceStaff from "@/Components/Twp/MaintenanceStaff";
 import MaintenanceStaffEdit from "@/Components/Twp/MaintenanceStaffEdit";
-import MaintenanceApplicationReason from "@/Components/Twp/MaintenanceApplicationReason";
+import MaintenanceReason from "@/Components/Twp/MaintenanceReasons";
+import MaintenanceInstitution from "@/Components/Twp/MaintenanceInstitutions";
 
 export default {
     name: 'Maintenance',
     components: {
-        MaintenanceApplicationReason,
+        MaintenanceInstitution,
+        MaintenanceReason,
         MaintenanceMenu,
         BreezeAuthenticatedLayout, Head, Link, MaintenanceStaff, MaintenanceStaffEdit
     },

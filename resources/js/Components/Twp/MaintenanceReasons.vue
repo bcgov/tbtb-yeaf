@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <div>Application Reasons Maintenance
+            <div>Denial Reasons Maintenance
                 <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newApplicationModal">New Denial Reason</button>
             </div>
         </div>
@@ -89,7 +89,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editApplicationModalLabel">Edit Application Reason</h5>
+                        <h5 class="modal-title" id="editApplicationModalLabel">Edit Denial Reason</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form v-if="editApplicationForm != null" @submit.prevent="submitEditApplication">
@@ -171,7 +171,7 @@ export default {
 
         submitEditApplication: function () {
             this.editApplicationForm.formState = '';
-            this.editApplicationForm.post(route('twp.maintenance.application-reason.edit', this.editApplicationForm.id), {
+            this.editApplicationForm.put(route('twp.maintenance.reasons.update', this.editApplicationForm.id), {
                 onSuccess: (response) => {
                     $("#editApplicationModal").modal('hide');
                     this.editApplicationForm.formState = true;
@@ -189,7 +189,7 @@ export default {
         newApplication: function ()
         {
             this.newApplicationForm.formState = '';
-            this.newApplicationForm.post(route('twp.maintenance.application-reason.store'), {
+            this.newApplicationForm.post(route('twp.maintenance.reasons.store'), {
                 onSuccess: (response) => {
                     $("#newApplicationModal").modal('hide');
                     this.newApplicationForm.reset(this.newApplicationFormData);
