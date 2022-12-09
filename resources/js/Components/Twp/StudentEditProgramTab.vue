@@ -8,92 +8,167 @@ tr {
 }
 </style>
 <template>
-    <form v-if="editForm != null" @submit.prevent="updateStudent">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <BreezeLabel for="inputInstitutionName" class="form-label" value="Institution Name" />
-                <BreezeSelect @change="assignInstitution($event)" class="form-select" id="inputInstitutionName" v-model="editForm.institution_name">
-                    <template v-for="school in schools">
-                        <option v-if="school.active_flag === true" :value="school.name">{{ school.name }}</option>
-                    </template>
-                </BreezeSelect>
+    <div>
+        <form v-if="editForm != null" @submit.prevent="updateStudent">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <BreezeLabel for="inputInstitutionName" class="form-label" value="Institution Name" />
+                    <BreezeSelect @change="assignInstitution($event)" class="form-select" id="inputInstitutionName" v-model="editForm.institution_name">
+                        <template v-for="school in schools">
+                            <option v-if="school.active_flag === true" :value="school.name">{{ school.name }}</option>
+                        </template>
+                    </BreezeSelect>
 
-            </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputCredential" class="form-label" value="Credential" />
-                <BreezeInput type="text" class="form-control" id="inputCredential" v-model="editForm.credential" />
-            </div>
-            <div class="col-md-2">
-                <BreezeLabel for="inputCredentialType" class="form-label" value="Credential Type" />
-                <BreezeSelect class="form-select" id="inputCredentialType" v-model="editForm.credential_type">
-                    <option value="Bachelor">Bachelor</option>
-                    <option value="Certificate">Certificate</option>
-                    <option value="Diploma">Diploma</option>
-                </BreezeSelect>
-            </div>
-            <div class="col-md-2">
-                <BreezeLabel for="inputStudentStatus" class="form-label" value="Student Status" />
-                <BreezeSelect class="form-select" id="inputStudentStatus" v-model="editForm.student_status">
-                    <option value="Attending">Attending</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Hiatus">Hiatus</option>
-                    <option value="Never Attended">Never Attended</option>
-                </BreezeSelect>
-            </div>
-
-            <div class="col-md-3">
-                <BreezeLabel for="inputStudyStartDate" class="form-label" value="Study Start Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputStudyStartDate" v-model="editForm.study_period_start_date" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputProgramLength" class="form-label" value="Program Length" />
-                <BreezeInput type="number" class="form-control" id="inputCredential" v-model="editForm.program_length" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputLengthType" class="form-label" value="Program Length Type" />
-                <BreezeSelect class="form-select" id="inputLengthType" v-model="editForm.program_length_type">
-                    <option value="day">Day</option>
-                    <option value="week">Week</option>
-                    <option value="month">Month</option>
-                    <option value="year">Year</option>
-                </BreezeSelect>
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputEstimatedCost" class="form-label" value="Estimated Cost" />
-                <div class="input-group">
-                    <div class="input-group-text">$</div>
-                    <input type="text" class="form-control" id="inputEstimatedCost" v-model="editForm.total_estimated_cost">
                 </div>
-            </div>
+                <div class="col-md-4">
+                    <BreezeLabel for="inputCredential" class="form-label" value="Credential" />
+                    <BreezeInput type="text" class="form-control" id="inputCredential" v-model="editForm.credential" />
+                </div>
+                <div class="col-md-2">
+                    <BreezeLabel for="inputCredentialType" class="form-label" value="Credential Type" />
+                    <BreezeSelect class="form-select" id="inputCredentialType" v-model="editForm.credential_type">
+                        <option value="Bachelor">Bachelor</option>
+                        <option value="Certificate">Certificate</option>
+                        <option value="Diploma">Diploma</option>
+                    </BreezeSelect>
+                </div>
+                <div class="col-md-2">
+                    <BreezeLabel for="inputStudentStatus" class="form-label" value="Student Status" />
+                    <BreezeSelect class="form-select" id="inputStudentStatus" v-model="editForm.student_status">
+                        <option value="Attending">Attending</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Hiatus">Hiatus</option>
+                        <option value="Never Attended">Never Attended</option>
+                    </BreezeSelect>
+                </div>
 
-            <div class="col-md-12">
-                <BreezeLabel for="inputProgramComments" class="form-label" value="Comments" />
-                <BreezeInput type="text" class="form-control" id="inputProgramComments" v-model="editForm.comments" />
-            </div>
-
-            <div v-if="editForm.errors != undefined" class="row">
-                <div class="col-12">
-                    <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
-                        <ul>
-                            <li v-for="err in editForm.errors">{{ err }}</li>
-                        </ul>
+                <div class="col-md-3">
+                    <BreezeLabel for="inputStudyStartDate" class="form-label" value="Study Start Date" />
+                    <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputStudyStartDate" v-model="editForm.study_period_start_date" />
+                </div>
+                <div class="col-md-3">
+                    <BreezeLabel for="inputProgramLength" class="form-label" value="Program Length" />
+                    <BreezeInput type="number" class="form-control" id="inputCredential" v-model="editForm.program_length" />
+                </div>
+                <div class="col-md-3">
+                    <BreezeLabel for="inputLengthType" class="form-label" value="Program Length Type" />
+                    <BreezeSelect class="form-select" id="inputLengthType" v-model="editForm.program_length_type">
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                    </BreezeSelect>
+                </div>
+                <div class="col-md-3">
+                    <BreezeLabel for="inputEstimatedCost" class="form-label" value="Estimated Cost" />
+                    <div class="input-group">
+                        <div class="input-group-text">$</div>
+                        <input type="text" class="form-control" id="inputEstimatedCost" v-model="editForm.total_estimated_cost">
                     </div>
                 </div>
+
+                <div class="col-md-12">
+                    <BreezeLabel for="inputProgramComments" class="form-label" value="Comments" />
+                    <BreezeInput type="text" class="form-control" id="inputProgramComments" v-model="editForm.comments" />
+                </div>
+
+                <div v-if="editForm.errors != undefined" class="row">
+                    <div class="col-12">
+                        <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
+                            <ul>
+                                <li v-for="err in editForm.errors">{{ err }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-footer mt-3">
+                <button v-if="result==null" type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Create Program</button>
+                <button v-else type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Program</button>
+                <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
             </div>
 
+            <FormSubmitAlert :form-state="editForm.formState"
+                             :success-msg="'Program record was submitted successfully.'"></FormSubmitAlert>
 
+        </form>
+
+<hr/>
+        <div v-if="result.versions != null" class="card">
+            <div class="card-header">History</div>
+            <div class="card-body">
+                <div class="accordion" id="accordionHistory">
+                    <div v-for="(version, i) in result.versions" class="accordion-item">
+                        <h2 class="accordion-header" :id="'heading'+i">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse'+i" aria-expanded="true" :aria-controls="'collapse'+i">
+                                {{ formatDate(version.created_at) }}
+                            </button>
+                        </h2>
+                        <div :id="'collapse'+i" class="accordion-collapse collapse" :aria-labelledby="'heading'+i" data-bs-parent="#accordionHistory">
+                            <div class="accordion-body">
+
+
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <BreezeLabel :for="'inputInstitutionName'+i" class="form-label" value="Institution Name" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputInstitutionName'+i" :value="version.institution_name" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel :for="'inputCredential'+i" class="form-label" value="Credential" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputCredential'+i" :value="version.credential" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <BreezeLabel :for="'inputCredentialType'+i" class="form-label" value="Credential Type" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputCredentialType'+i" :value="version.credential_type" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <BreezeLabel :for="'inputStudentStatus'+i" class="form-label" value="Student Status" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputStudentStatus'+i" :value="version.student_status" />
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <BreezeLabel :for="'inputStudyStartDate'+i" class="form-label" value="Study Start Date" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputStudyStartDate'+i" :value="version.study_period_start_date" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <BreezeLabel :for="'inputProgramLength'+i" class="form-label" value="Program Length" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputProgramLength'+i" :value="version.program_length" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <BreezeLabel :for="'inputLengthType'+i" class="form-label" value="Program Length Type" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputLengthType'+i" :value="version.program_length_type" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <BreezeLabel :for="'inputEstimatedCost'+i" class="form-label" value="Estimated Cost" />
+                                        <div class="input-group">
+                                            <div class="input-group-text">$</div>
+                                            <input readonly disabled type="text" class="form-control" :id="'inputEstimatedCost'+i" :value="version.total_estimated_cost">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <BreezeLabel :for="'inputProgramComments'+i" class="form-label" value="Comments" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputProgramComments'+i" :value="version.comments" />
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
         </div>
-        <div class="card-footer mt-3">
-            <button v-if="result==null" type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Create Program</button>
-            <button v-else type="submit" class="btn mr-2 btn-outline-success" :disabled="editForm.processing">Update Program</button>
-            <Link @click="back" class="btn btn-outline-primary float-right" href="#">Back</Link>
-        </div>
 
-        <FormSubmitAlert :form-state="editForm.formState"
-                         :success-msg="'Program record was submitted successfully.'"></FormSubmitAlert>
-
-    </form>
-
+    </div>
 </template>
 <script>
 import {Link, useForm} from '@inertiajs/inertia-vue3';
@@ -135,6 +210,15 @@ export default {
         }
     },
     methods: {
+        formatDate: function (value) {
+            if(value !== undefined && value !== ''){
+                let date = value.split("T");
+                let time = date[1].split(".");
+
+                return date[0] + " " + time[0];
+            }
+            return value;
+        },
         assignInstitution: function (e) {
             for(let i=0; i<this.schools.length; i++){
                 if(this.schools[i].name === e.target.value){

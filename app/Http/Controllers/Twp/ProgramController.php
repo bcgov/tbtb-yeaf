@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Twp;
 use App\Http\Requests\Twp\ProgramEditRequest;
 use App\Http\Requests\Twp\ProgramStoreRequest;
 use App\Models\Twp\Program;
+use App\Models\Twp\ProgramHistory;
 use Illuminate\Support\Facades\Redirect;
 
 class ProgramController extends Controller
@@ -51,6 +52,12 @@ class ProgramController extends Controller
      */
     public function update(ProgramEditRequest $request, Program $program)
     {
+        $history = $program->toArray();
+//        $history = $program;
+        $history['program_twp_id'] = $program->id;
+//        $history->save();
+        ProgramHistory::create($history);
+
         Program::where('id', $program->id)->update($request->validated());
         $program = Program::find($program->id);
 

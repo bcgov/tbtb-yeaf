@@ -23,4 +23,9 @@ class Program extends Model
     {
         return $this->belongsTo('App\Models\Twp\Institution', 'institution_twp_id', 'id');
     }
+
+    public function versions()
+    {
+        return $this->hasMany('App\Models\Twp\ProgramHistory', 'program_twp_id', 'id')->orderBy('created_at', 'desc');
+    }
 }
