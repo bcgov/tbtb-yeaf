@@ -95,8 +95,8 @@ tr {
 
         </form>
 
-<hr/>
-        <div v-if="result.versions != null" class="card">
+        <hr/>
+        <div v-if="result.versions != null && result.versions.length > 0" class="card">
             <div class="card-header">History</div>
             <div class="card-body">
                 <div class="accordion" id="accordionHistory">
@@ -108,7 +108,6 @@ tr {
                         </h2>
                         <div :id="'collapse'+i" class="accordion-collapse collapse" :aria-labelledby="'heading'+i" data-bs-parent="#accordionHistory">
                             <div class="accordion-body">
-
 
                                 <div class="row g-3">
                                     <div class="col-md-4">
@@ -147,7 +146,6 @@ tr {
                                             <input readonly disabled type="text" class="form-control" :id="'inputEstimatedCost'+i" :value="version.total_estimated_cost">
                                         </div>
                                     </div>
-
                                     <div class="col-md-12">
                                         <BreezeLabel :for="'inputProgramComments'+i" class="form-label" value="Comments" />
                                         <BreezeInput readonly disabled type="text" class="form-control" :id="'inputProgramComments'+i" :value="version.comments" />
@@ -155,15 +153,10 @@ tr {
 
                                 </div>
 
-
-
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-
 
             </div>
         </div>
