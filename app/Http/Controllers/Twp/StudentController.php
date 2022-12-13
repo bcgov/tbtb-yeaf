@@ -21,7 +21,7 @@ class StudentController extends Controller
     {
         $admin = Admin::first();
         $now_d = date('F d, Y');
-        $student = Student::where('id', $extra)->with('application.reasons', 'program', 'payments')->first();
+        $student = Student::where('id', $extra)->with('application.reasons', 'program.institution','payments')->first();
 
         $reasons = Reason::all();
         $letter_file = match ($type) {
