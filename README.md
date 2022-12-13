@@ -1,6 +1,6 @@
 <br/>
 <p align="center">
-Ministry of Advance Education, Skills and Training<br/> 
+Ministry of Post-Secondary Education and Future Skills<br/> 
 Student Services Division<br/><br/>
 YEAF - Youth Educational Assistance Fund
 <br/>

@@ -76,7 +76,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        $student = Student::where('id', $student->id)->with('application.reasons', 'program.versions', 'payments')->first();
+        $student = Student::where('id', $student->id)->with('application.reasons', 'program.versions', 'program.institution', 'payments')->first();
         $reasons = Reason::orderBy('reason_status', 'asc')->get();
         $schools = Institution::orderBy('name', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();

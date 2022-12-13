@@ -68,7 +68,7 @@
         <p><strong>If you change your program of study, institution, or timeframe for completion, please notify us at
                 <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a> so we can ensure your continued eligibility, and payment to the institution.</strong></p>
         <p>To facilitate timely communication, and to ensure your information is kept secure, we invite you to create a
-            StudentAid BC dashboard account at <a href="http://www.studentaidbc.ca/dashboard">www.StudentAidBC.ca/dashboard</a>. </p>
+            StudentAid BC dashboard account at <a href="https://www.studentaidbc.ca/dashboard">www.StudentAidBC.ca/dashboard</a>. </p>
         <p>Please be advised that tuition waivers are a source of taxable income, and you will receive a T4A through your
             institution to include with your income tax return. For more information on how taxable income is treated,
             or the issuance of a T4A, please visit the <a href="https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax.html">Canada Revenue Agency website</a>.</p>

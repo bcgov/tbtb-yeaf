@@ -179,8 +179,6 @@ export default {
     },
     methods: {
 
-
-
         switchActiveTab: function (tab)
         {
             this.activeTab = tab;
@@ -233,7 +231,7 @@ export default {
                 this.editForm = JSON.parse(JSON.stringify(newValue));
 
                 this.lettersEnabled = false;
-                if(this.editForm.application != null){
+                if(this.editForm.application != null && this.editForm.program != null && this.editForm.program.institution != null){
                     if(this.editForm.application.application_status === 'APPROVED'){
                         this.lettersEnabled = 'success';
                         if(this.editForm.age < 19){

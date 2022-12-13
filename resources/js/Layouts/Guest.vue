@@ -17,7 +17,7 @@ import { Link } from '@inertiajs/inertia-vue3';
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             <div class="inline-flex mb-5">
                 <Link href="/">
-                    <BreezeApplicationLoginLogo class="h-32 inline-flex" />
+                    <BreezeApplicationLoginLogo class="h-48 inline-flex" />
                 </Link>
             </div>
 
