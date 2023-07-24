@@ -96,7 +96,7 @@ class ReportController extends Controller
     public function payments(Request $request)
     {
         return response()->json(Payment::select('id', 'twp_student_id', 'twp_program_id', 'twp_application_id',
-            'payment_date', 'payment_amount')->get(), 200);
+            'payment_date', 'payment_amount', 'created_by', 'updated_by')->get(), 200);
     }
 
     public function grants(Request $request)
@@ -119,7 +119,7 @@ class ReportController extends Controller
 
     public function reasons(Request $request)
     {
-        return response()->json(Reason::select('title', 'reason_status', 'letter_body')->get());
+        return response()->json(Reason::select('id', 'title', 'reason_status', 'letter_body')->get());
     }
 
     public function applicationReasons(Request $request)
@@ -129,7 +129,7 @@ class ReportController extends Controller
 
     public function staff(Request $request)
     {
-        $users = User::select('user_id', 'first_name', 'last_name', 'disabled',
+        $users = User::select('id', 'user_id', 'first_name', 'last_name', 'disabled',
             'access_type', 'tele', 'email')->whereHas('roles', function ($q) {
                 $q->whereIn('name', ['TWP Admin', 'TWP User']);
             })->get();

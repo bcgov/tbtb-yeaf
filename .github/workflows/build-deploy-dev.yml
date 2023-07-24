@@ -1,4 +1,4 @@
-name: Build and Deploy in YEAF in DEV
+name: Build and Deploy YEAF in DEV
 
 on:
   push:
@@ -15,9 +15,10 @@ jobs:
         echo Git Base Ref: ${{ github.base_ref }}
         echo Git Build ID: ${{ github.event.number }}
         echo Git Pull Request Ref: ${{ github.event.pull_request.head.sha }}
+        echo Git Ref Name: ${{ github.ref_name }}
         echo OC CLI Version: $(oc version)
 
-  # Build the API
+  # Build YEAF
   build:
     name: Build project
     runs-on: ubuntu-latest
@@ -53,7 +54,7 @@ jobs:
           make oc-build-web
       - name: Finished OC Build from yaml
         run: |
-          echo "FINISHED OC BUILD WEB"
+          echo "FINISHED OC BUILD YEAF"
           echo ++++++++++
 
 
@@ -100,7 +101,7 @@ jobs:
           make oc-deploy-web
       - name: Finished OC Deploy from yaml
         run: |
-          echo "FINISHED OC Deploy WEB"
+          echo "FINISHED OC Deploy DEV YEAF"
           echo ++++++++++
 
   # Deploy project
@@ -142,5 +143,5 @@ jobs:
           make oc-deploy-web
       - name: Finished OC Deploy from yaml
         run: |
-          echo "FINISHED OC Deploy WEB PROD"
+          echo "FINISHED OC Deploy PROD YEAF"
           echo ++++++++++
