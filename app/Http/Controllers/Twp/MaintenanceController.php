@@ -20,7 +20,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function institutionList(Request $request): \Inertia\Response
@@ -33,7 +32,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  InstitutionStoreRequest  $request
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse::render
      */
@@ -48,7 +46,6 @@ class MaintenanceController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Http\Requests\StaffEditRequest  $request
-     * @param  Institution  $institution
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function institutionUpdate(InstitutionEditRequest $request, Institution $institution): \Illuminate\Http\RedirectResponse
@@ -63,7 +60,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function staffList(Request $request): \Inertia\Response
@@ -86,8 +82,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
     public function staffShow(Request $request, User $user): \Inertia\Response
@@ -104,8 +98,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\StaffEditRequest  $request
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
@@ -139,7 +131,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function reasonList(Request $request): \Inertia\Response
@@ -153,13 +144,12 @@ class MaintenanceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Request  $request
-     * @param  Reason  $reason
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function reasonUpdate(Request $request, Reason $reason): \Illuminate\Http\RedirectResponse
     {
         if (Auth::user()->hasRole(Role::TWP_ADMIN) && Auth::user()->disabled === false) {
-//            $reason->reason_status = "DENIED";
+            //            $reason->reason_status = "DENIED";
             $reason->reason_status = $request->reason_status;
             $reason->title = $request->title;
             $reason->letter_body = $request->letter_body;
@@ -173,7 +163,6 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function reasonStore(Request $request): \Illuminate\Http\RedirectResponse
@@ -186,7 +175,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function paymentList(Request $request): \Inertia\Response
@@ -217,7 +205,6 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function paymentStore(Request $request): \Illuminate\Http\RedirectResponse

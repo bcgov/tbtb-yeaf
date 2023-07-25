@@ -29,8 +29,6 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  ApplicationEditRequest  $request
-     * @param  \App\Models\Twp\Application  $application
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ApplicationEditRequest $request, Application $application)
@@ -52,8 +50,6 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  \App\Models\Twp\Application  $application
      * @return \Illuminate\Http\RedirectResponse
      */
     public function applicationStatus(Request $request, Application $application)

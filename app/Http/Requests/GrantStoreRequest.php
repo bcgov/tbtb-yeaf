@@ -84,14 +84,10 @@ class GrantStoreRequest extends FormRequest
         if (isset($this->age)) {
             $this->merge(['age' => preg_replace('/\D/', '', $this->age)]);
         }
-//        var_dump(isset($this->officer_user_id));
-//        var_dump(is_null($this->officer_user_id));
-//        var_dump($this->officer_user_id);
+
         if (! isset($this->officer_user_id) || is_null($this->officer_user_id)) {
-//            echo('in');
             $this->merge(['officer_user_id' => \Illuminate\Support\Facades\Auth::user()->user_id]);
         }
-//        dd($this->officer_user_id);
         $this->merge(['last_evaluation_date' => date('Y-m-d', strtotime('now'))]);
 
         $last_grant = Grant::select('grant_id')->orderBy('grant_id', 'desc')->first();
@@ -101,14 +97,11 @@ class GrantStoreRequest extends FormRequest
             'update_user_id' => Str::upper(Auth::user()->user_id),
         ]);
 
-        //
-//        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
     }
 
     /**
      * Convert to boolean
      *
-     * @param $booleable
      * @return bool
      */
     private function toBoolean($booleable)

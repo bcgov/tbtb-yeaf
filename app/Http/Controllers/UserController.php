@@ -34,7 +34,7 @@ class UserController extends Controller
 
             return Redirect::to($authUrl);
 
-        // Check given state against previously stored one to mitigate CSRF attack
+            // Check given state against previously stored one to mitigate CSRF attack
         } elseif (! $request->has('state') || ($request->state !== $request->session()->get('oauth2state'))) {
             $request->session()->forget('oauth2state');
             //Invalid state, make sure HTTP sessions are enabled
@@ -82,7 +82,7 @@ class UserController extends Controller
                     'status' => 'Please contact YEAF Admin to grant you access.',
                 ]);
 
-            //if the user has been disabled
+                //if the user has been disabled
             } elseif ($user->disabled === true) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
@@ -133,19 +133,18 @@ class UserController extends Controller
     {
         return Inertia::render('Yeaf/Students');
     }
-//
-//    /**
-//     * Display first page after login (dashboard page)
-//     */
-//    public function reports(Request $request)
-//    {
-//        return Inertia::render('Yeaf/Reports', ['results' => null]);
-//    }
+    //
+    //    /**
+    //     * Display first page after login (dashboard page)
+    //     */
+    //    public function reports(Request $request)
+    //    {
+    //        return Inertia::render('Yeaf/Reports', ['results' => null]);
+    //    }
 
     /**
      * Display the login view.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
     public function login(Request $request)
@@ -160,7 +159,6 @@ class UserController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function logout(Request $request)

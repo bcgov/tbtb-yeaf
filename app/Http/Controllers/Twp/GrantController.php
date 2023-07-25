@@ -12,7 +12,6 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  GrantStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(GrantStoreRequest $request)
@@ -25,8 +24,6 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  GrantEditRequest  $request
-     * @param  \App\Models\Twp\Grant  $grant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(GrantEditRequest $request, Grant $grant)

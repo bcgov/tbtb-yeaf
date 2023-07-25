@@ -12,7 +12,6 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PaymentStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PaymentStoreRequest $request)
@@ -25,8 +24,6 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  PaymentEditRequest  $request
-     * @param  \App\Models\Twp\Payment  $payment
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(PaymentEditRequest $request, Payment $payment)

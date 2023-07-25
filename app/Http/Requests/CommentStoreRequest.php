@@ -57,14 +57,11 @@ class CommentStoreRequest extends FormRequest
             'user_id' => Str::upper(Auth::user()->user_id),
         ]);
 
-        //
-//        $this->merge(['disabled' => $this->toBoolean($this->disabled)]);
     }
 
     /**
      * Convert to boolean
      *
-     * @param $booleable
      * @return bool
      */
     private function toBoolean($booleable)

@@ -62,7 +62,6 @@ class StaffEditRequest extends FormRequest
     /**
      * Convert to boolean
      *
-     * @param $booleable
      * @return bool
      */
     private function toBoolean($booleable)

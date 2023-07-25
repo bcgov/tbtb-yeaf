@@ -9,7 +9,6 @@ class Grant extends Model
 {
     use HasFactory;
 
-
     public function scopeIsPending($query)
     {
         return $query->where('status_code', 'P');

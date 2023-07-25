@@ -23,7 +23,7 @@ return new class extends Migration
             Schema::rename('yeaf_failed_jobs', 'failed_jobs');
             Schema::rename('yeaf_personal_access_tokens', 'personal_access_tokens');
 
- //           Schema::rename('yeaf_grant_twps', 'twp_grants');
+            //           Schema::rename('yeaf_grant_twps', 'twp_grants');
             Schema::rename('yeaf_program_history_twps', 'twp_program_histories');
             Schema::rename('yeaf_institution_twps', 'twp_institutions');
             Schema::rename('yeaf_reason_twps', 'twp_reasons');
@@ -42,7 +42,7 @@ return new class extends Migration
     public function down()
     {
         if (Schema::hasTable('sessions')) {
-//            Schema::rename('twp_grants', 'yeaf_grant_twps');
+            //            Schema::rename('twp_grants', 'yeaf_grant_twps');
             Schema::rename('twp_program_histories', 'yeaf_program_history_twps');
             Schema::rename('twp_institutions', 'yeaf_institution_twps');
             Schema::rename('twp_reasons', 'yeaf_reason_twps');
