@@ -33,7 +33,7 @@ class ReportController extends Controller
 
     public function reportsStudents(Request $request)
     {
-        return  response()->json(Student::select('student_id', 'first_name', 'last_name', 'sin', 'birth_date',
+        return response()->json(Student::select('student_id', 'first_name', 'last_name', 'sin', 'birth_date',
             'address', 'city', 'province', 'postal_code', 'country', 'tele', 'email', 'gender', 'life',
             'overaward_amount', 'overaward_flag', 'overaward_deducted_amount', 'investigate', 'pen', 'pd',
             'institution_student_number')->get(), 200);
@@ -41,8 +41,6 @@ class ReportController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request, $type): \Illuminate\Http\JsonResponse
     {
@@ -101,7 +99,7 @@ class ReportController extends Controller
     {
         $users = \App\Models\User::select('user_id', 'first_name', 'last_name', 'disabled',
             'access_type', 'tele', 'email')->whereHas('roles', function ($q) {
-            $q->whereIn('name', ['YEAF Admin', 'YEAF User']);
+                $q->whereIn('name', ['YEAF Admin', 'YEAF User']);
             })->get();
 
         return response()->json($users);

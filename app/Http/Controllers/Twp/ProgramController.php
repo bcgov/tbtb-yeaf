@@ -13,7 +13,6 @@ class ProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ProgramStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(ProgramStoreRequest $request)
@@ -26,8 +25,6 @@ class ProgramController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  ProgramEditRequest  $request
-     * @param  \App\Models\Twp\Program  $program
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(ProgramEditRequest $request, Program $program)

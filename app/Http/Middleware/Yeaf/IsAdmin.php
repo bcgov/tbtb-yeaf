@@ -13,7 +13,6 @@ class IsAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @param  string|null  ...$roles
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
@@ -27,10 +26,10 @@ class IsAdmin
         }
 
         $user = Auth::user();
-//        //redirect non admin users to the dashboard page
-//        if ($user->access_type != 'A' && $user->access_type != 'S') {
-//            return redirect(RouteServiceProvider::HOME);
-//        }
+        //        //redirect non admin users to the dashboard page
+        //        if ($user->access_type != 'A' && $user->access_type != 'S') {
+        //            return redirect(RouteServiceProvider::HOME);
+        //        }
         if (! $user->hasRole(Role::SUPER_ADMIN) && ! $user->hasRole(Role::YEAF_ADMIN)) {
             return redirect(RouteServiceProvider::HOME);
         }

@@ -28,7 +28,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function letters(Request $request): \Inertia\Response
@@ -60,7 +59,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function staffList(Request $request): \Inertia\Response
@@ -83,8 +81,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
     public function staffShow(Request $request, User $user): \Inertia\Response
@@ -101,8 +97,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\StaffEditRequest  $request
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
@@ -136,7 +130,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function ineligiblesList(Request $request): \Inertia\Response
@@ -149,8 +142,6 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\IneligibleEditRequest  $request
-     * @param  \App\Models\Yeaf\Ineligible  $ineligible
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): \Illuminate\Http\RedirectResponse
@@ -170,7 +161,6 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  IneligibleStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function ineligibleStore(IneligibleStoreRequest $request): \Illuminate\Http\RedirectResponse
@@ -183,7 +173,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function programYearsList(Request $request): \Inertia\Response
@@ -196,8 +185,6 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  ProgramYearEditRequest  $request
-     * @param  \App\Models\Yeaf\ProgramYear  $programYear
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): \Illuminate\Http\RedirectResponse
@@ -212,7 +199,6 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ProgramYearStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function programYearStore(ProgramYearStoreRequest $request): \Illuminate\Http\RedirectResponse
@@ -225,7 +211,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
@@ -233,7 +218,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response::render
      */
     public function batchesList(Request $request): \Inertia\Response
@@ -246,7 +230,6 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  BatchEditRequest  $request
      * @param  \App\Models\Batch  $batch
      * @return \Illuminate\Http\RedirectResponse::render
      */
@@ -262,7 +245,6 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  BatchStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function batchStore(BatchStoreRequest $request): \Illuminate\Http\RedirectResponse
@@ -275,7 +257,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
@@ -290,8 +271,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\MinistryEditRequest  $request
-     * @param  \App\Models\Yeaf\Admin  $admin
      * @return \Illuminate\Http\RedirectResponse::render
      */
     public function ministryUpdate(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
@@ -306,14 +285,13 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
     public function reportsShow(Request $request): \Inertia\Response
     {
         return Inertia::render('Yeaf/Maintenance', ['status' => true, 'page' => 'reports']);
-//        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
+        //        return Inertia::render('Yeaf/Maintenance', ['status' => true, 'results' => $admin, 'provinces' => $provinces, 'page' => 'ministry']);
     }
 
     /**

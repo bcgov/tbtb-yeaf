@@ -35,7 +35,6 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StudentStoreRequest  $request
      * @return \Inertia\Response
      */
     public function store(StudentStoreRequest $request)
@@ -51,7 +50,6 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Yeaf\Student  $student
      * @return \Inertia\Response
      */
     public function show(Student $student)
@@ -82,8 +80,6 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StudentUpdateRequest  $request
-     * @param  \App\Models\Yeaf\Student  $student
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student)

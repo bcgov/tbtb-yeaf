@@ -49,7 +49,6 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StudentStoreRequest  $request
      * @return \Inertia\Response
      */
     public function store(StudentStoreRequest $request)
@@ -87,7 +86,6 @@ class StudentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Twp\Student  $student
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student)

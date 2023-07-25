@@ -37,7 +37,6 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\GrantStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(GrantStoreRequest $request)
@@ -51,8 +50,6 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\GrantEditRequest  $request
-     * @param  \App\Models\Yeaf\Grant  $grant
      * @return \Illuminate\Http\Response
      */
     public function update(GrantEditRequest $request, Grant $grant)
@@ -93,7 +90,6 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param  Request  $request
      * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -169,8 +165,6 @@ class GrantController extends Controller
     /**
      * update and evaluate a grant.
      *
-     * @param  \App\Http\Requests\GrantEditRequest  $request
-     * @param  \App\Models\Yeaf\Grant  $grant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function evaluateApp(GrantEditRequest $request, Grant $grant)
@@ -439,7 +433,7 @@ class GrantController extends Controller
     {
         $results = DB::select(DB::raw("select yeaf_grants.program_year_id from yeaf_students
     inner join yeaf_grants on yeaf_students.student_id = yeaf_grants.student_id
-where yeaf_grants.total_yeaf_award > 0 AND yeaf_grants.grant_id <> $grant->id AND yeaf_grants.student_id='".$grant->student->student_id."'
+where yeaf_grants.total_yeaf_award > 0 AND yeaf_grants.grant_id <> $grant->grant_id AND yeaf_grants.student_id='".$grant->student->student_id."'
 group by yeaf_grants.program_year_id"));
         if (! is_null($results) && count($results) >= $grant->py->max_years_allowed) {
             if ($messageFlag) {
@@ -497,7 +491,7 @@ group by yeaf_grants.program_year_id"));
             } elseif ($appeal_status != 'A') {
                 $msg = 'Student is '.$age_within_range.' and there is an age appeal with status of ';
                 $msg .= match ($appeal_status) {
-//                    'A' => 'Approved',
+                    //                    'A' => 'Approved',
                     'P' => 'Pending',
                     'D' => 'Denied',
                 };

@@ -111,73 +111,73 @@ class Application extends Model
 
                     if (! is_null($row->{'Program Length'})) {
                         $p_type = 'year';
-                        switch($row->{'Program Length'}) {
+                        switch ($row->{'Program Length'}) {
                             case 'Varies': break;
 
                             case '4 level -1/yr': $p_type = 'year';
-                            $p_len = 4;
-                            break;
+                                $p_len = 4;
+                                break;
 
                             case '7 weeks': $p_type = 'week';
-                            $p_len = 7;
-                            break;
+                                $p_len = 7;
+                                break;
                             case '43 weeks': $p_type = 'week';
-                            $p_len = 43;
-                            break;
+                                $p_len = 43;
+                                break;
                             case '10 weeks': $p_type = 'week';
-                            $p_len = 10;
-                            break;
+                                $p_len = 10;
+                                break;
                             case '16 weeks': $p_type = 'week';
-                            $p_len = 16;
-                            break;
+                                $p_len = 16;
+                                break;
                             case '17 weeks': $p_type = 'week';
-                            $p_len = 17;
-                            break;
+                                $p_len = 17;
+                                break;
                             case '24 weeks': $p_type = 'week';
-                            $p_len = 24;
-                            break;
+                                $p_len = 24;
+                                break;
                             case '26 weeks': $p_type = 'week';
-                            $p_len = 26;
-                            break;
+                                $p_len = 26;
+                                break;
                             case '28 weeks': $p_type = 'week';
-                            $p_len = 28;
-                            break;
+                                $p_len = 28;
+                                break;
                             case '33 weeks': $p_type = 'week';
-                            $p_len = 33;
-                            break;
+                                $p_len = 33;
+                                break;
                             case '34 weeks': $p_type = 'week';
-                            $p_len = 34;
-                            break;
+                                $p_len = 34;
+                                break;
                             case '39 weeks': $p_type = 'week';
-                            $p_len = 39;
-                            break;
+                                $p_len = 39;
+                                break;
                             case '43 weeks': $p_type = 'week';
-                            $p_len = 43;
-                            break;
+                                $p_len = 43;
+                                break;
 
                             case '1 month': $p_type = 'month';
-                            $p_len = 1;
-                            break;
+                                $p_len = 1;
+                                break;
                             case '9 months': $p_type = 'month';
-                            $p_len = 9;
-                            break;
+                                $p_len = 9;
+                                break;
                             case '18 months': $p_type = 'month';
-                            $p_len = 18;
-                            break;
+                                $p_len = 18;
+                                break;
 
                             case '1-3 days': $p_type = 'day';
-                            $p_len = 3;
-                            break;
+                                $p_len = 3;
+                                break;
 
                             case '1.3': $p_type = 'year';
-                            $p_len = 1;
-                            break;
+                                $p_len = 1;
+                                break;
                             case '1.5': $p_type = 'month';
-                            $p_len = 18;
-                            break;
+                                $p_len = 18;
+                                break;
                             case '2.5': $p_type = 'month';
-                            $p_len = 30;
-                            break;
+                                $p_len = 30;
+                                break;
                         }
                     }
 

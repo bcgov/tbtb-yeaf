@@ -28,7 +28,6 @@ class InstitutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  InstitutionStoreRequest  $request
      * @return \Inertia\Response
      */
     public function store(InstitutionStoreRequest $request)
@@ -45,7 +44,6 @@ class InstitutionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Yeaf\Institution  $institution
      * @return \Inertia\Response
      */
     public function show(Institution $institution)
@@ -58,8 +56,6 @@ class InstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  InstitutionUpdateRequest  $request
-     * @param  \App\Models\Yeaf\Institution  $institution
      * @return \Inertia\Response
      */
     public function update(InstitutionUpdateRequest $request, Institution $institution)

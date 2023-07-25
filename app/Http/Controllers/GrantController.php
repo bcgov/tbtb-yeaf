@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Grant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class GrantController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +34,6 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -47,7 +44,6 @@ class GrantController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\Response
      */
     public function show(Grant $grant)
@@ -58,7 +54,6 @@ class GrantController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\Response
      */
     public function edit(Grant $grant)
@@ -69,8 +64,6 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Grant $grant)
@@ -81,13 +74,10 @@ class GrantController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Grant  $grant
      * @return \Illuminate\Http\Response
      */
     public function destroy(Grant $grant)
     {
         //
     }
-
-
 }
