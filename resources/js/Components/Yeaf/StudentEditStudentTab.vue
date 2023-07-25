@@ -102,19 +102,19 @@ tr {
 
             <div class="col-md-3">
                 <BreezeLabel for="inputTotalAward" class="form-label" value="Total Over Award" />
-                <BreezeInput type="text" class="form-control" id="inputTotalAward" v-model="editForm.overaward_amount" disabled />
+                <BreezeInput type="text" class="form-control" id="inputTotalAward" v-model="totalOverawardAmount" disabled />
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="inputTotalDeductedAward" class="form-label" value="- Deducted Over Award" />
-                <BreezeInput type="text" class="form-control" id="inputTotalDeductedAward" v-model="editForm.overaward_deducted_amount" disabled />
+                <BreezeInput type="text" class="form-control" id="inputTotalDeductedAward" v-model="totalOverawardDeductedAmount" disabled />
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="inputTotalCurrent" class="form-label" value="= Current Over Award" readonly="readonly" />
-                <BreezeInput type="text" class="form-control" id="inputTotalCurrent" :value="(editForm.overaward_amount - editForm.overaward_deducted_amount)" disabled />
+                <BreezeInput type="text" class="form-control" id="inputTotalCurrent" :value="(totalOverawardAmount - totalOverawardDeductedAmount)" disabled />
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="inputTotalLifetime" class="form-label" value="Lifetime Total Award" />
-                <BreezeInput type="text" class="form-control" id="inputTotalLifetime" :value="editForm.life" disabled />
+                <BreezeInput type="text" class="form-control" id="inputTotalLifetime" :value="totalLife" disabled />
             </div>
 
 
@@ -227,6 +227,44 @@ export default {
     mounted() {
         this.editForm = this.result;
         this.formatPhoneNumber();
+    },
+    computed: {
+totalOverawardAmount: function ()
+{
+    if(this.editForm === null || this.editForm.grants.length === 0){
+        return 0;
+    }
+
+    let total = 0;
+    for(let i=0; i<this.editForm.grants.length; i++){
+        total += parseFloat(this.editForm.grants[i].overaward);
+    }
+    return total.toFixed(2);
+},
+totalOverawardDeductedAmount: function ()
+{
+    if(this.editForm === null || this.editForm.grants.length === 0){
+        return 0;
+    }
+
+    let total = 0;
+    for(let i=0; i<this.editForm.grants.length; i++){
+        total += parseFloat(this.editForm.grants[i].overaward_deducted_amount);
+    }
+    return total.toFixed(2);
+},
+totalLife: function ()
+{
+    if(this.editForm === null || this.editForm.grants.length === 0){
+        return 0;
+    }
+
+    let total = 0;
+    for(let i=0; i<this.editForm.grants.length; i++){
+        total += parseFloat(this.editForm.grants[i].total_yeaf_award);
+    }
+    return total.toFixed(2);
+},
     }
 }
 
