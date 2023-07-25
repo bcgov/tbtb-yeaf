@@ -125,7 +125,7 @@ export default {
                 onError: () => {
                     this.paymentForms[index].formState = false;
                 },
-                preserveState: false,
+                // preserveState: false,
 
             });
         },

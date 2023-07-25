@@ -45,7 +45,7 @@ class ProgramStoreRequest extends FormRequest
             'institution_twp_id' => 'required',
             'credential' => 'nullable',
             'credential_type' => 'nullable',
-            'study_field' => 'nullable',
+            'study_field' => 'required',
             'study_period_start_date' => 'present|date_format:Y-m-d|nullable',
             'program_length' => 'present|numeric|nullable',
             'program_length_type' => 'present|in:day,week,month,year|nullable',
