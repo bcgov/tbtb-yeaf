@@ -389,17 +389,21 @@ export default {
             this.newGrantForm.twp_application_id = this.activeApp.id;
             if(this.activeApp.program != null){
                 this.newPaymentForm.twp_program_id = this.activeApp.program.id;
+
+                if(this.activeApp.application_status === 'APPROVED'){
+                    this.lettersEnabled = 'success';
+                    if(this.result.age < 19){
+                        this.lettersEnabled = 'success_under_age';
+                    }
+                }
+                if(this.activeApp.application_status === 'DENIED'){
+                    this.lettersEnabled = 'denied';
+                }
+            }else{
+                this.lettersEnabled = false;
             }
 
-            if(this.activeApp.application_status === 'APPROVED'){
-                this.lettersEnabled = 'success';
-                if(this.result.age < 19){
-                    this.lettersEnabled = 'success_under_age';
-                }
-            }
-            if(this.activeApp.application_status === 'DENIED'){
-                this.lettersEnabled = 'denied';
-            }
+
         },
         downloadTransfer: async function ()
         {
