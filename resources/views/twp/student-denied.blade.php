@@ -80,7 +80,7 @@
     <p>If you have any questions about this decision, or other grant and student financial assistance options that may be available to you through StudentAid BC, please do not hesitate to contact us at: <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.</p>
     <p>Sincerely,</p>
     <p>PTWP System Navigator<br/><a href="mailto:tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
-    <p>cc: {{$app->program->institution->name}}, {{ $app->program->institution->contact_name }}, {{ $app->program->institution->contact_email }}</p>
+{{--    <p>cc: {{$app->program->institution->name}}, {{ $app->program->institution->contact_name }}, {{ $app->program->institution->contact_email }}</p>--}}
 </div>
 
 
