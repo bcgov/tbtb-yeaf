@@ -19,3 +19,6 @@ composer.lock
 package-lock.json
 /public/*.csv
 /public/*.xls
+/public/css
+/public/images
+/public/js

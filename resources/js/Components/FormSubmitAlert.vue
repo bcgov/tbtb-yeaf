@@ -33,7 +33,7 @@ export default {
                 vm.showHide = true;
                 setTimeout(function () {
                     vm.showHide = false;
-                }, 5000);
+                }, 2000);
             }
         }
     },
