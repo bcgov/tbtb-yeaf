@@ -212,21 +212,16 @@ export default {
                     this.editForm.formState = true;
                     this.noChanges = true;
                 },
-                onFailure: () => {
-                },
                 onError: () => {
                     this.editForm.formState = false;
                 },
-                // preserveState: false,
-
             };
-            this.editForm.formState = '';
+            this.editForm.formState = null;
 
             if(this.result == null){
                 this.editForm.post(route('twp.applications.store'), options);
             }else{
                 this.editForm.id = this.result.id;
-                this.editForm = useForm(this.editForm);
                 this.editForm.put(route('twp.applications.update', this.result.id), options);
             }
 

@@ -119,8 +119,6 @@ export default {
                     this.grantForms[index].formState = true;
                     this.noChanges = true;
                 },
-                onFailure: () => {
-                },
                 onError: () => {
                     this.grantForms[index].formState = false;
                 },

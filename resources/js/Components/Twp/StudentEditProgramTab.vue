@@ -206,9 +206,7 @@ export default {
     },
     data() {
         return {
-            noChanges: true,
             editForm: useForm({
-                formState: true,
                 formSuccessMsg: 'Form was submitted successfully.',
                 formFailMsg: 'There was an error submitting this form.',
                 id: null,
@@ -249,24 +247,20 @@ export default {
         },
         updateStudent: function ()
         {
+            this.editForm.formState = '';
             let options = {
                 onSuccess: () => {
                     this.editForm.formState = true;
-                    this.noChanges = true;
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.editForm.formState = false;
                 },
             };
-            this.editForm.formState = '';
 
             if(this.result == null){
                 this.editForm.post(route('twp.programs.store'), options);
             }else{
                 this.editForm.id = this.result.id;
-                this.editForm = useForm(this.editForm);
                 this.editForm.put(route('twp.programs.update', this.result.id), options);
             }
 
@@ -275,7 +269,7 @@ export default {
     },
     mounted() {
         if(this.result != null){
-            this.editForm = this.result;
+            this.editForm = useForm(this.result);
         }
     }
 }

@@ -136,7 +136,6 @@ export default {
         updateStudent: function ()
         {
             this.editForm = useForm({
-
                 id: this.editForm.id,
                 last_name: this.editForm.last_name,
                 first_name: this.editForm.first_name,
@@ -159,12 +158,9 @@ export default {
                     this.editForm.formState = true;
                     this.noChanges = true;
                 },
-                onFailure: () => {
-                },
                 onError: () => {
                     this.editForm.formState = false;
                 },
-                // preserveState: false,
             });
         },
     },
