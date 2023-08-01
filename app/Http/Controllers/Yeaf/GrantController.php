@@ -431,10 +431,10 @@ class GrantController extends Controller
 
     private function checkMaxYears($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
     {
-        $results = DB::select(DB::raw("select yeaf_grants.program_year_id from yeaf_students
+        $results = DB::select("select yeaf_grants.program_year_id from yeaf_students
     inner join yeaf_grants on yeaf_students.student_id = yeaf_grants.student_id
 where yeaf_grants.total_yeaf_award > 0 AND yeaf_grants.grant_id <> $grant->grant_id AND yeaf_grants.student_id='".$grant->student->student_id."'
-group by yeaf_grants.program_year_id"));
+group by yeaf_grants.program_year_id");
         if (! is_null($results) && count($results) >= $grant->py->max_years_allowed) {
             if ($messageFlag) {
                 $msg = 'This student has received funding for '.count($results).'.';
