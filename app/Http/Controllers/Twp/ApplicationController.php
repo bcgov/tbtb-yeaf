@@ -71,18 +71,26 @@ class ApplicationController extends Controller
         $app = Application::where('id', $extra)->with('student', 'reasons', 'program.institution', 'payments')->first();
 
         $reasons = Reason::all();
+        $contact_name = $request->contact_name;
+        $contact_email = $request->contact_email;
+
         $letter_file = match ($type) {
             'student_success_under_age' => 'twp.student-success-under-age',
             'student_denied' => 'twp.student-denied',
             'school_denied' => 'twp.school-denied',
             default => 'twp.student-success',
         };
-        $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'app', 'now_d'));
+        $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'));
         $pdf->getDomPDF()->set_option('enable_php', true);
         $pdf->set_paper('Letter', 'portrait');
         $file_name = $app->student->birth_date;
 
-        return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
+//        return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
+        $file_name = mt_rand().'-'.$file_name.'-letter.pdf';
+
+        return response($pdf->download($file_name))
+            ->header('Content-Disposition', 'attachment; filename="'.$file_name.'"');
+
     }
 
     public function downloadSchoolLetter(Request $request, $extra)

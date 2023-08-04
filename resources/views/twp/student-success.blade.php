@@ -35,8 +35,9 @@
 <footer>
     <table>
         <tr>
-            <td style="width: 50%;">{{ $admin->ministry }}<br/>System Navigator<br/>{{ $admin->ministry_branch }}<br/>Provincial Tuition Waiver Program</td>
-            <td style="width: 50%;">
+            <td style="width: 33%;"><strong>{{ $admin->ministry }}</strong></td>
+            <td style="width: 33%;">System Navigator<br/>{{ $admin->ministry_branch }}<br/>Provincial Tuition Waiver Program</td>
+            <td style="width: 33%;">
                 Mailing Address:<br/>
                 {{ $admin->ministry_address }}<br/>
                 {{ $admin->ministry_city }} {{ $admin->ministry_prov }} {{ $admin->ministry_postal }}<br/>
@@ -61,20 +62,20 @@
             {{ date('F j, Y', strtotime($app->received_date)) }}.</p>
         <p>As a recipient of the Provincial Tuition Waiver Program, you are eligible to have your tuition and eligible
             fees waived at an estimated total cost of ${{number_format($app->program->total_estimated_cost, 2, '.', ',')}} as you work to complete
-            your {{$app->program->credential}} at {{$app->program->institution_name}}. This means StudentAid BC will pay your tuition and mandatory fees for
+            your {{$app->program->credential}} studies at {{$app->program->institution_name}}. This means StudentAid BC will pay your tuition and eligible fees for
             this program according to information submitted by {{$app->program->institution_name}}. </p>
-        <p><strong>If you change your program of study, institution, or timeframe for completion, please notify us at
-                <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a> so we can ensure your continued eligibility, and payment to the institution.</strong></p>
-        <p>To facilitate timely communication, and to ensure your information is kept secure, we invite you to create a
-            StudentAid BC dashboard account at <a href="https://www.studentaidbc.ca/dashboard">www.StudentAidBC.ca/dashboard</a>. </p>
-        <p>Please be advised that tuition waivers are a source of taxable income, and you will receive a T4A through your
-            institution to include with your income tax return. For more information on how taxable income is treated,
-            or the issuance of a T4A, please visit the <a href="https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax.html">Canada Revenue Agency website</a>.</p>
-        <p>If you have any questions, please do not hesitate to contact us at <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>. We wish you
+
+        <p>If you have also applied for the <a href="https://studentaidbc.ca/explore/grants-scholarships/learning-future-grant">Learning for Future Grant</a>, you will be eligible for the grant if you are enrolled in a program or course that leads, or will lead, to a credential at the undergraduate level. Learning for Future Grant funding will be provided to you via your institution.</p>
+
+        <p><strong>If you plan to change the location of your studies to another <a href="https://studentaidbc.ca/explore/grants-scholarships/provincial-tuition-waiver-program#Am_I_eligible">eligible institution</a>, please notify us at <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>, as well as inform the financial aid office at your new institution.</strong></p>
+
+        <p>Please be advised that tuition waivers and grants may be a source of taxable income, and you will receive a T4A through your institution to include with your income tax return. For more information on how taxable income is treated, or the issuance of a T4A, please visit the <a href="https://www.canada.ca/en/services/taxes/income-tax/personal-income-tax.html">Canada Revenue Agency website</a>.</p>
+
+        <p>If you have any questions, please do not hesitate to contact us at <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.<br/>We wish you
             success in your educational pursuits.</p>
         <p>Sincerely,</p>
-        <p>PTWP System Navigator<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
-        <p>cc: {{$app->program->institution->name}}, {{ $app->program->institution->contact_name }}, {{ $app->program->institution->contact_email }}</p>
+        <p>System Navigator, Provincial Tuition Waiver Program<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
+        <p>cc: {{$app->program->institution->name}}, {{ $contact_name }}, {{ $contact_email }}</p>
     </div>
 
 
