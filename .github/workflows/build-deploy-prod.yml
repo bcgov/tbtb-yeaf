@@ -23,8 +23,6 @@ jobs:
     name: Deploy Project to PROD
     runs-on: ubuntu-latest
     if: github.ref_name == 'master'
-    needs:
-      - build
     env:
       BUILD_ID: ${{ github.event.number }}
       NAMESPACE: 06cb9b-prod
