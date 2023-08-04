@@ -21,6 +21,9 @@ endef
 define PARAM_FILE
 "dev.env"
 endef
+define BUILD_TAG
+"latest-dev"
+endef
 else
 define OC_USER_ID
 "1009380000"
@@ -28,13 +31,13 @@ endef
 define PARAM_FILE
 "prod.env"
 endef
+define BUILD_TAG
+"latest-prod"
+endef
 endif
 
 
 #define general variables
-define BUILD_TAG
-"latest"
-endef
 define LABEL_NAME
 "TBTB-YEAF"
 endef
