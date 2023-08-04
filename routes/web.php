@@ -34,8 +34,8 @@ Route::group(
         Route::resource('programs', App\Http\Controllers\Twp\ProgramController::class);
         Route::resource('payments', App\Http\Controllers\Twp\PaymentController::class);
         Route::resource('grants', App\Http\Controllers\Twp\GrantController::class);
-        Route::get('/students-letters/{type}/{extra}', [App\Http\Controllers\Twp\ApplicationController::class, 'downloadLetter'])->name('applications.letters.download');
         Route::put('/application-status/{application}', [App\Http\Controllers\Twp\ApplicationController::class, 'applicationStatus'])->name('application-status.update');
+        Route::post('/students-letters/{type}/{extra}', [App\Http\Controllers\Twp\ApplicationController::class, 'downloadLetter'])->name('applications.letters.download');
         Route::post('/students-letters/{extra}', [App\Http\Controllers\Twp\ApplicationController::class, 'downloadSchoolLetter'])->name('applications.letters.school-download');
         Route::post('/students-transfer-letters/{extra}', [App\Http\Controllers\Twp\ApplicationController::class, 'downloadStudentTransferLetter'])->name('applications.letters.student-transfer-download');
 

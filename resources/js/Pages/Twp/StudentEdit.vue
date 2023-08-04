@@ -64,10 +64,13 @@
                                             Letters
                                         </button>
                                         <ul class="dropdown-menu" style="">
-                                            <li v-if="lettersEnabled==='denied'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_denied', activeApp.id])" target="_blank">Student Denied</a></li>
+                                            <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_denied')">Student Denied</button></li>
+
+<!--                                            <li v-if="lettersEnabled==='denied'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_denied', activeApp.id])" target="_blank">Student Denied</a></li>-->
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadSchool">School Denied</button></li>
                                             <li v-if="lettersEnabled==='success'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
-                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success', activeApp.id])" target="_blank">Student Successful</a></li>
+                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_success')">Student Successful</button></li>
+<!--                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success', activeApp.id])" target="_blank">Student Successful</a></li>-->
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success_under_age', activeApp.id])" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
@@ -345,6 +348,10 @@ export default {
                 contact_name: null,
                 contact_email: null,
             }),
+            studentSuccessForm: useForm({
+                contact_name: null,
+                contact_email: null,
+            }),
             newTwpForm: useForm({
                 formState: true,
                 formSuccessMsg: 'Form was submitted successfully.',
@@ -402,8 +409,40 @@ export default {
             }else{
                 this.lettersEnabled = false;
             }
+        },
 
+        downloadStudentLetter: async function (type)
+        {
+            let form = useForm({});
+            let downloadEnabled = true;
+            if(type === 'student_success'){
+                this.studentSuccessForm.contact_name = prompt("Please enter contact name");
+                this.studentSuccessForm.contact_email = prompt("Please enter contact email");
+                if(this.studentSuccessForm.contact_name == "" || this.studentSuccessForm.contact_email == ""){
+                    downloadEnabled = false;
+                }
+                form = this.studentSuccessForm;
 
+            }
+
+            if(downloadEnabled){
+                try {
+                    const response = await axios.post(route('twp.applications.letters.download', [type, this.activeApp.id]), form, {
+                        responseType: 'arraybuffer'
+                    });
+                    const blob = new Blob([response.data], { type: 'application/pdf' });
+                    const url = window.URL.createObjectURL(blob);
+                    const filename = response.headers['content-disposition'].split('filename=')[1].replace(/"/g, '');
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', filename);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         },
         downloadTransfer: async function ()
         {

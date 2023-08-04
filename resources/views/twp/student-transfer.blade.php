@@ -58,19 +58,18 @@
 <p>{{ $contact_name }}</p>
 <p>Financial Awards</p>
 <p>Via email to: {{ $contact_email }}</p><br/>
-<p><strong>Re: Provincial Tuition Waiver Program Transfer</strong></p><br/>
+<p><strong>Re: Provincial Tuition Waiver Program Transfer or Concurrent Studies</strong></p><br/>
 <div>
-    <p>Please be advised that {{ $app->student->first_name }} {{ $app->student->last_name }} is approved to
-        transfer their Provincial Tuition Waiver supports to {{ $app->program->institution->name }}.</p>
-    <p>{{ $app->student->first_name }} {{ $app->student->last_name }} is eligible to have their tuition and mandatory
-        fees waived, at an estimated total cost of ${{ number_format($app->program->total_estimated_cost, 0, '.', ',') }}, as they work to complete
-        their {{ $app->program->credential }} at {{ $app->program->institution->name }}.</p>
+    <p>Please be advised that {{ $app->student->first_name }} {{ $app->student->last_name }} is approved under the Provincial Tuition Waiver Program</p>
 
-    <p>If you have any questions about this transfer approval, please do not hesitate to contact us at
+    <p>{{ $app->student->first_name }} {{ $app->student->last_name }} is eligible to have their tuition and eligible fees waived as they work to complete
+        their {{ $app->program->credential }} studies at {{ $app->program->institution->name }}.</p>
+
+    <p>If you have any questions about this approval, please do not hesitate to contact us at
         <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.</p>
     <p>Sincerely,</p>
     <br/>
-    <p>PTWP System Navigator<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
+    <p>System Navigator<br/>Provincial Tuition Waiver Program<br/><a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
     <p>cc: {{ $app->student->first_name }} {{ $app->student->last_name }}, {{ $app->student->email }}</p>
 </div>
 

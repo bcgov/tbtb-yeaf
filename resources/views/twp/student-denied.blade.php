@@ -35,8 +35,9 @@
 <footer>
     <table>
         <tr>
-            <td style="width: 50%;">{{ $admin->ministry }}<br/>System Navigator<br/>{{ $admin->ministry_branch }}<br/>Provincial Tuition Waiver Program</td>
-            <td style="width: 50%;">
+            <td style="width: 33%;"><strong>{{ $admin->ministry }}</strong></td>
+            <td style="width: 33%;">System Navigator<br/>{{ $admin->ministry_branch }}<br/>Provincial Tuition Waiver Program</td>
+            <td style="width: 33%;">
                 Mailing Address:<br/>
                 {{ $admin->ministry_address }}<br/>
                 {{ $admin->ministry_city }} {{ $admin->ministry_prov }} {{ $admin->ministry_postal }}<br/>
@@ -56,10 +57,9 @@
 <p>{{ $now_d }}</p><br/>
 <p>{{ $app->student->first_name }} {{ $app->student->last_name }}</p>
 <p>Via email to: {{ $app->student->email }}</p><br/>
-<p><strong>Re: Provincial Tuition Waiver Program Application</strong></p><br/>
+<p><strong>Re: Provincial Tuition Waiver Program Application (PTWP) Application</strong></p><br/>
 <div>
-    <p>This letter is to inform you that, regrettably, we are unable to approve your application to the Provincial
-        Tuition Waiver Program, as one or more eligibility criteria have not been met. </p>
+    <p>This letter is to inform you that, regrettably, we are unable to approve your application to the Provincial Tuition Waiver Program, as one or more eligibility criteria have not been met.</p>
 
     <p>To be eligible for the Provincial Tuition Waiver Program, applicants must be: </p>
     <ul>
@@ -68,18 +68,19 @@
         @endforeach
     </ul>
 
-    <p>The Provincial Tuition Waiver Program is committed to supporting former youth in care to achieve their post-secondary
-        education goals. The program has discretion on a case-by-case basis to approve exceptions to the eligibility
-        criteria through a review of exceptional circumstances. Individuals with circumstances falling outside of the
-        eligibility criteria can contact the PTWP System Navigator to request a review of their eligibility. </p>
+    @foreach($app->reasons as $reason)
+        @if($reason->title === 'Time in Care')
+            <p>As our records indicate that your time in care status totals [XX] days (outline confirmed care status(es)); we are unable to approve your application at this time. </p>
+        @endif
+    @endforeach
 
-    <p>We also encourage you to contact your institution’s financial aid office to explore your eligibility for other
-        programs and bursaries that may help offset educational costs including student financial assistance,
-        and the <a href="https://studentaidbc.ca/explore/grants-scholarships/youth-educational-assistance-fund-former-youth-care">Youth Educational Assistance Fund</a>.</p>
+    <p>The Provincial Tuition Waiver Program is committed to supporting former youth in care to achieve their post-secondary education goals. The program has discretion on a case-by-case basis to approve exceptions to the eligibility criteria through a review of exceptional circumstances. Individuals with circumstances falling outside of the eligibility criteria can contact the PTWP System Navigator to request a review of their eligibility. </p>
+
+    <p>We also encourage you to contact your institution’s financial aid office to explore your eligibility for other programs and bursaries that may help offset educational costs, including student financial assistance.</p>
 
     <p>If you have any questions about this decision, or other grant and student financial assistance options that may be available to you through StudentAid BC, please do not hesitate to contact us at: <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.</p>
     <p>Sincerely,</p>
-    <p>PTWP System Navigator<br/><a href="mailto:tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
+    <p>System Navigator<br/>Provincial Tuition Waiver Program<br/><a href="mailto:tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a></p>
 {{--    <p>cc: {{$app->program->institution->name}}, {{ $app->program->institution->contact_name }}, {{ $app->program->institution->contact_email }}</p>--}}
 </div>
 
