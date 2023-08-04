@@ -65,12 +65,9 @@
                                         </button>
                                         <ul class="dropdown-menu" style="">
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_denied')">Student Denied</button></li>
-
-<!--                                            <li v-if="lettersEnabled==='denied'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_denied', activeApp.id])" target="_blank">Student Denied</a></li>-->
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadSchool">School Denied</button></li>
                                             <li v-if="lettersEnabled==='success'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
                                             <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_success')">Student Successful</button></li>
-<!--                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success', activeApp.id])" target="_blank">Student Successful</a></li>-->
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success_under_age', activeApp.id])" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
@@ -449,7 +446,8 @@ export default {
             this.studentTransferForm.contact_name = prompt("Please enter contact name");
             this.studentTransferForm.contact_email = prompt("Please enter contact email");
 
-            if(this.studentTransferForm.contact_name != "" && this.studentTransferForm.contact_email != ""){
+            if((this.studentTransferForm.contact_name && this.studentTransferForm.contact_name.trim() !== "") &&
+                (this.studentTransferForm.contact_email && this.studentTransferForm.contact_email.trim() !== "")){
                 try {
                     const response = await axios.post(route('twp.applications.letters.student-transfer-download', [this.activeApp.id]), this.studentTransferForm, {
                         responseType: 'arraybuffer'
@@ -472,8 +470,9 @@ export default {
         {
             this.schoolLetterForm.contact_name = prompt("Please enter contact name");
             this.schoolLetterForm.contact_email = prompt("Please enter contact email");
+            if((this.schoolLetterForm.contact_name && this.schoolLetterForm.contact_name.trim() !== "") &&
+                (this.schoolLetterForm.contact_email && this.schoolLetterForm.contact_email.trim() !== "")){
 
-            if(this.schoolLetterForm.contact_name != "" && this.schoolLetterForm.contact_email != ""){
                 try {
                     const response = await axios.post(route('twp.applications.letters.school-download', [this.activeApp.id]), this.schoolLetterForm, {
                         responseType: 'arraybuffer'
