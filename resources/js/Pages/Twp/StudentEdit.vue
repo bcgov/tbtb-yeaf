@@ -71,6 +71,7 @@
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success_under_age', activeApp.id])" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
                                     <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                     <button v-if="activeTab==='grant-app'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantAppModal">New Grant App</button>
@@ -588,34 +589,12 @@ export default {
                         this.lettersEnabled = 'denied';
                     }
                 }
-
             },
             deep: true
         }
-
     },
     mounted() {
         this.editForm = JSON.parse(JSON.stringify(this.result));
-        // this.newTwpForm.twp_student_id = this.result.id;
-
-        // this.newPaymentForm.twp_student_id = this.result.id;
-        // this.newGrantForm.twp_student_id = this.result.id;
-        // if(this.activeApp.program != null){
-        //     this.newPaymentForm.twp_program_id = this.activeApp.program.id;
-        // }
-        //
-        // if(this.editForm.application != null) {
-        //     if(this.editForm.application.application_status === 'APPROVED'){
-        //         this.lettersEnabled = 'success';
-        //         if(this.editForm.age < 19){
-        //             this.lettersEnabled = 'success_under_age';
-        //         }
-        //     }
-        //     if(this.editForm.application.application_status === 'DENIED'){
-        //         this.lettersEnabled = 'denied';
-        //     }
-        // }
-
     }
 }
 </script>
