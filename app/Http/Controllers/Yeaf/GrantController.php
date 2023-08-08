@@ -43,9 +43,6 @@ class GrantController extends Controller
     {
         $grant = Grant::create($request->validated());
         $student = Student::where('student_id', $grant->student_id)->first();
-
-        var_dump($request->validated());
-        die();
         return Redirect::route('students.show', [$student->id]);
     }
 
