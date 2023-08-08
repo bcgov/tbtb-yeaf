@@ -62,6 +62,11 @@ class GrantStoreRequest extends FormRequest
             'age' => 'nullable|numeric',
             'status_code' => 'nullable|in:A,P,D',
 
+            'application_type' => 'nullable|string|in:SFAS Extract,Paper Application',
+            'program_name' => 'nullable|string',
+            'application_number' => 'nullable|string',
+            'program_other_description' => 'nullable',
+
         ];
     }
 
