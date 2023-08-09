@@ -50,6 +50,7 @@
         <table>
             <tr>
                 <td style="text-align: left; width: 25%;"><img src="{{ public_path('/images/bc_sq_logo.png') }}"></td>
+                <td style="text-align: right; width: 75%;"><br/><p style="font-family: Arial,sans-serif; font-size: 32px; font-weight: lighter;">Provincial Tuition Waiver Program </p></td>
             </tr>
         </table>
     </header>
