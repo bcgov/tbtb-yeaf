@@ -62,11 +62,10 @@
     <p>This letter is to inform you that, regrettably, we are unable to approve your application to the Provincial Tuition Waiver Program, as one or more eligibility criteria have not been met.</p>
 
     <p>To be eligible for the Provincial Tuition Waiver Program, applicants must be: </p>
-    <ul>
-        @foreach($app->reasons as $reason)
-            <li>{{$reason->letter_body}}</li>
-        @endforeach
-    </ul>
+
+    @foreach($app->reasons as $reason)
+        <p style="white-space: pre-line;">{{ $reason->letter_body }}</p>
+    @endforeach
 
     @foreach($app->reasons as $reason)
         @if($reason->title === 'Time in Care')
@@ -75,7 +74,7 @@
     @endforeach
 
     <p>The Provincial Tuition Waiver Program is committed to supporting former youth in care to achieve their post-secondary education goals. The program has discretion on a case-by-case basis to approve exceptions to the eligibility criteria through a review of exceptional circumstances. Individuals with circumstances falling outside of the eligibility criteria can contact the PTWP System Navigator to request a review of their eligibility. </p>
-
+    <div style="page-break-before: always;"></div>
     <p>We also encourage you to contact your institution’s financial aid office to explore your eligibility for other programs and bursaries that may help offset educational costs, including student financial assistance.</p>
 
     <p>If you have any questions about this decision, or other grant and student financial assistance options that may be available to you through StudentAid BC, please do not hesitate to contact us at: <a href="mailto: tuitionwaiver@gov.bc.ca">tuitionwaiver@gov.bc.ca</a>.</p>
