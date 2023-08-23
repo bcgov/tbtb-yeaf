@@ -66,7 +66,7 @@
                                         <ul class="dropdown-menu" style="">
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_denied')">Student Denied</button></li>
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadSchool">School Denied</button></li>
-                                            <li v-if="lettersEnabled==='success'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
+                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
                                             <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_success')">Student Successful</button></li>
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="route('twp.applications.letters.download', ['student_success_under_age', activeApp.id])" target="_blank">Under Age Student Successful</a></li>
                                         </ul>

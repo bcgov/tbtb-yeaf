@@ -43,11 +43,8 @@ tr {
                             <div class="row g-3">
 
 
-                                <div class="col-md-4">
+                                <div v-if="grant.school != null" class="col-md-4">
                                     <BreezeLabel :for="'inputInstitution'+i" class="form-label" value="Institution" />
-<!--                                    <BreezeSelect class="form-select" :id="'inputInstitution'+i" v-model="grant.institution_id">-->
-<!--                                        <option v-for="(school,j) in schools" :value="school.institution_id">{{ school.name }}</option>-->
-<!--                                    </BreezeSelect>-->
                                     <BreezeInput @focusout="resetFilter(i)" @keyup="filterActiveSchools(i, $event)" type="text" class="form-control" :id="'inputInstitution'+i" v-model="grant.school.name" />
                                     <input type="hidden" v-model="grant.institution_id" />
                                     <ul class="dropdown-menu" :class="grant.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start">
