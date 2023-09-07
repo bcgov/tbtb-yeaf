@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use PDF;
 use Response;
+use DateTime;
 
 class GrantController extends Controller
 {
@@ -502,16 +503,17 @@ group by yeaf_grants.program_year_id");
 
     private function ageCalc(Grant $grant)
     {
-        $yDate = date('Y', strtotime('now'));
-        $mDate = date('mmdd', strtotime('now'));
+        $yDate = DateTime::createFromFormat('Ymd', strtotime('now'));
+//        $mDate = date('mmdd', strtotime('now'));
         if (! is_null($grant->study_start_date)) {
-            $yDate = date('Y', strtotime($grant->study_start_date));
-            $mDate = date('mmdd', strtotime($grant->study_start_date));
+            $yDate = DateTime::createFromFormat('Ymd', strtotime($grant->study_start_date));
+//            $mDate = date('mmdd', strtotime($grant->study_start_date));
         }
-        $birth_date_y = date('Y', strtotime($grant->student->birth_date));
-        $birth_date_m = date('mmdd', strtotime($grant->student->birth_date));
+        $birth_date_y = DateTime::createFromFormat('Ymd', strtotime($grant->student->birth_date));
+//        $birth_date_m = date('mmdd', strtotime($grant->student->birth_date));
+        $interval = $birth_date_y->diff($yDate);
+        return $interval->y;
 
-        return (intval($yDate) - intval($birth_date_y)) + (intval($mDate) < intval($birth_date_m));
     }
 
     private function addIneligibleReason(Grant $grant, $ineligible_code_id)
