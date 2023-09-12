@@ -503,14 +503,11 @@ group by yeaf_grants.program_year_id");
 
     private function ageCalc(Grant $grant)
     {
-        $yDate = DateTime::createFromFormat('Ymd', strtotime('now'));
-//        $mDate = date('mmdd', strtotime('now'));
+        $yDate = new DateTime(date('Ymd', strtotime('now')));
         if (! is_null($grant->study_start_date)) {
-            $yDate = DateTime::createFromFormat('Ymd', strtotime($grant->study_start_date));
-//            $mDate = date('mmdd', strtotime($grant->study_start_date));
+            $yDate = new DateTime(date('Ymd', strtotime($grant->study_start_date)));
         }
-        $birth_date_y = DateTime::createFromFormat('Ymd', strtotime($grant->student->birth_date));
-//        $birth_date_m = date('mmdd', strtotime($grant->student->birth_date));
+        $birth_date_y = new DateTime(date('Ymd', strtotime($grant->student->birth_date)));
         $interval = $birth_date_y->diff($yDate);
         return $interval->y;
 
