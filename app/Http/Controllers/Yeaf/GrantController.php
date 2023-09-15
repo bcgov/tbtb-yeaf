@@ -153,10 +153,35 @@ class GrantController extends Controller
             $pdf = PDF::loadView('pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
 
             $file_name = $student->first_name.'-'.$student->last_name.'-'.match ($grant->status_code) {
-                'A' => 'approval-letter',
-                'D' => 'denial-letter',
-                'P' => 'pending-letter',
-            };
+                    'A' => 'approval-letter',
+                    'D' => 'denial-letter',
+                    'P' => 'pending-letter',
+                };
+
+            return $pdf->download($file_name.'.pdf');
+        }
+    }
+
+    /**
+     * validate to export or to show errors on letter export request.
+     *
+     * @param  \App\Models\Grant  $grant
+     * @param  null  $docName
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function exportWithdrawalLetter(Grant $grant, $docName = null)
+    {
+        if (! is_null($docName)) {
+            $doc = $docName;
+            $admin = Admin::first();
+            $student = $grant->student;
+            $officer = $grant->officer;
+            $now_d = date('F d, Y');
+            $now_t = date('H:m:i');
+            $user = Auth::user();
+            $pdf = PDF::loadView('pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
+
+            $file_name = $student->first_name.'-'.$student->last_name.'-withdrawal-letter';
 
             return $pdf->download($file_name.'.pdf');
         }

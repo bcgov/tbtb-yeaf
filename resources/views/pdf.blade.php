@@ -68,6 +68,10 @@
                     @include('letters.reptLtrSuccessComp', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
                     @break
 
+                    @case('rptLtrWithdrawal')
+                    @include('letters.reptLtrWithdrawal', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'))
+                    @break
+
                 @endswitch
 
 

@@ -76,6 +76,7 @@ Route::middleware(['auth', 'yeaf_active'])->group(function () {
         ], function () {
             Route::get('/validate-letter/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'validateLetter'])->name('validate-letter');
             Route::get('/export-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportLetter'])->name('export-letter');
+            Route::get('/export-withdrawal-letter/{grant}/{docName?}', [App\Http\Controllers\Yeaf\GrantController::class, 'exportWithdrawalLetter'])->name('export-withdrawal-letter');
             Route::post('/evaluate/{grant}', [App\Http\Controllers\Yeaf\GrantController::class, 'evaluateApp'])->name('evaluate');
         });
 
