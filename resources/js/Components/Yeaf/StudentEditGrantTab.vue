@@ -157,7 +157,7 @@ tr {
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="&nbsp;" />
-                                            <div class="d-grid"><button type="button" class="btn btn-success" :disabled="checkLocked(i) || !grant.withdrawal">Withdrawal Letter</button></div>
+                                            <div class="d-grid"><button type="button" class="btn btn-success" :disabled="checkLocked(i) || !grant.withdrawal" @click="exportWithdrawlGrant(i)">Withdrawal Letter</button></div>
                                         </div>
                                     </div>
 
@@ -441,6 +441,26 @@ export default {
                     return obj.name.toLowerCase().indexOf(search) >= 0;
                 } );
             }
+        },
+
+        exportWithdrawlGrant: function (index)
+        {
+            let vm = this;
+            axios({
+                url: route('grants.validate-letter', this.grantForms[index].id),
+                method: 'get',
+                headers: {'Accept': 'application/json'}
+            })
+                .then(function (response) {
+                    if(response.data.msg === ''){
+                        window.location.href = '/grants/export-withdrawal-letter/' + vm.grantForms[index].id + '/rptLtrWithdrawal';
+                    }else{
+                        vm.grantForms[index].msg = response.data.msg;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
         exportGrant: function (index)
         {
