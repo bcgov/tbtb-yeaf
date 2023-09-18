@@ -264,8 +264,11 @@ class GrantController extends Controller
         if (isset($request->new_pending_reasons)) {
             foreach ($request->new_pending_reasons as $pending) {
                 if ($pending->ineligible_code_id != 0) {
-                    $check = GrantIneligible::where(['grant_id' => $grant->grant_id, 'ineligible_code_id' => $pending->ineligible_code_id,
-                        'ineligible_code_type' => 'P', ])->first();
+                    $check = GrantIneligible::where([
+                        'grant_id' => $grant->grant_id,
+                        'ineligible_code_id' => $pending->ineligible_code_id,
+                        'ineligible_code_type' => 'P',
+                        ])->first();
                     if (is_null($check)) {
                         $grant_ineligible = new GrantIneligible();
                         $grant_ineligible->grant_id = $grant->grant_id;
@@ -469,6 +472,14 @@ group by yeaf_grants.program_year_id");
                 $app_ineligible = true;
             }
         }
+        $grant_ineligible_check = GrantIneligible::where('grant_id', $grant->grant_id)
+            ->where('ineligible_code_id', '09')
+            ->where('cleared_flag', true)
+            ->first();
+        if(!is_null($grant_ineligible_check)){
+            $msg = '';
+            $app_ineligible = false;
+        }
 
         return [$msg, $app_ineligible];
     }
@@ -540,15 +551,20 @@ group by yeaf_grants.program_year_id");
 
     private function addIneligibleReason(Grant $grant, $ineligible_code_id)
     {
-        $grant_ineligibles = GrantIneligible::where('grant_id', $grant->grant_id)->where('ineligible_code_id', $ineligible_code_id)->get();
-        if ($grant_ineligibles->count() > 0) {
-            foreach ($grant_ineligibles as $grant_ineligible) {
-                $grant_ineligible->cleared_flag = false;
-                $grant_ineligible->save();
-            }
-        } else {
+        $grant_ineligibles = GrantIneligible::where('grant_id', $grant->grant_id)
+            ->where('ineligible_code_id', $ineligible_code_id)
+            ->first();
+        if(is_null($grant_ineligibles)){
             $this->createGrantIneligible($grant, $ineligible_code_id, 'D');
         }
+//        if ($grant_ineligibles->count() > 0) {
+//            foreach ($grant_ineligibles as $grant_ineligible) {
+//                $grant_ineligible->cleared_flag = false;
+//                $grant_ineligible->save();
+//            }
+//        } else {
+//            $this->createGrantIneligible($grant, $ineligible_code_id, 'D');
+//        }
     }
 
     private function createGrantIneligible(Grant $grant, $ineligible_code_id, $ineligible_code_type)
