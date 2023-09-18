@@ -121,7 +121,7 @@ tr {
 
                             <div v-if="grant.status_code === 'A'" class="card mt-3">
                                 <div class="card-header">Approved Application
-                                    <button v-if="grant.total_yeaf_award <= 0 || grant.total_yeaf_award == 0 || grant.cheque_batch_number == null" @click="giveAward(i)" type="button" class="btn btn-sm float-end btn-success">Give Award</button>
+                                    <button v-if="grant.total_yeaf_award <= 0 || grant.cheque_batch_number == null" @click="giveAward(i)" type="button" class="btn btn-sm float-end btn-success">Give Award</button>
                                     <button v-if="checkLocked(i)" type="button" class="btn btn-sm float-end btn-danger" @click="unlock(i)">Locked</button>
                                 </div>
                                 <div class="card-body">
@@ -133,6 +133,7 @@ tr {
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="Processing Batch" />
                                             <BreezeSelect class="form-select" v-model="grant.cheque_batch_number" :disabled="checkLocked(i)">
+                                                <option value=""></option>
                                                 <template v-for="batch in batches">
                                                     <option :value="batch.batch_number">{{ batch.batch_human_date }} | {{ batch.batch_date }}</option>
                                                 </template>
@@ -157,7 +158,7 @@ tr {
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="&nbsp;" />
-                                            <div class="d-grid"><button type="button" class="btn btn-success" :disabled="checkLocked(i) || !grant.withdrawal" @click="exportWithdrawlGrant(i)">Withdrawal Letter</button></div>
+                                            <div class="d-grid"><button type="button" class="btn btn-success" :disabled="checkLocked(i) && !grant.withdrawal" @click="exportWithdrawlGrant(i)">Withdrawal Letter</button></div>
                                         </div>
                                     </div>
 
@@ -496,6 +497,7 @@ export default {
             let check = confirm('Are you sure you want to unlock this grant? This will reset the YEAF Award fied to zero.');
             if(check){
                 this.grantForms[index].total_yeaf_award = 0;
+                this.grantForms[index].forceUnlock = true;
             }
         },
         giveAward: function (index)
@@ -509,6 +511,8 @@ export default {
         },
         checkLocked: function (index)
         {
+            if(this.grantForms[index].forceUnlock === true)
+                return false;
             return ((this.result.grants[index].total_yeaf_award > 0 && this.result.grants[index].cheque_batch_number != null) && this.grantForms[index].total_yeaf_award > 0);
         },
         //type is P|D
