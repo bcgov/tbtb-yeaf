@@ -218,7 +218,7 @@ tr {
                                 </div>
                             </div>
 
-                            <div v-if="grant.status_code === 'D'" class="card mt-3">
+                            <div v-if="grant.status_code === 'D' || grant.grant_denied_ineligibles.length > 0" class="card mt-3">
                                 <div class="card-header">Deny Reasons<button @click="newReason(i, 'D')" type="button" class="btn btn-sm float-end btn-success">add row +</button></div>
                                 <div class="card-body">
                                     <div class="row mb-3" v-for="(grantDenied, j) in grant.grant_denied_ineligibles">
@@ -621,12 +621,15 @@ export default {
                 grant.evaluationValid = false;
             }else{
                 if(this.result.grants[index].status_code === 'A' && this.result.grants[index].total_yeaf_award > 0){
-                    alert("Once an award has been made, you cannot 'evaluate' an application.");
-                    grant.evaluationValid = false;
-                }else if(grant.program_year_id === ''){
+                    let check = confirm("Once an award has been made, you cannot 'evaluate' an application. Are you sure you want to proceed?");
+                    if(!check)
+                        grant.evaluationValid = false;
+                }
+                if(grant.program_year_id === ''){
                     alert("You must select a program year.");
                     grant.evaluationValid = false;
-                }else{
+                }
+                else if(grant.evaluationValid === true){
                     let vm = this;
                     vm.grantForms[index].formSubmitting = true;
                     vm.grantForms[index].formState = '';
