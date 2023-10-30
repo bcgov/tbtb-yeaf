@@ -12,7 +12,7 @@ tr {
         <div class="row g-3">
             <div class="col-md-4">
                 <BreezeLabel for="inputReceivedDate" class="form-label" value="Received Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputReceivedDate" v-model="editForm.received_date" />
+                <BreezeInput  type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceivedDate" v-model="editForm.received_date" />
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />

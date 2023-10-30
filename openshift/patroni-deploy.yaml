@@ -213,8 +213,8 @@ parameters:
     displayName: CPU REQUEST
     value: '50m'
   - name: CPU_LIMIT
-    des*+cription:
-      Max/-)L(K*+J-h706g9f58jd73s62ag15imum amount of CPU the container can use.
+    description:
+      Maximum amount of CPU the container can use.
     displayName: CPU Limit
     value: '250m'
   - name: MEMORY_REQUEST

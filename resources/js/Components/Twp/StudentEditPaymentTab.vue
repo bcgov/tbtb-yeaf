@@ -40,7 +40,7 @@ tr {
 
                                 <div class="col-md-3">
                                     <BreezeLabel :for="'inputPaymentDate'+i" class="form-label" value="Payment Date" />
-                                    <BreezeInput type="date" class="form-control" :id="'inputPaymentDate'+i" v-model="payment.payment_date" />
+                                    <BreezeInput  type="date" max="2040-12-31" class="form-control" :id="'inputPaymentDate'+i" v-model="payment.payment_date" />
                                 </div>
                                 <div class="col-md-3">
                                     <BreezeLabel :for="'inputPaymentAmount'+i" class="form-label" value="Payment Amount" />

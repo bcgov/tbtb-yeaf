@@ -78,7 +78,7 @@ tr {
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
-                <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="editForm.birth_date" />
+                <BreezeInput  type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="editForm.birth_date" />
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="inputGender" class="form-label" value="Gender" />

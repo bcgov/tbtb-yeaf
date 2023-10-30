@@ -87,7 +87,7 @@
 
                                     <div class="col-md-6">
                                         <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
-                                        <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="newStudentForm.birth_date" />
+                                        <BreezeInput  type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputBirth" v-model="newStudentForm.birth_date" />
                                     </div>
 
                                     <div class="col-md-4">

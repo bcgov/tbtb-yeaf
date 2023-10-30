@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel for="newDateReceived" class="form-label" value="Date Received *" />
-                                            <BreezeInput type="date" class="form-control" id="newDateReceived" v-model="newGrantForm.application_receive_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" id="newDateReceived" v-model="newGrantForm.application_receive_date" />
                                         </div>
 
                                         <div :class="newGrantForm.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
@@ -130,11 +130,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel for="newStartDate" class="form-label" value="Study Start Date *" />
-                                            <BreezeInput type="date" class="form-control" id="newStartDate" v-model="newGrantForm.study_start_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" id="newStartDate" v-model="newGrantForm.study_start_date" />
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel for="newEndDate" class="form-label" value="Study End Date *" />
-                                            <BreezeInput type="date" class="form-control" id="newEndDate" v-model="newGrantForm.study_end_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" id="newEndDate" v-model="newGrantForm.study_end_date" />
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel for="newAge" class="form-label" value="Age" />
