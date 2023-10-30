@@ -51,7 +51,7 @@ class ProgramEditRequest extends FormRequest
             'program_length' => 'present|numeric|nullable',
             'program_length_type' => 'present|in:day,week,month,year|nullable',
             'total_estimated_cost' => 'present|numeric|nullable',
-            'student_status' => 'present|in:Attending,Completed,Hiatus,Never Attended|nullable',
+            'student_status' => 'present|in:Attending,Completed,Hiatus,Never Attended,No Longer Attending|nullable',
             'comments' => 'nullable',
         ];
     }

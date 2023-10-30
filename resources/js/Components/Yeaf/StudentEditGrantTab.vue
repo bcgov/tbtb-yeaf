@@ -57,7 +57,7 @@ tr {
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputDateReceived'+i" class="form-label" value="Date Received" />
-                                    <BreezeInput type="date" class="form-control" :id="'inputDateReceived'+i" v-model="grant.application_receive_date" />
+                                    <BreezeInput  type="date" max="2040-12-31" class="form-control" :id="'inputDateReceived'+i" v-model="grant.application_receive_date" />
                                 </div>
 
                                 <div :class="grant.program_code !== 'I' ? 'col-md-4' : 'col-md-3'">
@@ -86,11 +86,11 @@ tr {
 
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputStartDate'+i" class="form-label" value="Study Start Date" />
-                                    <BreezeInput type="date" class="form-control" :id="'inputStartDate'+i" v-model="grant.study_start_date" />
+                                    <BreezeInput  type="date" max="2040-12-31" class="form-control" :id="'inputStartDate'+i" v-model="grant.study_start_date" />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputEndDate'+i" class="form-label" value="Study End Date" />
-                                    <BreezeInput type="date" class="form-control" :id="'inputEndDate'+i" v-model="grant.study_end_date" />
+                                    <BreezeInput  type="date" max="2040-12-31" class="form-control" :id="'inputEndDate'+i" v-model="grant.study_end_date" />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel :for="'inputAge'+i" class="form-label" value="Age" />
@@ -141,7 +141,7 @@ tr {
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="Date Issued" />
-                                            <BreezeInput type="date" class="form-control" v-model="grant.cheque_issue_date" :disabled="checkLocked(i)" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="grant.cheque_issue_date" :disabled="checkLocked(i)" />
                                         </div>
                                     </div>
 
@@ -154,7 +154,7 @@ tr {
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="Withdrawal Date" />
-                                            <BreezeInput type="date" class="form-control" v-model="grant.withdrawal_date" :disabled="checkLocked(i) || !grant.withdrawal" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="grant.withdrawal_date" :disabled="checkLocked(i) || !grant.withdrawal" />
                                         </div>
                                         <div class="col-md-4">
                                             <BreezeLabel class="form-label" value="&nbsp;" />
@@ -270,7 +270,7 @@ tr {
                                     <div class="row mb-3" v-for="(appeal, j) in grant.appeals">
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Appeal Date" />
-                                            <BreezeInput type="date" class="form-control" v-model="appeal.appeal_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="appeal.appeal_date" />
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Type" />
@@ -294,7 +294,7 @@ tr {
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Status Date" />
-                                            <BreezeInput type="date" class="form-control" v-model="appeal.status_affective_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="appeal.status_affective_date" />
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Reason (Other)" />
@@ -306,7 +306,7 @@ tr {
                                     <div class="row mb-3" v-for="(appeal, j) in grant.new_appeals">
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Appeal Date" />
-                                            <BreezeInput type="date" class="form-control" v-model="appeal.appeal_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="appeal.appeal_date" />
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Type" />
@@ -330,7 +330,7 @@ tr {
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Status Date" />
-                                            <BreezeInput type="date" class="form-control" v-model="appeal.status_affective_date" />
+                                            <BreezeInput  type="date" max="2040-12-31" class="form-control" v-model="appeal.status_affective_date" />
                                         </div>
                                         <div class="col-md-2">
                                             <BreezeLabel v-if="j===0" class="form-label" value="Reason (Other)" />

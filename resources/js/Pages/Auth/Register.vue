@@ -57,7 +57,7 @@ const submit = () => {
 
             <div class="mt-4">
                 <BreezeLabel for="start_date" value="Start Date" />
-                <BreezeInput id="start_date" type="date" class="mt-1 block w-full" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.start_date" required />
+                <BreezeInput id="start_date"  type="date" max="2040-12-31" class="mt-1 block w-full" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.start_date" required />
             </div>
 
             <div class="mt-4">

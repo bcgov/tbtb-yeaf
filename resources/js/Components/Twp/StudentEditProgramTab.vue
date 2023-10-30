@@ -59,12 +59,13 @@ tr {
                         <option value="Completed">Completed</option>
                         <option value="Hiatus">Hiatus</option>
                         <option value="Never Attended">Never Attended</option>
+                        <option value="No Longer Attending">No Longer Attending</option>
                     </BreezeSelect>
                 </div>
 
                 <div class="col-md-3">
                     <BreezeLabel for="inputStudyStartDate" class="form-label" value="Study Start Date" />
-                    <BreezeInput type="date" placeholder="YYYY-MM-DD" class="form-control" id="inputStudyStartDate" v-model="editForm.study_period_start_date" />
+                    <BreezeInput  type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputStudyStartDate" v-model="editForm.study_period_start_date" />
                 </div>
                 <div class="col-md-3">
                     <BreezeLabel for="inputProgramLength" class="form-label" value="Program Length" />
