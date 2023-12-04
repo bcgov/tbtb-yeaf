@@ -93,7 +93,7 @@ class ReportController extends Controller
     public function payments(Request $request)
     {
         return response()->json(Payment::select('id', 'twp_student_id', 'twp_program_id', 'twp_application_id',
-            'payment_date', 'payment_amount', 'created_by', 'updated_by')->get(), 200);
+            'payment_date', 'payment_amount', 'created_by', 'updated_by', 'twp_payment_type_id')->get(), 200);
     }
 
     public function grants(Request $request)
